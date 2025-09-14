@@ -21,8 +21,13 @@ const Navbar: React.FC = () => {
 
   // Efek untuk mengunci scroll body saat menu mobile terbuka
   useEffect(() => {
-    document.body.style.overflow = isMenuOpen ? "hidden" : "unset";
-  }, [isMenuOpen]);
+         // [PERBAIKAN SCROLL] Menggunakan class pada body lebih aman daripada mengubah style langsung
+        if (isMenuOpen) {
+            document.body.classList.add('overflow-hidden');
+        } else {
+            document.body.classList.remove('overflow-hidden');
+        }
+    }, [isMenuOpen]);
 
   // Efek untuk mendeteksi scroll dan mengubah tampilan navbar
   useEffect(() => {
@@ -74,9 +79,10 @@ const Navbar: React.FC = () => {
       href="#home"
       className="text-xl font-bold text-white transition-opacity hover:opacity-80"
     >
-      <span>Rizky </span>
-      <span className="text-[#3498db]">Faisal Rafi</span>
-      <span className="text-[#3498db]">.</span>
+          <span  className="text-[#3498db]">Rizky </span>
+          <span>Faisal </span>
+          <span className="text-[#00C950]">Rafi</span>
+
     </a>
   );
 
@@ -159,11 +165,29 @@ const Navbar: React.FC = () => {
           </div>
         </nav>
       </header>
+      {/* [PERBAIKAN SCROLL] Menambahkan onClick pada backdrop untuk menutup menu */}
       <div
+              className={`fixed inset-0 z-30 transform transition-opacity md:hidden ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
+              onClick={() => setIsMenuOpen(false)}
+            >
+                <div className="absolute inset-0 bg-gray-900/90 backdrop-blur-sm">
+                    <div className="mt-24 flex flex-col items-center space-y-8">
+                        {menuItems.map(item => (
+                           <a key={item.name} href={item.href} onClick={() => setIsMenuOpen(false)} className="text-2xl font-semibold text-gray-200 hover:text-[#3498db] transition-colors">{item.name}</a>
+                        ))}
+                         <PrimaryButton href="#contact" className="mt-4">Contact Me</PrimaryButton>
+                    </div>
+                </div>
+            </div>
+        
+
+
+      {/* <div
         className={`fixed inset-0 z-30 transform transition-transform duration-300 ease-in-out md:hidden ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
+
         <div className="absolute inset-0 bg-gray-900/90 backdrop-blur-sm">
           <div className="mt-24 flex flex-col items-center space-y-8">
             {menuItems.map((item) => (
@@ -181,7 +205,9 @@ const Navbar: React.FC = () => {
             </PrimaryButton>
           </div>
         </div>
-      </div>
+      </div> */}
+
+
     </>
   );
 };
@@ -190,8 +216,12 @@ const Navbar: React.FC = () => {
 const Hero: React.FC = () => (
   <section
     id="home"
-    className="min-h-screen flex items-center justify-center text-center px-4 relative bg-cover bg-center bg-no-repeat"
-    style={{ backgroundImage: `url('profile2.jpeg')` }}
+  className="min-h-screen flex items-center justify-center text-center px-4 relative bg-cover bg-no-repeat"
+        style={{ 
+            backgroundImage: `url('photo_with_parent.jpg')`,
+            // [PERUBAHAN] Menyesuaikan posisi fokus gambar agar sedikit lebih ke bawah dari atas
+            backgroundPosition: 'center 17%' 
+        }}
   >
     {/* Lapisan overlay gelap untuk keterbacaan teks */}
     <div className="absolute inset-0 bg-black/60 z-0"></div>
@@ -1017,7 +1047,7 @@ const Contact: React.FC = () => {
     },
 
     {
-      name: "Communication",
+      name: "Communi\ncation",
       icon: <CommunicationIcon />,
     },
   ];
@@ -1083,30 +1113,11 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-900/50 border-t border-gray-800 mt-16">
       <div className="max-w-6xl mx-auto px-4 py-8 text-center">
-        <button
-          onClick={scrollToTop}
-          className="group mx-auto flex flex-col items-center text-gray-400 hover:text-white transition-colors mb-6"
-        >
-          <span className="mb-2 block h-8 w-8 rounded-full border-2 border-gray-600 group-hover:border-[#3498db] items-center justify-center transition-colors">
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M5 15l7-7 7 7"
-              ></path>
-            </svg>
-          </span>
-          Kembali ke Atas
-        </button>
+    
         <div className="text-2xl font-bold mb-4 text-white">
-          <span>Rizky </span>
-          <span className="text-[#3498db]">Faisal Rafi</span>
+          <span  className="text-[#3498db]">Rizky </span>
+          <span>Faisal </span>
+          <span className="text-[#00C950]">Rafi</span>
         </div>
         <nav className="flex justify-center gap-6 sm:gap-8 mb-8 flex-wrap">
           <a className="text-gray-300 hover:text-[#3498db]" href="#home">
