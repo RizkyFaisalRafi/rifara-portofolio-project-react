@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 
 // --- [BAGIAN 1: KOMPONEN NAVIGASI] ---
-
 const Navbar: React.FC = () => {
   // State untuk menu mobile, status scroll, dan seksi aktif
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,13 +20,13 @@ const Navbar: React.FC = () => {
 
   // Efek untuk mengunci scroll body saat menu mobile terbuka
   useEffect(() => {
-         // [PERBAIKAN SCROLL] Menggunakan class pada body lebih aman daripada mengubah style langsung
-        if (isMenuOpen) {
-            document.body.classList.add('overflow-hidden');
-        } else {
-            document.body.classList.remove('overflow-hidden');
-        }
-    }, [isMenuOpen]);
+    // [PERBAIKAN SCROLL] Menggunakan class pada body lebih aman daripada mengubah style langsung
+    if (isMenuOpen) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+  }, [isMenuOpen]);
 
   // Efek untuk mendeteksi scroll dan mengubah tampilan navbar
   useEffect(() => {
@@ -79,10 +78,9 @@ const Navbar: React.FC = () => {
       href="#home"
       className="text-xl font-bold text-white transition-opacity hover:opacity-80"
     >
-          <span  className="text-[#3498db]">Rizky </span>
-          <span>Faisal </span>
-          <span className="text-[#00C950]">Rafi</span>
-
+      <span className="text-[#3498db]">Rizky </span>
+      <span>Faisal </span>
+      <span className="text-[#00C950]">Rafi</span>
     </a>
   );
 
@@ -141,9 +139,15 @@ const Navbar: React.FC = () => {
       >
         <nav className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-20 items-center justify-between">
-            <div className="flex-shrink-0">
+            <div className="flex flex-shrink-0 items-center space-x-3">
+              <img
+                src="logo_besmart_hd.png"
+                alt="Logo Rifara"
+                className="h-10 w-10"
+              />
               <BrandLogo />
             </div>
+
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 {menuItems.map((item) => (
@@ -167,20 +171,29 @@ const Navbar: React.FC = () => {
       </header>
       {/* [PERBAIKAN SCROLL] Menambahkan onClick pada backdrop untuk menutup menu */}
       <div
-              className={`fixed inset-0 z-30 transform transition-opacity md:hidden ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
-              onClick={() => setIsMenuOpen(false)}
-            >
-                <div className="absolute inset-0 bg-gray-900/90 backdrop-blur-sm">
-                    <div className="mt-24 flex flex-col items-center space-y-8">
-                        {menuItems.map(item => (
-                           <a key={item.name} href={item.href} onClick={() => setIsMenuOpen(false)} className="text-2xl font-semibold text-gray-200 hover:text-[#3498db] transition-colors">{item.name}</a>
-                        ))}
-                         <PrimaryButton href="#contact" className="mt-4">Contact Me</PrimaryButton>
-                    </div>
-                </div>
-            </div>
-        
-
+        className={`fixed inset-0 z-30 transform transition-opacity md:hidden ${
+          isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+        }`}
+        onClick={() => setIsMenuOpen(false)}
+      >
+        <div className="absolute inset-0 bg-gray-900/90 backdrop-blur-sm">
+          <div className="mt-24 flex flex-col items-center space-y-8">
+            {menuItems.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                onClick={() => setIsMenuOpen(false)}
+                className="text-2xl font-semibold text-gray-200 hover:text-[#3498db] transition-colors"
+              >
+                {item.name}
+              </a>
+            ))}
+            <PrimaryButton href="#contact" className="mt-4">
+              Contact Me
+            </PrimaryButton>
+          </div>
+        </div>
+      </div>
 
       {/* <div
         className={`fixed inset-0 z-30 transform transition-transform duration-300 ease-in-out md:hidden ${
@@ -206,8 +219,6 @@ const Navbar: React.FC = () => {
           </div>
         </div>
       </div> */}
-
-
     </>
   );
 };
@@ -216,12 +227,12 @@ const Navbar: React.FC = () => {
 const Hero: React.FC = () => (
   <section
     id="home"
-  className="min-h-screen flex items-center justify-center text-center px-4 relative bg-cover bg-no-repeat"
-        style={{ 
-            backgroundImage: `url('photo_with_parent.jpg')`,
-            // [PERUBAHAN] Menyesuaikan posisi fokus gambar agar sedikit lebih ke bawah dari atas
-            backgroundPosition: 'center 17%' 
-        }}
+    className="min-h-screen flex items-center justify-center text-center px-4 relative bg-cover bg-no-repeat"
+    style={{
+      backgroundImage: `url('photo_with_parent.jpg')`,
+      // [PERUBAHAN] Menyesuaikan posisi fokus gambar agar sedikit lebih ke bawah dari atas
+      backgroundPosition: "center 17%",
+    }}
   >
     {/* Lapisan overlay gelap untuk keterbacaan teks */}
     <div className="absolute inset-0 bg-black/60 z-0"></div>
@@ -276,12 +287,14 @@ const SectionWithTabs: React.FC<{
         <h2 className="text-3xl md:text-4xl font-bold text-white">{title}</h2>
       </div>
       <div className="flex flex-col lg:flex-row gap-8">
-        <div className="flex lg:flex-col lg:w-1/4 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0">
+        {/* [PERUBAHAN] Mengubah tata letak tombol menjadi vertikal di mobile */}
+        <div className="flex flex-col gap-2 lg:w-1/4">
           {data.map((item, idx) => (
             <button
               key={idx}
               onClick={() => setActiveIndex(idx)}
-              className={`text-left p-4 rounded-lg whitespace-nowrap lg:whitespace-normal w-full transition-all duration-300 ${
+              // [PERUBAHAN] Menghapus 'whitespace-nowrap' agar teks bisa wrap
+              className={`text-left p-4 rounded-lg w-full transition-all duration-300 ${
                 activeIndex === idx
                   ? "bg-[#3498db]/20 text-[#3498db]"
                   : "text-gray-400 hover:bg-gray-800/50"
@@ -296,6 +309,7 @@ const SectionWithTabs: React.FC<{
             </button>
           ))}
         </div>
+
         <div className="w-full lg:w-3/4">
           <div className="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
@@ -702,7 +716,8 @@ const Projects: React.FC = () => {
     {
       image: "https://placehold.co/600x400/1a202c/3498db?text=Dicoding+Story",
       githubLink: "https://github.com/RizkyFaisalRafi",
-      title: "Flutter Dicoding Story (Submission Dicoding Intermediate Project)",
+      title:
+        "Flutter Dicoding Story (Submission Dicoding Intermediate Project)",
       desc: "...",
       features: ["", "", ""],
       tech: ["Dart", "Flutter", "___", "___", "___", "___"],
@@ -737,7 +752,6 @@ const Projects: React.FC = () => {
       features: ["...", "...", "..."],
       tech: ["Kotlin", "Android", "___", "___", "___", "___"],
     },
-
   ];
 
   const PlayStoreIcon = () => (
@@ -845,49 +859,83 @@ const Projects: React.FC = () => {
   );
 };
 
-
 // --- [BAGIAN 5: KOMPONEN PUBLIKASI JURNAL] ---
 
 const Publications: React.FC = () => {
-    const publicationList = [
-      { 
-        title: 'PENGEMBANGAN WEB DINAS PERPUSTAKAAN DAN ARSIP BERBASIS LARAVEL FRAMEWORK PADA DPAD KOTA TANGERANG', 
-        journal: 'Jurnal Mahasiswa Teknik Informatika (Jurnal Teknologi Informasi)', 
-        date: 'Desember 2023', 
-        desc: 'Penelitian ini membahas pengembangan web Dinas Perpustakaan dan Arsip berbasis Laravel Framework pada DPAD Kota Tangerang untuk meningkatkan layanan perpustakaan dan arsip digital.', 
-        link: 'https://ejournal.itn.ac.id/index.php/jati/article/view/7840',
-        authors: ['Agam Adensa', 'Kamilah Raihan', 'Rizky Faisal Rafi', 'Irwan Richwandi Putra', ' Firda Azizah']
-      },
-    ];
+  const publicationList = [
+    {
+      title:
+        "PENGEMBANGAN WEB DINAS PERPUSTAKAAN DAN ARSIP BERBASIS LARAVEL FRAMEWORK PADA DPAD KOTA TANGERANG",
+      journal:
+        "Jurnal Mahasiswa Teknik Informatika (Jurnal Teknologi Informasi)",
+      date: "Desember 2023",
+      desc: "Penelitian ini membahas pengembangan web Dinas Perpustakaan dan Arsip berbasis Laravel Framework pada DPAD Kota Tangerang untuk meningkatkan layanan perpustakaan dan arsip digital.",
+      link: "https://ejournal.itn.ac.id/index.php/jati/article/view/7840",
+      authors: [
+        "Agam Adensa",
+        "Kamilah Raihan",
+        "Rizky Faisal Rafi",
+        "Irwan Richwandi Putra",
+        " Firda Azizah",
+      ],
+    },
+  ];
 
-    const DocumentIcon = () => (
-      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-      </svg>
-    );
+  const DocumentIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-5 w-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth={2}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+      />
+    </svg>
+  );
 
-    return (
-        <section id='publications' className="mx-auto mt-12 max-w-6xl px-4 py-12">
-            <div className="text-center mb-12">
-                <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">Riset & Akademik</h3>
-                <h2 className="text-3xl md:text-4xl font-bold text-white">Publikasi Jurnal</h2>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {publicationList.map((pub, idx) => (
-                    <div key={idx} className="bg-gray-900/50 rounded-2xl p-6 border border-gray-800 shadow-xl flex flex-col transition-transform transform hover:-translate-y-2">
-                        <h3 className="text-xl font-bold text-white mb-2">{pub.title}</h3>
-                        <p className="text-sm text-cyan-400 font-semibold mb-1">{pub.journal}</p>
-                        <p className="text-xs text-gray-400 mb-4">{pub.authors.join(', ')} - {pub.date}</p>
-                        <p className="text-gray-300 flex-grow mb-6">{pub.desc}</p>
-                        <a href={pub.link} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center gap-2 px-4 py-2 font-semibold text-white bg-gray-700 rounded-lg transition-colors hover:bg-[#3498db] self-start">
-                            <DocumentIcon />
-                            Baca Publikasi
-                        </a>
-                    </div>
-                ))}
-            </div>
-        </section>
-    );
+  return (
+    <section id="publications" className="mx-auto mt-12 max-w-6xl px-4 py-12">
+      <div className="text-center mb-12">
+        <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">
+          Riset & Akademik
+        </h3>
+        <h2 className="text-3xl md:text-4xl font-bold text-white">
+          Publikasi Jurnal
+        </h2>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {publicationList.map((pub, idx) => (
+          <div
+            key={idx}
+            className="bg-gray-900/50 rounded-2xl p-6 border border-gray-800 shadow-xl flex flex-col transition-transform transform hover:-translate-y-2"
+          >
+            <h3 className="text-xl font-bold text-white mb-2">{pub.title}</h3>
+            <p className="text-sm text-cyan-400 font-semibold mb-1">
+              {pub.journal}
+            </p>
+            <p className="text-xs text-gray-400 mb-4">
+              {pub.authors.join(", ")} - {pub.date}
+            </p>
+            <p className="text-gray-300 flex-grow mb-6">{pub.desc}</p>
+            <a
+              href={pub.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-auto inline-flex items-center gap-2 px-4 py-2 font-semibold text-white bg-gray-700 rounded-lg transition-colors hover:bg-[#3498db] self-start"
+            >
+              <DocumentIcon />
+              Baca Publikasi
+            </a>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 };
 
 // --- [BAGIAN 6: KOMPONEN KONTAK] ---
@@ -1091,16 +1139,66 @@ const Contact: React.FC = () => {
             {skills.map((skill) => (
               <div
                 key={skill.name}
-                className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 flex flex-col items-center justify-center gap-2 transition-transform transform hover:scale-110"
+                className="bg-gray-800/50 border border-gray-700 rounded-lg p-4 flex flex-col items-center justify-center gap-2 transition-transform duration-300 transform hover:scale-110 hover:-translate-y-1"
               >
                 {skill.icon}
-                <p className="font-semibold text-white text-xs text-center">
+                <p className="font-semibold text-white text-xs text-cex`nter">
                   {skill.name}
                 </p>
               </div>
             ))}
           </div>
         </div>
+      </div>
+    </section>
+  );
+};
+
+// --- [BAGIAN 6: KOMPONEN TESTIMONI] ---
+const Testimonials: React.FC = () => {
+  const testimonialList = [
+    {
+      quote:
+        "Rizky adalah developer yang sangat berdedikasi dan cepat belajar. Kemampuannya dalam Flutter sangat membantu tim kami dalam menyelesaikan proyek tepat waktu.",
+      name: "Nama Atasan",
+      title: "Project Manager, Shan Information System",
+      avatar: "https://placehold.co/100x100/3498db/ffffff?text=NA",
+    },
+    {
+      quote:
+        "Sangat senang bekerja sama dengan Rizky. Dia tidak hanya handal dalam coding, tetapi juga memiliki kemampuan komunikasi yang baik dan proaktif dalam memberikan solusi.",
+      name: "Nama Rekan Kerja",
+      title: "UI/UX Designer",
+      avatar: "https://placehold.co/100x100/2ecc71/ffffff?text=NR",
+    },
+  ];
+
+  return (
+    <section id="testimonials" className="mx-auto mt-12 max-w-6xl px-4 py-12">
+      <div className="text-center mb-12">
+        <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">
+          Apresiasi
+        </h3>
+        <h2 className="text-3xl md:text-4xl font-bold text-white">
+          Apa Kata Mereka
+        </h2>
+      </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        {testimonialList.map((testimonial, idx) => (
+          <div
+            key={idx}
+            className="bg-gray-900/50 rounded-2xl p-8 border border-gray-800 shadow-xl text-center"
+          >
+            <img
+              src={testimonial.avatar}
+              alt={testimonial.name}
+              className="w-20 h-20 rounded-full mx-auto mb-4 border-2 border-[#3498db]"
+            />
+            <p className="text-gray-300 italic mb-6">"{testimonial.quote}"</p>
+            <h4 className="font-bold text-white">{testimonial.name}</h4>
+            <p className="text-sm text-gray-400">{testimonial.title}</p>
+          </div>
+        ))}
       </div>
     </section>
   );
@@ -1113,9 +1211,8 @@ const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-900/50 border-t border-gray-800 mt-16">
       <div className="max-w-6xl mx-auto px-4 py-8 text-center">
-    
         <div className="text-2xl font-bold mb-4 text-white">
-          <span  className="text-[#3498db]">Rizky </span>
+          <span className="text-[#3498db]">Rizky </span>
           <span>Faisal </span>
           <span className="text-[#00C950]">Rafi</span>
         </div>
@@ -1170,6 +1267,7 @@ const App: React.FC = () => {
           <Projects />
           <Publications />
           <Contact />
+          {/* <Testimonials /> */}
         </main>
         <Footer />
       </div>
