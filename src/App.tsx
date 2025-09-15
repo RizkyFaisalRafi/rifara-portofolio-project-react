@@ -278,6 +278,22 @@ const SectionWithTabs: React.FC<{
 
   const activeItem = data[activeIndex];
 
+  // --- Icon untuk tombol sertifikat ---
+  const CertificateIcon = () => (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-5 w-5"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fillRule="evenodd"
+        d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zM9 12a1 1 0 102 0V9a1 1 0 10-2 0v3zm2-5a1 1 0 11-2 0 1 1 0 012 0z"
+        clipRule="evenodd"
+      />
+    </svg>
+  );
+
   return (
     <section id={id} className="max-w-6xl mx-auto py-12 px-4">
       <div className="text-center mb-12">
@@ -360,6 +376,23 @@ const SectionWithTabs: React.FC<{
                   )
               )}
             </div>
+
+             {/* --- [BARU] Tombol Lihat Sertifikat --- */}
+            {activeItem.certificateUrl && (
+              <div className="mt-6">
+                <a
+                  href={activeItem.certificateUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 font-semibold text-white bg-gray-700 rounded-lg transition-colors hover:bg-[#3498db]"
+                >
+                  <CertificateIcon />
+                  Lihat Sertifikat
+                </a>
+              </div>
+            )}
+            {/* --- Akhir Bagian Baru --- */}
+            
           </div>
         </div>
       </div>
@@ -454,6 +487,7 @@ const Bootcamp = () => {
       name: "Multiplatform Mobile App Development with Flutter",
       organizer: "Dicoding Indonesia",
       date: "Mei 2022 - Jun 2025",
+      certificateUrl: "https://www.dicoding.com/certificates/...", // Ganti dengan URL asli
       details: [
         "Memulai Pemrograman Dengan Dart.",
         "Belajar Membuat Aplikasi Flutter untuk Pemula.",
