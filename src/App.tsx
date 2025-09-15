@@ -377,7 +377,7 @@ const SectionWithTabs: React.FC<{
               )}
             </div>
 
-             {/* --- [BARU] Tombol Lihat Sertifikat --- */}
+             {/* --- Tombol Lihat Sertifikat --- */}
             {activeItem.certificateUrl && (
               <div className="mt-6">
                 <a
@@ -391,7 +391,6 @@ const SectionWithTabs: React.FC<{
                 </a>
               </div>
             )}
-            {/* --- Akhir Bagian Baru --- */}
             
           </div>
         </div>
