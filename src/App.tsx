@@ -262,6 +262,16 @@ const Hero: React.FC = () => (
         >
           Unduh CV
         </a>
+
+        <a
+          href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white"
+        >
+          Portofolio Aktif
+        </a>
+
       </div>
     </div>
   </section>
@@ -437,6 +447,7 @@ const WorkExperience = () => {
       role: "Fullstack Developer",
       companyUrl: "https://anugrahhadi.com/",
       date: "March 2024 - July 2024",
+      certificateUrl: 'https://drive.google.com/file/d/1pYO9sTYYpDjX3tSWPuXt86alOSQlzrdg/view?usp=sharing',
       details: [
         "Creating an Android-based E-Commerce system using the Flutter framework.",
         "Creating an admin website using the Laravel framework (Stisla Web Admin Template).",
@@ -486,7 +497,7 @@ const Bootcamp = () => {
       name: "Multiplatform Mobile App Development with Flutter",
       organizer: "Dicoding Indonesia",
       date: "Mei 2022 - Jun 2025",
-      certificateUrl: "https://www.dicoding.com/certificates/...", // Ganti dengan URL asli
+      certificateUrl: "https://drive.google.com/file/d/1C2s3ndu3S9KVdPF2P740BFTsc5txdgsl/view?usp=sharing",
       details: [
         "Memulai Pemrograman Dengan Dart.",
         "Belajar Membuat Aplikasi Flutter untuk Pemula.",
@@ -535,6 +546,7 @@ const Bootcamp = () => {
       name: "2023 Complete Front-End Engineer Career With Flutter",
       organizer: "Alterra Academy",
       date: "Feb 2023 - Jun 2023",
+      certificateUrl: "https://drive.google.com/file/d/1q3LQppiF38NcGB97gvo6v3MM4G2vtevx/view?usp=sharing",
       details: [
         "Dart Programming, Branch Management (Git), Widget in Flutter, State Management Provider and BLOC (Business Logic Component), Flutter Animation, Storage, REST API - JSON Serialization/deserialization.",
         "MVVM Architecture, Finite State Machine, Unit Testing, Widget Testing, Professional Skill (Communication, Building CV, Teamwork & Collaboration, Time & Task Management).",
@@ -555,6 +567,7 @@ const Bootcamp = () => {
       name: "Android Java For Mobile Developer",
       organizer: "Hacktiv8 (Hacktivate Teknologi Indonesia)",
       date: "Agu 2022 - Des 2022",
+      certificateUrl: "https://drive.google.com/file/d/195gadyKUWLYtnCjKGthMsLyUZwHUl5Za/view?usp=sharing",
       details: [
         "Memahami Konsep Java Untuk Android.",
         "Memahami Konsep Kotlin Untuk Android.",
@@ -585,6 +598,7 @@ const Education = () => {
       degree: "Sarjana Komputer (S.Kom)",
       major: "Teknologi Informasi",
       date: "2020 - 2024",
+      certificateUrl: "https://drive.google.com/file/d/1kwl6o_l5I91cH4MsTRVNricukyzq5vie/view?usp=sharing",
       details: [
         "Aktif di organisasi kemahasiswaan (Himpunan Mahasiswa Teknik Informatika).",
         "Proyek akhir Skripsi tentang pengembangan aplikasi mobile.",
@@ -602,6 +616,7 @@ const Education = () => {
       institution: "SMK Negeri 8 Kota Tangerang",
       degree: "Sekolah Menengah Kejuruan (SMK)",
       major: "Teknik Instalasi Tenaga Listrik",
+      certificateUrl: "https://drive.google.com/file/d/1FkqO-Csau7bGg-cUCDmc0gFLay4QSdpR/view?usp=sharing",
       date: "2017 - 2020",
       details: [
         "Aktif di organisasi Paskibra (PASLAVANTA).",
@@ -633,7 +648,7 @@ const Projects: React.FC = () => {
     {
       image: "https://placehold.co/600x400/1a202c/3498db?text=AHE+Shopping",
       // link: "https://play.google.com/store/apps/details?id=id.haaweejee.imageconverter",
-      githubLink: "https://github.com/RizkyFaisalRafi",
+      githubLink: "https://github.com/FinalProjectRifara/flutter_online_shop_app-ahe",
       title: "AHE Shopping",
       desc: "E-Commerce App Flutter App and Laravel Web Admin.",
       features: [
@@ -668,7 +683,7 @@ const Projects: React.FC = () => {
     {
       image: "https://placehold.co/600x400/1a202c/3498db?text=Todo+List+App",
       // link: "https://play.google.com/store/apps/details?id=id.haaweejee.imageconverter",
-      githubLink: "https://github.com/RizkyFaisalRafi",
+      githubLink: "https://github.com/RizkyFaisalRafi/Final-Project-1",
       title: "To Do List App (Final Project (1) Bootcamp Hactiv8)",
       desc: "Aplikasi manajemen tugas harian yang dibangun sepenuhnya dengan Java Android, memungkinkan pengguna untuk menambah, mengedit, dan melacak tugas secara efisien.",
       features: [
@@ -683,7 +698,7 @@ const Projects: React.FC = () => {
     {
       image: "https://placehold.co/600x400/1a202c/3498db?text=Kalkulator+App",
       // link: "https://play.google.com/store/apps/details?id=id.haaweejee.imageconverter",
-      githubLink: "https://github.com/RizkyFaisalRafi",
+      githubLink: "https://github.com/RizkyFaisalRafi/FinalProject3",
       title: "Kalkulator App (Final Project (2) Bootcamp Hactiv8)",
       desc: "Sebuah aplikasi kalkulator fungsional dengan antarmuka modern yang dibuat menggunakan Java Android untuk melakukan operasi perhitungan.",
       features: [
@@ -698,7 +713,7 @@ const Projects: React.FC = () => {
     {
       image: "https://placehold.co/600x400/1a202c/3498db?text=Travelgo+App",
       // link: "https://play.google.com/store/apps/details?id=id.haaweejee.imageconverter",
-      githubLink: "https://github.com/RizkyFaisalRafi",
+      githubLink: "https://github.com/RizkyFaisalRafi/FinalProject4",
       title: "Travelgo App (Final Project (3) Bootcamp Hactiv8)",
       desc: "Aplikasi direktori wisata yang menampilkan daftar destinasi menarik. Dibangun untuk mempraktikkan pembuatan layout kompleks dan menampilkan data dalam daftar.",
       features: [
@@ -713,7 +728,7 @@ const Projects: React.FC = () => {
     {
       image: "https://placehold.co/600x400/1a202c/3498db?text=E+Commerce+App",
       // link: "https://play.google.com/store/apps/details?id=id.haaweejee.imageconverter",
-      githubLink: "https://github.com/RizkyFaisalRafi",
+      githubLink: "https://github.com/RizkyFaisalRafi/Final_Project_2",
       title: "Travelgo App (Final Project (4) Bootcamp Hactiv8)",
       desc: "Aplikasi E Commerce. Multi User bisa digunakan untuk memasukan barang dengan role Admin, Staff dan juga sebagai user/buyer.",
       features: [
@@ -728,11 +743,11 @@ const Projects: React.FC = () => {
     {
       image:
         "https://placehold.co/600x400/1a202c/3498db?text=Sekretariat+Kabinet",
-      githubLink: "https://github.com/RizkyFaisalRafi",
+      githubLink: "https://github.com/RizkyFaisalRafi/kabinet_indonesia",
       title: "Sekretariat Kabinet (Submission Dicoding Pemula Project)",
-      desc: "...",
-      features: ["...", "...", "..."],
-      tech: ["Dart", "Flutter", "___", "___", "___", "___"],
+      desc: "APLIKASI INFORMASI KABINET INDONESIA",
+      features: ["Informasi Kabinet", "Detail Kabinet", "Data Local"],
+      tech: ["Dart", "Flutter", "Data Dummy",],
     },
 
     // Submission Dicoding Flutter Fundamental Project
@@ -740,7 +755,7 @@ const Projects: React.FC = () => {
       image: "https://placehold.co/600x400/1a202c/3498db?text=Restaurant+App",
       githubLink: "https://github.com/RizkyFaisalRafi",
       title: "Flutter Restaurant App (Submission Dicoding Fundamental Project)",
-      desc: "...",
+      desc: "Tahap Development Web",
       features: ["", "", ""],
       tech: ["Dart", "Flutter", "___", "___", "___", "___"],
     },
@@ -748,10 +763,10 @@ const Projects: React.FC = () => {
     // Submission Dicoding Flutter Intermediate Project
     {
       image: "https://placehold.co/600x400/1a202c/3498db?text=Dicoding+Story",
-      githubLink: "https://github.com/RizkyFaisalRafi",
+      githubLink: "https://tree-sunstone-9a8.notion.site/Documentation-Portofolio-1e9169cf35a2804d81f9e146a6104bdb",
       title:
         "Flutter Dicoding Story (Submission Dicoding Intermediate Project)",
-      desc: "...",
+      desc: "Tahap Development Web",
       features: ["", "", ""],
       tech: ["Dart", "Flutter", "___", "___", "___", "___"],
     },
@@ -759,9 +774,9 @@ const Projects: React.FC = () => {
     // Submission Dicoding Flutter Expert Project
     {
       image: "https://placehold.co/600x400/1a202c/3498db?text=Dicoding+Movie",
-      githubLink: "https://github.com/RizkyFaisalRafi",
+      githubLink: "https://github.com/RizkyFaisalRafi/ditonton_clean_architecture/tree/Second-Submission",
       title: "Flutter Dicoding Movie (Submission Dicoding Expert Project)",
-      desc: "...",
+      desc: "Tahap Development Web",
       features: ["...", "...", "..."],
       tech: ["Dart", "Flutter", "___", "___", "___", "___"],
     },
@@ -769,9 +784,9 @@ const Projects: React.FC = () => {
     // Submission Dicoding Kotlin Pemula Project
     {
       image: "https://placehold.co/600x400/1a202c/3498db?text=Tempat+Wisata",
-      githubLink: "https://github.com/RizkyFaisalRafi",
+      githubLink: "https://github.com/RizkyFaisalRafi/Tempat_Wisata_Popular_App",
       title: "Kotlin Tempat Wisata (Submission Dicoding Pemula Project)",
-      desc: "...",
+      desc: "Tahap Development Web",
       features: ["...", "...", "..."],
       tech: ["Kotlin", "Android", "___", "___", "___", "___"],
     },
@@ -779,9 +794,9 @@ const Projects: React.FC = () => {
     // Submission Dicoding Kotlin Fundamental Project
     {
       image: "https://placehold.co/600x400/1a202c/3498db?text=Github+User+App",
-      githubLink: "https://github.com/RizkyFaisalRafi",
+      githubLink: "https://github.com/RizkyFaisalRafi/Github_User",
       title: "Kotlin Github User App (Submission Dicoding Fundamental Project)",
-      desc: "...",
+      desc: "Tahap Development Web",
       features: ["...", "...", "..."],
       tech: ["Kotlin", "Android", "___", "___", "___", "___"],
     },
