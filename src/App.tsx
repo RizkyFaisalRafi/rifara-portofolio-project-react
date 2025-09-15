@@ -11,7 +11,7 @@ const Navbar: React.FC = () => {
   const menuItems = [
     { name: "Home", href: "#home" },
     { name: "Experience", href: "#experience" },
-    { name: "Bootcamp", href: "#bootcamp" },
+    { name: "Bootcamp & Certificates", href: "#bootcamp" },
     { name: "Education", href: "#education" },
     { name: "Projects", href: "#projects" },
     { name: "Publications", href: "#publications" },
