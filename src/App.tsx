@@ -20,7 +20,7 @@ const Navbar: React.FC = () => {
 
   // Efek untuk mengunci scroll body saat menu mobile terbuka
   useEffect(() => {
-    // [PERBAIKAN SCROLL] Menggunakan class pada body lebih aman daripada mengubah style langsung
+    // Menggunakan class pada body lebih aman daripada mengubah style langsung
     if (isMenuOpen) {
       document.body.classList.add("overflow-hidden");
     } else {
@@ -644,6 +644,34 @@ const Education = () => {
 // --- [BAGIAN 4: KOMPONEN RIWAYAT PROYEK] ---
 const Projects: React.FC = () => {
   const projectList = [
+
+   // Screenshoot Smart pro
+    {
+      image: "https://placehold.co/600x400/1a202c/3498db?text=Screenshot+Smart+Home+Pro",
+      link: "https://play.google.com/store/apps/details?id=com.rifara.screenshootBesmartIndonesiaGemilang&pcampaignid=web_share",
+      // githubLink: "https://github.com/FinalProjectRifara/flutter_online_shop_app-ahe",
+      title: "Screenshot Smart Pro",
+      desc: "Screenshot Layar dengan Jendela Mengambang dan Rekam Layar Suara Dengan Kualitas HD.",
+      features: [
+        "SCREENSHOT LAYAR DENGAN JENDELA MENGAMBANG",
+        "REKAM LAYAR DENGAN SUARA",
+        "KUALITAS HD",
+        "FREE",
+      ],
+      tech: [
+        "Dart",
+        "Flutter",
+        'Widget "Floating Action Button"',
+        'With Native Code',
+        "MVVM",
+        "Git",
+        "GitHub",
+        "Firebase",
+        "Android Studio",
+        "State Management Provider",
+      ],
+    },
+
     // AHE Shopping
     {
       image: "https://placehold.co/600x400/1a202c/3498db?text=AHE+Shopping",
@@ -875,7 +903,7 @@ const Projects: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-4">
-                {/* {project.link && (
+                {project.link && (
                   <a
                     href={project.link}
                     target="_blank"
@@ -885,7 +913,7 @@ const Projects: React.FC = () => {
                     <PlayStoreIcon />
                     Lihat di Play Store
                   </a>
-                )} */}
+                )}
 
                 {project.githubLink && (
                   <a
