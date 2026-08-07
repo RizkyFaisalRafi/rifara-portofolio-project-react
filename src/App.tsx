@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 
-// --- [KOMPONEN PEMBANTU: Auto-Scroll saat berpindah halaman/hash] ---
+// --- [KOMPONEN PEMBANTU: Auto-Scroll saat berpindah hash] ---
 const ScrollHandler = () => {
   const location = useLocation();
 
@@ -12,9 +12,9 @@ const ScrollHandler = () => {
       if (element) {
         setTimeout(() => {
           element.scrollIntoView({ behavior: "smooth" });
-        }, 100);
+        }, 50);
       }
-    } else {
+    } else if (location.pathname === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [location]);
@@ -28,64 +28,61 @@ const Navbar: React.FC = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const location = useLocation();
-  const isMs365Page = location.pathname === "/microsoft-365";
-
+  // Menu sudah disatukan di 1 page
   const menuItems = [
     { name: "Home", href: "/" },
     { name: "Experience", href: "/#experience" },
     { name: "Bootcamp & Certificates", href: "/#bootcamp" },
     { name: "Education", href: "/#education" },
     { name: "Projects", href: "/#projects" },
-    { name: "Microsoft 365", href: "/microsoft-365" },
+    { name: "Microsoft 365", href: "/#microsoft-365" },
     { name: "Publications", href: "/#publications" },
     { name: "Contact", href: "/#contact" },
   ];
 
+  // Perbaikan Scroll Body
   useEffect(() => {
     if (isMenuOpen) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
     }
+    // Cleanup function mencegah bug scroll stuck
+    return () => document.body.classList.remove("overflow-hidden");
   }, [isMenuOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
-      if (!isMs365Page) {
-        const sections = menuItems
-          .filter((item) => item.href.startsWith("/#"))
-          .map((item) => document.getElementById(item.href.substring(2)));
+      const sections = menuItems
+        .filter((item) => item.href.startsWith("/#"))
+        .map((item) => document.getElementById(item.href.substring(2)));
 
-        let currentSection = "home";
-        if (window.scrollY < 100) {
-          currentSection = "home";
-        } else {
-          for (const section of sections) {
-            if (section && window.scrollY >= section.offsetTop - 150) {
-              currentSection = section.id;
-            }
+      let currentSection = "home";
+      if (window.scrollY < 100) {
+        currentSection = "home";
+      } else {
+        for (const section of sections) {
+          if (section && window.scrollY >= section.offsetTop - 150) {
+            currentSection = section.id;
           }
         }
-        setActiveSection(currentSection);
       }
+      setActiveSection(currentSection);
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isMs365Page]);
+  }, []); // Hapus dependency yang tidak perlu
 
   const NavLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => {
     let isActive = false;
-    if (isMs365Page && href === "/microsoft-365") {
-      isActive = true;
-    } else if (!isMs365Page && href.startsWith("/#")) {
+    if (href === "/") {
+      isActive = activeSection === "home";
+    } else if (href.startsWith("/#")) {
       const sectionId = href.substring(2);
       isActive = activeSection === sectionId;
-    } else if (!isMs365Page && href === "/" && activeSection === "home") {
-      isActive = true;
     }
 
     return (
@@ -115,6 +112,7 @@ const Navbar: React.FC = () => {
   const PrimaryButton: React.FC<{ to: string; children: React.ReactNode; className?: string }> = ({ to, children, className }) => (
     <Link
       to={to}
+      onClick={() => setIsMenuOpen(false)}
       className={`inline-block bg-[#3498db] text-white font-semibold px-5 py-2 rounded-lg shadow-lg shadow-[#3498db]/30 transition-all duration-300 hover:bg-[#2980b9] hover:shadow-xl hover:-translate-y-0.5 ${className}`}
     >
       {children}
@@ -133,7 +131,7 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-      <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${isScrolled ? "bg-gray-900/80 backdrop-blur-sm shadow-lg border-b border-gray-800" : "bg-transparent"}`}>
+      <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${isScrolled ? "bg-gray-900/90 backdrop-blur-md shadow-lg border-b border-gray-800" : "bg-transparent"}`}>
         <nav className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-20 items-center justify-between">
             <div className="flex flex-shrink-0 items-center space-x-3">
@@ -158,9 +156,10 @@ const Navbar: React.FC = () => {
       </header>
       
       {/* Mobile Menu */}
-      <div className={`fixed inset-0 z-30 transform transition-opacity lg:hidden ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`} onClick={() => setIsMenuOpen(false)}>
-        <div className="absolute inset-0 bg-gray-900/90 backdrop-blur-sm overflow-y-auto">
-          <div className="mt-24 flex flex-col items-center space-y-8 pb-10">
+      <div className={`fixed inset-0 z-30 transform transition-opacity lg:hidden ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
+        {/* Overlay ditambahkan penanganan scroll dan klik */}
+        <div className="absolute inset-0 bg-gray-900/95 backdrop-blur-md overflow-y-auto" onClick={() => setIsMenuOpen(false)}>
+          <div className="min-h-full flex flex-col items-center justify-center space-y-8 pb-10 pt-24" onClick={(e) => e.stopPropagation()}>
             {menuItems.map((item) => (
               <Link key={item.name} to={item.href} onClick={() => setIsMenuOpen(false)} className="text-2xl font-semibold text-gray-200 hover:text-[#3498db] transition-colors">
                 {item.name}
@@ -357,10 +356,12 @@ const ProjectCarousel: React.FC<{ images: string[]; title: string }> = ({ images
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Perbaikan Scroll Body Modal
   React.useEffect(() => {
-    if (isModalOpen) document.body.style.overflow = "hidden";
-    else document.body.style.overflow = "unset";
-    return () => { document.body.style.overflow = "unset"; };
+    if (isModalOpen) document.body.classList.add("overflow-hidden");
+    else document.body.classList.remove("overflow-hidden");
+    
+    return () => document.body.classList.remove("overflow-hidden");
   }, [isModalOpen]);
 
   const prevSlide = (e?: React.MouseEvent) => {
@@ -421,18 +422,15 @@ const ProjectCarousel: React.FC<{ images: string[]; title: string }> = ({ images
 
 // --- KOMPONEN UTAMA MS 365 TERINTEGRASI SIMPAN DATABASE & MODEL LIHAT DATA ---
 const Microsoft365Projects: React.FC = () => {
-  // State untuk Modal Form Unduh (User)
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [downloadName, setDownloadName] = useState("");
   const [downloadPhone, setDownloadPhone] = useState("");
   const [selectedExcelUrl, setSelectedExcelUrl] = useState("");
 
-  // State untuk Modal Lihat Data Pengunduh & Modal PIN Admin
   const [isViewDataModalOpen, setIsViewDataModalOpen] = useState(false);
   const [isAdminPinModalOpen, setIsAdminPinModalOpen] = useState(false);
   const [adminPin, setAdminPin] = useState("");
 
-  // State "Database" Pengunduh (diinisialisasi dari localStorage agar persisten)
   const [downloaders, setDownloaders] = useState<
     Array<{ id: number; name: string; phone: string; timestamp: string }>
   >(() => {
@@ -465,14 +463,12 @@ const Microsoft365Projects: React.FC = () => {
     <div className="bg-gray-700 text-gray-200 px-3 py-1 rounded-md text-sm font-medium">{children}</div>
   );
 
-  // Fungsi untuk mensensor 6 digit terakhir nomor HP (Untuk tampilan User biasa)
   const maskPhoneNumber = (phone: string) => {
     const cleanPhone = phone.trim();
     if (cleanPhone.length <= 6) return "******";
     return cleanPhone.slice(0, cleanPhone.length - 6) + "******";
   };
 
-  // Fungsi Handle Submit Form Download + Simpan ke Database (User Biasa)
   const handleDownloadSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (downloadName.trim() && downloadPhone.trim()) {
@@ -508,7 +504,6 @@ const Microsoft365Projects: React.FC = () => {
     }
   };
 
-  // Fungsi Export Data ke CSV (Hanya Dipanggil Jika PIN Benar)
   const handleExportAdminData = () => {
     if (downloaders.length === 0) {
       alert("Belum ada data pengunduh untuk diexport.");
@@ -535,7 +530,8 @@ const Microsoft365Projects: React.FC = () => {
   };
 
   return (
-    <section className="mx-auto max-w-6xl px-4 relative">
+    // ID ditambahkan di section ini agar navigasi hash #microsoft-365 bisa bekerja
+    <section id="microsoft-365" className="mx-auto mt-12 max-w-6xl px-4 py-12 relative">
       <div className="text-center mb-12">
         <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">Administrasi & Analisis Data</h3>
         <h2 className="text-3xl md:text-4xl font-bold text-white">Proyek Microsoft 365</h2>
@@ -798,7 +794,7 @@ const Microsoft365Projects: React.FC = () => {
 
 const Publications: React.FC = () => {
   const publicationList = [
-    { title: "PENGEMBANGAN WEB DINAS PERPUSTAKAAN DAN ARSIP BERBASIS LARAVEL FRAMEWORK PADA DPAD KOTA TANGERANG", journal: "Jurnal Mahasiswa Teknik Informatika (Jurnal Teknologi Informasi)", date: "Desember 2023", desc: "Penelitian ini membahas pengembangan web Dinas Perpustakaan dan Arsip berbasis Laravel Framework pada DPAD Kota Tangerang untuk meningkatkan layanan perpustakaan dan arsip digital.", link: "https://ejournal.itn.ac.id/index.php/jati/article/view/7840", authors: ["Agam Adensa", "Kamilah Raihan", "Rizky Faisal Rafi", "Irwan Richwandi Putra", " Firda Azizah"] },
+    { title: "PENGEMBANGAN WEB DINAS PERPUSTAKAAN DAN ARSIP BERBASIS LARAVEL FRAMEWORK PADA DPAD Kota TANGERANG", journal: "Jurnal Mahasiswa Teknik Informatika (Jurnal Teknologi Informasi)", date: "Desember 2023", desc: "Penelitian ini membahas pengembangan web Dinas Perpustakaan dan Arsip berbasis Laravel Framework pada DPAD Kota Tangerang untuk meningkatkan layanan perpustakaan dan arsip digital.", link: "https://ejournal.itn.ac.id/index.php/jati/article/view/7840", authors: ["Agam Adensa", "Kamilah Raihan", "Rizky Faisal Rafi", "Irwan Richwandi Putra", " Firda Azizah"] },
   ];
   const DocumentIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>);
 
@@ -887,7 +883,7 @@ const Footer: React.FC = () => {
           <Link className="text-gray-300 hover:text-[#3498db]" to="/">Home</Link>
           <Link className="text-gray-300 hover:text-[#3498db]" to="/#experience">Experience</Link>
           <Link className="text-gray-300 hover:text-[#3498db]" to="/#projects">Projects</Link>
-          <Link className="text-gray-300 hover:text-[#3498db]" to="/microsoft-365">Microsoft 365</Link>
+          <Link className="text-gray-300 hover:text-[#3498db]" to="/#microsoft-365">Microsoft 365</Link>
           <Link className="text-gray-300 hover:text-[#3498db]" to="/#contact">Contact</Link>
         </nav>
         <div className="text-gray-500 text-sm">
@@ -899,6 +895,7 @@ const Footer: React.FC = () => {
 };
 
 // --- [BAGIAN 8: HALAMAN (PAGES)] ---
+// Microsoft365Page telah dihapus dan digabungkan langsung ke sini
 const HomePage = () => (
   <>
     <Hero />
@@ -906,16 +903,10 @@ const HomePage = () => (
     <Bootcamp />
     <Education />
     <Projects />
+    <Microsoft365Projects />
     <Publications />
     <Contact />
   </>
-);
-
-const Microsoft365Page = () => (
-  <div className="pt-28 min-h-screen pb-12">
-    <Microsoft365Projects />
-    <Contact />
-  </div>
 );
 
 // --- [BAGIAN 9: APLIKASI UTAMA BESERTA ROUTING] ---
@@ -931,19 +922,21 @@ const AppContent = () => {
   const handleBackToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
-    <div className="min-h-screen m-0 p-0 bg-gray-900 text-white overflow-x-hidden relative">
+    <div className="min-h-screen m-0 p-0 bg-gray-900 text-white relative">
       <ScrollHandler />
       
-      {/* Efek Background */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-[#3498db]/10 rounded-full filter blur-3xl opacity-50 animate-pulse-slow"></div>
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-purple-600/10 rounded-full filter blur-3xl opacity-50 animate-pulse-slow animation-delay-4000"></div>
+      {/* Efek Background dibungkus dalam div fixed agar tidak mengacaukan batas scroll halaman terbawah */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#3498db]/10 rounded-full filter blur-3xl opacity-50 animate-pulse-slow"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-600/10 rounded-full filter blur-3xl opacity-50 animate-pulse-slow animation-delay-4000"></div>
+      </div>
 
       <div className="relative z-10">
         <Navbar />
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/microsoft-365" element={<Microsoft365Page />} />
+            {/* Rute /microsoft-365 dihapus karena semua komponen sekarang dalam page HomePage */}
           </Routes>
         </main>
         <Footer />
@@ -962,6 +955,7 @@ const AppContent = () => {
       )}
       <style>{`
         html { scroll-behavior: smooth; }
+        body.overflow-hidden { overflow: hidden; }
         @keyframes pulse-slow {
           0%, 100% { transform: scale(1); opacity: 0.4; }
           50% { transform: scale(1.2); opacity: 0.6; }
