@@ -439,24 +439,38 @@ const Microsoft365Projects: React.FC = () => {
   });
 
   const ms365List = [
+    // Template Excel 1
     {
       images: ["/excel/1/image.png"],
       pdfUrl: "/excel/1/AbsensiBulananRekapGajiByRIFARA.pdf",
       excelUrl: "/excel/1/TemplateAbsensiBulananRekapGajibyRIFARA.xlsx",
-      title: "Sistem Absensi & Penggajian Otomatis (Automated HR & Payroll System)",
+      title: "Absensi Bulanan & Penggajian Otomatis (Automated HR & Payroll System)",
       desc: "Pembuatan sistem rekapitulasi absensi dan kalkulasi penggajian karyawan bulanan yang terintegrasi. Menggunakan formula dinamis dan logika perhitungan bersyarat untuk melacak kehadiran, cuti, serta menghitung gaji bersih (Take-Home Pay) secara otomatis dan akurat.",
       features: ["Otomatisasi Kalkulasi Penggajian: Perhitungan gaji pokok, tunjangan, dan potongan kehadiran secara real-time.", "Rekapitulasi Data Bersyarat: Penggunaan COUNTIF dengan wildcard untuk melacak berbagai kode status cuti karyawan.", "Keamanan Data (Data Protection): Implementasi penguncian sel (Locked Cells) untuk melindungi integritas formula.", "Manajemen Tanggal & Teks Dinamis: Ekstraksi hari dan tanggal menggunakan kombinasi formula LEFT, TEXT, dan DATE."],
       tech: ["Microsoft Excel", "HR Analytics", "Payroll Automation", "Formula & Logic"],
     },
+
+    // Template Excel 2
     {
-      images: ["/word/image.png"],
-      pdfUrl: "/files/laporan-word.pdf",
-      excelUrl: null,
-      title: "Template Dokumen Laporan Profesional (Microsoft Word)",
-      desc: "Penyusunan dan pemformatan dokumen profesional yang terstruktur rapi. Termasuk pembuatan daftar isi otomatis, mail merge untuk surat massal, pengaturan layout kompleks, dan implementasi styling standar perusahaan.",
-      features: ["Daftar Isi & Referensi Otomatis", "Integrasi Mail Merge (Surat Massal)", "Formatting & Layout Tingkat Lanjut", "Desain Kop Surat, Header & Footer"],
-      tech: ["Microsoft Word", "Document Formatting", "Administration", "Mail Merge"],
+      images: ["/excel/2/image1.png", "/excel/2/image2.png"],
+      pdfUrl: "/excel/2/Faktur_Invoice_By_RIFARA.pdf",
+      excelUrl: "/excel/2/Faktur_Invoice_By_RIFARA.xlsx",
+      title: "Generator Faktur Penjualan Otomatis (Automated Sales Invoice Generator)",
+      desc: "Pembuatan template faktur penjualan dinamis yang dirancang untuk mempercepat proses penagihan dan administrasi. Sistem ini menggunakan kombinasi fitur validasi data dan formula pencarian untuk mengisi detail pelanggan serta melakukan kalkulasi transaksi secara otomatis, sehingga meminimalisir kesalahan input manual (human error).",
+      features: ["Otomatisasi Data Pelanggan: Implementasi Data Validation (Dropdown List) yang dipadukan dengan formula VLOOKUP untuk memanggil data alamat dan kontak pelanggan secara instan berdasarkan nama perusahaan.", "Kalkulasi Harga Dinamis: Perhitungan otomatis dan akurat untuk Sub Total, Total Diskon, perhitungan Pajak (10%), hingga Total Akhir (Yang Dibayar) menggunakan fungsi matematika dasar dan SUM.", "Manajemen Basis Data Terstruktur: Memanfaatkan tabel referensi terpisah (Master Data) untuk menyimpan daftar pelanggan secara rapi, sehingga pembuatan faktur baru menjadi jauh lebih cepat dan efisien.", "Desain Profesional & Siap Cetak: Tata letak (layout) faktur yang bersih, terstruktur, dan telah diatur area cetaknya (Print Area) agar formatnya tetap rapi saat diekspor ke PDF maupun dicetak langsung."],
+      tech: ["Microsoft Excel", "Sales Automation", "VLOOKUP & Data Validation", "Formula & Logic"],
     },
+
+    // Template Word
+    // {
+    //   images: ["/word/image.png"],
+    //   pdfUrl: "/files/laporan-word.pdf",
+    //   excelUrl: null,
+    //   title: "Template Dokumen Laporan Profesional (Microsoft Word)",
+    //   desc: "Penyusunan dan pemformatan dokumen profesional yang terstruktur rapi. Termasuk pembuatan daftar isi otomatis, mail merge untuk surat massal, pengaturan layout kompleks, dan implementasi styling standar perusahaan.",
+    //   features: ["Daftar Isi & Referensi Otomatis", "Integrasi Mail Merge (Surat Massal)", "Formatting & Layout Tingkat Lanjut", "Desain Kop Surat, Header & Footer"],
+    //   tech: ["Microsoft Word", "Document Formatting", "Administration", "Mail Merge"],
+    // },
   ];
 
   const Chip: React.FC<{ children: React.ReactNode }> = ({ children }) => (
