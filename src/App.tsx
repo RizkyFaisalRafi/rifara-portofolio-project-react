@@ -28,7 +28,6 @@ const Navbar: React.FC = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
 
-  // Menu sudah disatukan di 1 page
   const menuItems = [
     { name: "Home", href: "/" },
     { name: "Experience", href: "/#experience" },
@@ -40,14 +39,12 @@ const Navbar: React.FC = () => {
     { name: "Contact", href: "/#contact" },
   ];
 
-  // Perbaikan Scroll Body
   useEffect(() => {
     if (isMenuOpen) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
     }
-    // Cleanup function mencegah bug scroll stuck
     return () => document.body.classList.remove("overflow-hidden");
   }, [isMenuOpen]);
 
@@ -74,7 +71,7 @@ const Navbar: React.FC = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []); // Hapus dependency yang tidak perlu
+  }, []); 
 
   const NavLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => {
     let isActive = false;
@@ -157,7 +154,6 @@ const Navbar: React.FC = () => {
       
       {/* Mobile Menu */}
       <div className={`fixed inset-0 z-30 transform transition-opacity lg:hidden ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
-        {/* Overlay ditambahkan penanganan scroll dan klik */}
         <div className="absolute inset-0 bg-gray-900/95 backdrop-blur-md overflow-y-auto" onClick={() => setIsMenuOpen(false)}>
           <div className="min-h-full flex flex-col items-center justify-center space-y-8 pb-10 pt-24" onClick={(e) => e.stopPropagation()}>
             {menuItems.map((item) => (
@@ -427,17 +423,6 @@ const Microsoft365Projects: React.FC = () => {
   const [downloadPhone, setDownloadPhone] = useState("");
   const [selectedExcelUrl, setSelectedExcelUrl] = useState("");
 
-  const [isViewDataModalOpen, setIsViewDataModalOpen] = useState(false);
-  const [isAdminPinModalOpen, setIsAdminPinModalOpen] = useState(false);
-  const [adminPin, setAdminPin] = useState("");
-
-  const [downloaders, setDownloaders] = useState<
-    Array<{ id: number; name: string; phone: string; timestamp: string }>
-  >(() => {
-    const savedData = localStorage.getItem("excel_downloaders_db");
-    return savedData ? JSON.parse(savedData) : [];
-  });
-
   const ms365List = [
     // Template Excel 1
     {
@@ -471,34 +456,26 @@ const Microsoft365Projects: React.FC = () => {
       features: ["Navigasi Data Interaktif: Penggunaan Form Controls (Spin Button & List Box) yang terhubung dengan nomor urut (ID) untuk memilih dan menampilkan rincian gaji karyawan secara instan dan user-friendly.", "Integrasi Data Otomatis: Memanfaatkan fungsi pencarian lanjutan (seperti VLOOKUP atau INDEX-MATCH) untuk menarik data komponen gaji pokok, tunjangan, dan potongan secara otomatis berdasarkan nama atau nomor urut yang dipilih.", "Kalkulasi Penggajian Akurat: Perhitungan terpusat untuk total pendapatan bersih (Take-Home Pay) setelah dikurangi potongan terkait (seperti Pajak/PPh), meminimalisir kesalahan perhitungan manual.", "Format Dokumen Siap Cetak: Tata letak (layout) slip gaji yang rapi dan profesional, dilengkapi dengan pengaturan area cetak (Print Area) agar dokumen siap diekspor ke PDF atau dicetak langsung dengan ukuran yang presisi."],
       tech: ["Microsoft Excel", "Payroll Automation", "Form Controls", "Interactive Dashboard"],
     },
-
-    // Template Word
-    // {
-    //   images: ["/word/image.png"],
-    //   pdfUrl: "/files/laporan-word.pdf",
-    //   excelUrl: null,
-    //   title: "Template Dokumen Laporan Profesional (Microsoft Word)",
-    //   desc: "Penyusunan dan pemformatan dokumen profesional yang terstruktur rapi. Termasuk pembuatan daftar isi otomatis, mail merge untuk surat massal, pengaturan layout kompleks, dan implementasi styling standar perusahaan.",
-    //   features: ["Daftar Isi & Referensi Otomatis", "Integrasi Mail Merge (Surat Massal)", "Formatting & Layout Tingkat Lanjut", "Desain Kop Surat, Header & Footer"],
-    //   tech: ["Microsoft Word", "Document Formatting", "Administration", "Mail Merge"],
-    // },
   ];
 
   const Chip: React.FC<{ children: React.ReactNode }> = ({ children }) => (
     <div className="bg-gray-700 text-gray-200 px-3 py-1 rounded-md text-sm font-medium">{children}</div>
   );
 
-  const maskPhoneNumber = (phone: string) => {
-    const cleanPhone = phone.trim();
-    if (cleanPhone.length <= 6) return "******";
-    return cleanPhone.slice(0, cleanPhone.length - 6) + "******";
-  };
-
-  const handleDownloadSubmit = (e: React.FormEvent) => {
+  const handleDownloadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validasi Manual Tambahan sebelum proses dijalankan
+    if (downloadPhone.trim().length < 10) {
+      alert("Nomor WhatsApp tidak valid. Minimal harus berisi 10 angka.");
+      return;
+    }
+
+    // GANTI URL DI BAWAH INI DENGAN URL GOOGLE APPS SCRIPT ANDA
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzAcmWg0qoULx8jV6LVpk2JWOV7Hfo1K81nG4DVixsvrsqTazO0aO_ZPTYL1Xgrw1-Liw/exec";
+
     if (downloadName.trim() && downloadPhone.trim()) {
       const newEntry = {
-        id: Date.now(),
         name: downloadName.trim(),
         phone: downloadPhone.trim(),
         timestamp: new Date().toLocaleString("id-ID", {
@@ -510,10 +487,21 @@ const Microsoft365Projects: React.FC = () => {
         }),
       };
 
-      const updatedList = [newEntry, ...downloaders];
-      setDownloaders(updatedList);
-      localStorage.setItem("excel_downloaders_db", JSON.stringify(updatedList));
+      // 1. Kirim data ke Google Sheets melalui Apps Script
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors", 
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newEntry),
+        });
+      } catch (error) {
+        console.error("Gagal mengirim data ke Google Sheets:", error);
+      }
 
+      // 2. Lanjutkan proses unduh file Excel template untuk user
       const link = document.createElement("a");
       link.href = selectedExcelUrl;
       link.setAttribute("download", "");
@@ -529,33 +517,7 @@ const Microsoft365Projects: React.FC = () => {
     }
   };
 
-  const handleExportAdminData = () => {
-    if (downloaders.length === 0) {
-      alert("Belum ada data pengunduh untuk diexport.");
-      return;
-    }
-
-    let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "No,Nama Lengkap,Nomor HP (Lengkap),Waktu Unduh\n";
-
-    downloaders.forEach((row, index) => {
-      const rowName = `"${row.name}"`;
-      const rowPhone = `"${row.phone}"`; 
-      const rowTime = `"${row.timestamp}"`;
-      csvContent += `${index + 1},${rowName},${rowPhone},${rowTime}\n`;
-    });
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "Data_Pengunduh_Lengkap_Admin.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
   return (
-    // ID ditambahkan di section ini agar navigasi hash #microsoft-365 bisa bekerja
     <section id="microsoft-365" className="mx-auto mt-12 max-w-6xl px-4 py-12 relative">
       <div className="text-center mb-12">
         <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">Administrasi & Analisis Data</h3>
@@ -614,19 +576,6 @@ const Microsoft365Projects: React.FC = () => {
                     Download Excel
                   </button>
                 )}
-
-                {project.excelUrl && (
-                  <button
-                    onClick={() => setIsViewDataModalOpen(true)}
-                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 font-semibold text-gray-200 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 hover:text-white transition-all transform hover:scale-105"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-[#3498db]">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                    </svg>
-                    Lihat Data Pengunduh ({downloaders.length})
-                  </button>
-                )}
               </div>
             </div>
           </div>
@@ -671,11 +620,17 @@ const Microsoft365Projects: React.FC = () => {
                   type="tel"
                   id="phone"
                   required
+                  minLength={10} // <-- Validasi Bawaan HTML
                   value={downloadPhone}
-                  onChange={(e) => setDownloadPhone(e.target.value)}
+                  onChange={(e) => {
+                    // Validasi agar HANYA angka yang bisa diketik oleh pengguna
+                    const onlyNums = e.target.value.replace(/[^0-9]/g, '');
+                    setDownloadPhone(onlyNums);
+                  }}
                   placeholder="Contoh: 081234567890"
                   className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3498db] focus:border-transparent transition-all"
                 />
+                <p className="text-xs text-gray-500 mt-1">Gunakan angka saja, minimal 10 digit.</p>
               </div>
 
               <div className="pt-4 flex gap-3">
@@ -694,122 +649,6 @@ const Microsoft365Projects: React.FC = () => {
                 </button>
               </div>
             </form>
-          </div>
-        </div>
-      )}
-
-      {/* --- MODAL 2: TABEL DATA PENGUNDUH (DENGAN SENSOR HP) & TOMBOL EXPORT ADMIN --- */}
-      {isViewDataModalOpen && (
-        <div className="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 w-full max-w-3xl shadow-2xl relative animate-fade-in-up">
-            <button
-              onClick={() => setIsViewDataModalOpen(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            <div className="mb-6">
-              <h3 className="text-2xl font-bold text-white mb-1">Daftar Pengunduh File Excel</h3>
-              <p className="text-gray-400 text-sm">Menampilkan daftar pengguna yang telah mengunduh file template Excel ini (6 digit terakhir nomor HP disensor demi privasi).</p>
-            </div>
-
-            <div className="max-h-80 overflow-y-auto border border-gray-800 rounded-lg">
-              {downloaders.length === 0 ? (
-                <div className="text-center py-8 text-gray-400">Belum ada pengguna yang mengunduh file ini.</div>
-              ) : (
-                <table className="w-full text-left text-sm text-gray-300">
-                  <thead className="bg-gray-800 text-gray-200 uppercase text-xs sticky top-0">
-                    <tr>
-                      <th className="px-4 py-3">No</th>
-                      <th className="px-4 py-3">Nama</th>
-                      <th className="px-4 py-3">Nomor HP (Sensored)</th>
-                      <th className="px-4 py-3 text-right">Waktu Unduh</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-800">
-                    {downloaders.map((item, index) => (
-                      <tr key={item.id} className="hover:bg-gray-800/40 transition-colors">
-                        <td className="px-4 py-3 font-semibold text-gray-400">{index + 1}</td>
-                        <td className="px-4 py-3 font-medium text-white">{item.name}</td>
-                        <td className="px-4 py-3 font-mono text-cyan-400">{maskPhoneNumber(item.phone)}</td>
-                        <td className="px-4 py-3 text-right text-gray-400 text-xs">{item.timestamp}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
-            </div>
-
-            <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-              
-              {/* TOMBOL EXPORT: Akan membuka Modal PIN sebelum unduh data */}
-              <button
-                onClick={() => setIsAdminPinModalOpen(true)}
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold text-white bg-green-600 rounded-lg shadow-lg shadow-green-600/30 hover:bg-green-700 transition-colors"
-                title="Membutuhkan Kode Kunci"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                </svg>
-                Unduh Data (Admin / Dev)
-              </button>
-
-              <button
-                onClick={() => setIsViewDataModalOpen(false)}
-                className="w-full sm:w-auto px-6 py-2.5 font-bold text-white bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                Tutup
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* --- MODAL 3: INPUT PIN ADMIN --- */}
-      {isAdminPinModalOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/95 backdrop-blur-md p-4">
-          <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 w-full max-w-sm shadow-2xl relative animate-fade-in-up">
-            <h3 className="text-xl font-bold text-white mb-2 text-center">Otorisasi Admin</h3>
-            <p className="text-gray-400 text-xs text-center mb-6">Masukkan kode kunci untuk mengunduh data utuh.</p>
-            
-            <input
-              type="password"
-              value={adminPin}
-              onChange={(e) => setAdminPin(e.target.value)}
-              placeholder="Masukkan PIN"
-              className="w-full px-4 py-3 mb-6 bg-gray-800 border border-gray-700 rounded-lg text-white text-center tracking-[0.5em] text-lg font-mono focus:outline-none focus:ring-2 focus:ring-[#3498db] transition-all"
-              autoFocus
-            />
-            
-            <div className="flex gap-3">
-              <button
-                onClick={() => {
-                  setIsAdminPinModalOpen(false);
-                  setAdminPin(""); // Reset PIN saat batal
-                }}
-                className="flex-1 px-4 py-2 font-semibold text-gray-300 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 transition-colors"
-              >
-                Batal
-              </button>
-              <button
-                onClick={() => {
-                  if (adminPin === "301201") {
-                    setIsAdminPinModalOpen(false);
-                    setAdminPin("");
-                    handleExportAdminData(); // Eksekusi unduh data jika PIN benar
-                  } else {
-                    alert("Kode kunci salah! Akses ditolak.");
-                    setAdminPin(""); // Kosongkan input agar bisa coba lagi
-                  }
-                }}
-                className="flex-1 px-4 py-2 font-bold text-white bg-green-600 rounded-lg hover:bg-green-700 shadow-lg shadow-green-600/30 transition-colors"
-              >
-                Verifikasi
-              </button>
-            </div>
           </div>
         </div>
       )}
