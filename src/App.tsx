@@ -456,6 +456,18 @@ const Microsoft365Projects: React.FC = () => {
       features: ["Navigasi Data Interaktif: Penggunaan Form Controls (Spin Button & List Box) yang terhubung dengan nomor urut (ID) untuk memilih dan menampilkan rincian gaji karyawan secara instan dan user-friendly.", "Integrasi Data Otomatis: Memanfaatkan fungsi pencarian lanjutan (seperti VLOOKUP atau INDEX-MATCH) untuk menarik data komponen gaji pokok, tunjangan, dan potongan secara otomatis berdasarkan nama atau nomor urut yang dipilih.", "Kalkulasi Penggajian Akurat: Perhitungan terpusat untuk total pendapatan bersih (Take-Home Pay) setelah dikurangi potongan terkait (seperti Pajak/PPh), meminimalisir kesalahan perhitungan manual.", "Format Dokumen Siap Cetak: Tata letak (layout) slip gaji yang rapi dan profesional, dilengkapi dengan pengaturan area cetak (Print Area) agar dokumen siap diekspor ke PDF atau dicetak langsung dengan ukuran yang presisi."],
       tech: ["Microsoft Excel", "Payroll Automation", "Form Controls", "Interactive Dashboard"],
     },
+
+    // Template Excel 4
+    {
+      images: ["/excel/4/image1.jpg", "/excel/4/image2.png"],
+      pdfUrl: "/excel/4/Surat_Jalan_By_RIFARA.pdf",
+      excelUrl: "/excel/4/Surat_Jalan_By_RIFARA.xlsx",
+      title: "Surat Jalan (Delivery Note) Dinamis & Interaktif (Dynamic & Interactive Delivery Note Template)",
+      desc: "Pembuatan template Surat Jalan (Delivery Note) dinamis yang dirancang untuk mempercepat proses administrasi pengiriman barang harian. Sistem ini memanfaatkan integrasi rumus dan manajemen data untuk menarik detail pelanggan serta inventaris secara instan, meminimalisir human error dalam pencatatan fisik, dan memastikan kelancaran alur distribusi.",
+      features: ["Integrasi Database Pelanggan & Barang: Memanfaatkan fungsi pencarian lanjutan (XLOOKUP) dipadukan dengan Data Validation (Dropdown List) untuk memanggil data alamat pelanggan dan deskripsi barang secara otomatis hanya dengan memilih No. Surat Jalan.", "Penomoran & Perekaman Data Efisien: Implementasi sistem input yang terstruktur untuk merekam detail pengiriman (Nomor Surat Jalan, Tanggal, Nama Supir, Nomor Polisi Kendaraan) secara rapi agar mudah dilacak untuk keperluan audit atau penagihan (invoicing).", "Format Dokumen Siap Cetak: Tata letak (layout) Surat Jalan yang rapi dan profesional (mendukung format multi-copy), dilengkapi dengan pengaturan area cetak (Print Area) agar dokumen siap diekspor ke PDF atau dicetak langsung dengan ukuran kertas yang presisi (misalnya A5 atau A4 dibagi dua)."],
+      tech: ["Microsoft Excel", "Payroll Automation", "Form Controls", "Interactive Dashboard"],
+    },
+    
   ];
 
   const Chip: React.FC<{ children: React.ReactNode }> = ({ children }) => (
