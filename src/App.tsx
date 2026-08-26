@@ -465,7 +465,7 @@ const Microsoft365Projects: React.FC = () => {
       title: "Surat Jalan (Delivery Note) Dinamis & Interaktif (Dynamic & Interactive Delivery Note Template)",
       desc: "Pembuatan template Surat Jalan (Delivery Note) dinamis yang dirancang untuk mempercepat proses administrasi pengiriman barang harian. Sistem ini memanfaatkan integrasi rumus dan manajemen data untuk menarik detail pelanggan serta inventaris secara instan, meminimalisir human error dalam pencatatan fisik, dan memastikan kelancaran alur distribusi.",
       features: ["Integrasi Database Pelanggan & Barang: Memanfaatkan fungsi pencarian lanjutan (XLOOKUP) dipadukan dengan Data Validation (Dropdown List) untuk memanggil data alamat pelanggan dan deskripsi barang secara otomatis hanya dengan memilih No. Surat Jalan.", "Penomoran & Perekaman Data Efisien: Implementasi sistem input yang terstruktur untuk merekam detail pengiriman (Nomor Surat Jalan, Tanggal, Nama Supir, Nomor Polisi Kendaraan) secara rapi agar mudah dilacak untuk keperluan audit atau penagihan (invoicing).", "Format Dokumen Siap Cetak: Tata letak (layout) Surat Jalan yang rapi dan profesional (mendukung format multi-copy), dilengkapi dengan pengaturan area cetak (Print Area) agar dokumen siap diekspor ke PDF atau dicetak langsung dengan ukuran kertas yang presisi (misalnya A5 atau A4 dibagi dua)."],
-      tech: ["Microsoft Excel", "Payroll Automation", "Form Controls", "Interactive Dashboard"],
+      tech: ["Microsoft Excel", "Document Automation", "Data Management", "Print-Ready Layout"],
     },
     
   ];
