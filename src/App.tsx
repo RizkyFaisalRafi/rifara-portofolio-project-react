@@ -188,48 +188,94 @@ const Navbar: React.FC = () => {
 // );
 
 // --- [BAGIAN 2: KOMPONEN HERO] ---
+// const Hero: React.FC = () => (
+//   <section id="home" className="min-h-screen flex items-center justify-center text-center px-4 relative bg-cover bg-no-repeat" style={{ backgroundImage: `url('photo_with_parent.jpg')`, backgroundPosition: "center 17%" }}>
+//     <div className="absolute inset-0 bg-black/60 z-0"></div>
+//     <div className="max-w-4xl relative z-10">
+//       <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight">Rizky Faisal Rafi</h1>
+      
+//       {/* Bagian deskripsi yang sudah diubah */}
+//       <p className="mt-4 text-lg md:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto">
+//         Seorang <span className="text-[#3498db] font-semibold">Profesional Multidisiplin</span> dengan latar belakang <span className="text-[#3498db] font-semibold">Teknologi</span> serta kompetensi di bidang <span className="text-[#3498db] font-semibold">Administrasi & Finance</span>. Berdedikasi untuk memberikan solusi yang efisien, andal, dan terstruktur.
+//       </p>
+      
+//       {/* <div className="mt-8 flex flex-wrap justify-center gap-4">
+//         <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek</Link>
+//         <a href="https://drive.google.com/file/d/1Viw-9ev64CIISVf0tMWZJwRf0SCtzkXK/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Unduh CV</a>
+//         <a href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white">Portofolio Aktif</a>
+//       </div> */}
+
+//   <div className="mt-8 flex flex-wrap justify-center gap-4">
+//   <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+//     Lihat Proyek
+//   </Link>
+  
+//   {/* Tombol Unduh CV yang diperbarui ke file lokal */}
+//   <a 
+//     href="/cv/d:\Dokumen Lamar Kerja\CV_Rizky_Faisal_Rafi.pdf" 
+//     download="CV_Rizky_Faisal_Rafi.pdf"
+//     className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105"
+//   >
+//     Unduh CV
+//   </a>
+  
+//   {/* Tombol Portofolio Aktif */}
+//   <a 
+//     href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" 
+//     target="_blank" 
+//     rel="noopener noreferrer" 
+//     className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white"
+//   >
+//     Portofolio Aktif
+//   </a>
+// </div>
+      
+//     </div>
+//   </section>
+// );
+
+// --- [BAGIAN 2: KOMPONEN HERO] ---
 const Hero: React.FC = () => (
   <section id="home" className="min-h-screen flex items-center justify-center text-center px-4 relative bg-cover bg-no-repeat" style={{ backgroundImage: `url('photo_with_parent.jpg')`, backgroundPosition: "center 17%" }}>
     <div className="absolute inset-0 bg-black/60 z-0"></div>
     <div className="max-w-4xl relative z-10">
       <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight">Rizky Faisal Rafi</h1>
-      
-      {/* Bagian deskripsi yang sudah diubah */}
+
+      {/* Bagian deskripsi */}
       <p className="mt-4 text-lg md:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto">
         Seorang <span className="text-[#3498db] font-semibold">Profesional Multidisiplin</span> dengan latar belakang <span className="text-[#3498db] font-semibold">Teknologi</span> serta kompetensi di bidang <span className="text-[#3498db] font-semibold">Administrasi & Finance</span>. Berdedikasi untuk memberikan solusi yang efisien, andal, dan terstruktur.
       </p>
-      
-      {/* <div className="mt-8 flex flex-wrap justify-center gap-4">
-        <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek</Link>
-        <a href="https://drive.google.com/file/d/1Viw-9ev64CIISVf0tMWZJwRf0SCtzkXK/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Unduh CV</a>
-        <a href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white">Portofolio Aktif</a>
-      </div> */}
 
       <div className="mt-8 flex flex-wrap justify-center gap-4">
-  <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-    Lihat Proyek
-  </Link>
-  
-  {/* Tombol Unduh CV yang diperbarui ke file lokal */}
-  <a 
-    href="/cv/d:\Dokumen Lamar Kerja\CV_Rizky_Faisal_Rafi.pdf" 
-    download="CV_Rizky_Faisal_Rafi.pdf"
-    className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105"
-  >
-    Unduh CV
-  </a>
-  
-  {/* Tombol Portofolio Aktif */}
-  <a 
-    href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" 
-    target="_blank" 
-    rel="noopener noreferrer" 
-    className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white"
-  >
-    Portofolio Aktif
-  </a>
-</div>
-      
+        {/* Tombol Lihat Proyek IT */}
+        <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+          Lihat Proyek IT
+        </Link>
+
+        {/* TOMBOL BARU: Lihat Proyek MS 365 */}
+        <Link to="/#microsoft-365" className="bg-[#217346] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">
+          Lihat Proyek MS 365
+        </Link>
+
+        {/* Tombol Unduh CV */}
+        <a 
+          href="/CV_Rizky_Faisal_Rafi.pdf" 
+          download="CV_Rizky_Faisal_Rafi.pdf"
+          className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105"
+        >
+          Unduh CV
+        </a>
+
+        {/* Tombol Portofolio Aktif */}
+        <a 
+          href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white"
+        >
+          Portofolio Aktif
+        </a>
+      </div>
     </div>
   </section>
 );
