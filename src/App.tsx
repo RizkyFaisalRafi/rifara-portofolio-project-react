@@ -254,7 +254,7 @@ const Hero: React.FC = () => (
 
         {/* TOMBOL BARU: Lihat Proyek MS 365 */}
         <Link to="/#microsoft-365" className="bg-[#217346] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          Lihat Proyek MS 365
+          Lihat Proyek Microsoft Office
         </Link>
 
         {/* Tombol Unduh CV */}
