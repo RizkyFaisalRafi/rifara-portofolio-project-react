@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 
-// --- [KOMPONEN PEMBANTU: Auto-Scroll saat berpindah hash/halaman] ---
+// --- [KOMPONEN PEMBANTU: Auto-Scroll saat berpindah hash] ---
 const ScrollHandler = () => {
   const location = useLocation();
 
@@ -14,7 +14,7 @@ const ScrollHandler = () => {
           element.scrollIntoView({ behavior: "smooth" });
         }, 50);
       }
-    } else {
+    } else if (location.pathname === "/") {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [location]);
@@ -187,7 +187,6 @@ const Hero: React.FC = () => (
         <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek IT</Link>
         <Link to="/#microsoft-365" className="bg-[#217346] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek Microsoft Office</Link>
         <a href="/CV_Rizky_Faisal_Rafi.pdf" download="CV_Rizky_Faisal_Rafi.pdf" className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Unduh CV</a>
-        {/* <a href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white">Portofolio Aktif</a> */}
       </div>
     </div>
   </section>
@@ -669,7 +668,7 @@ const MiniERPPage: React.FC = () => {
     {
       title: "Pemesanan Barang (Purchase Order)",
       desc: "Siklus pengadaan dimulai ketika pihak pembeli menerbitkan Purchase Order (PO). Dokumen ini mengikat pesanan secara resmi antar perusahaan (B2B). Pada sistem Excel ini, PO dilengkapi fitur kalkulasi dinamis untuk Sub Total, Pajak (PPN), dan Grand Total.",
-      // image: "/excel/5/po_modern.png",
+      // image: "/excel/erp/po_modern.png",
       image: "/excel/5/image.png",
       tag: "Tahap 1 - Inisiasi Transaksi",
       color: "text-blue-400"
@@ -730,8 +729,8 @@ const MiniERPPage: React.FC = () => {
         </p>
         <div className="mt-8 flex justify-center gap-4">
           
-          {/* TOMBOL UNDUH MASTER EXCEL DIUBAH MENJADI ALERT */}
-          <button 
+          {/* TOMBOL UNDUH MASTER EXCEL (TETAP ALERT KARENA MASIH PROSES) */}
+          {/* <button 
             onClick={(e) => {
               e.preventDefault();
               alert("Dokumen Mini-ERP Master (Full Version) saat ini sedang dalam tahap pengembangan. Silakan cek secara berkala untuk pembaruannya!");
@@ -740,7 +739,30 @@ const MiniERPPage: React.FC = () => {
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
             Unduh Excel Master
-          </button>
+          </button> */}
+
+          {/* TOMBOL UNDUH EXCEL MASTER */}
+          <a 
+            href="/excel/erp/Mini_ERP_Procurement_By_RIFARA.xlsx" 
+            download="Mini_ERP_Procurement_By_RIFARA.xlsx"
+            className="bg-[#217346] text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-[#1e603b] transition-transform transform hover:scale-105 flex items-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+            Unduh Excel Master
+          </a>
+
+          {/* TOMBOL UNDUH PDF MASTER - LANGSUNG PREVIEW/DOWNLOAD LOKAL */}
+          <a 
+            href="/excel/5/Mini_ERP_Procurement_By_RIFARA.pdf" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-red-600 text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-red-700 transition-transform transform hover:scale-105 flex items-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+            Lihat / Unduh PDF Master
+          </a>
 
         </div>
       </div>
