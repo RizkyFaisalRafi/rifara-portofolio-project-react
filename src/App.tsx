@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 
-// --- [KOMPONEN PEMBANTU: Auto-Scroll saat berpindah hash] ---
+// --- [KOMPONEN PEMBANTU: Auto-Scroll saat berpindah hash/halaman] ---
 const ScrollHandler = () => {
   const location = useLocation();
 
@@ -14,7 +14,7 @@ const ScrollHandler = () => {
           element.scrollIntoView({ behavior: "smooth" });
         }, 50);
       }
-    } else if (location.pathname === "/") {
+    } else {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [location]);
@@ -27,6 +27,7 @@ const Navbar: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
 
   const menuItems = [
     { name: "Home", href: "/" },
@@ -52,6 +53,9 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
+      // Scroll Spy hanya aktif di halaman utama ("/")
+      if (location.pathname !== "/") return;
+
       const sections = menuItems
         .filter((item) => item.href.startsWith("/#"))
         .map((item) => document.getElementById(item.href.substring(2)));
@@ -71,13 +75,14 @@ const Navbar: React.FC = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []); 
+  }, [location.pathname]); 
 
   const NavLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href, children }) => {
     let isActive = false;
-    if (href === "/") {
+    
+    if (location.pathname === "/" && href === "/") {
       isActive = activeSection === "home";
-    } else if (href.startsWith("/#")) {
+    } else if (location.pathname === "/" && href.startsWith("/#")) {
       const sectionId = href.substring(2);
       isActive = activeSection === sectionId;
     }
@@ -169,112 +174,20 @@ const Navbar: React.FC = () => {
   );
 };
 
-// // --- [BAGIAN 2: KOMPONEN HERO] ---
-// const Hero: React.FC = () => (
-//   <section id="home" className="min-h-screen flex items-center justify-center text-center px-4 relative bg-cover bg-no-repeat" style={{ backgroundImage: `url('photo_with_parent.jpg')`, backgroundPosition: "center 17%" }}>
-//     <div className="absolute inset-0 bg-black/60 z-0"></div>
-//     <div className="max-w-4xl relative z-10">
-//       <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight">Rizky Faisal Rafi</h1>
-//       <p className="mt-4 text-lg md:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto">
-//         Seorang <span className="text-[#3498db] font-semibold">Mobile Developer</span> & <span className="text-[#3498db] font-semibold">Software Engineer</span> yang bersemangat dalam membangun aplikasi yang intuitif, andal, dan bermanfaat.
-//       </p>
-//       <div className="mt-8 flex flex-wrap justify-center gap-4">
-//         <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek</Link>
-//         <a href="https://drive.google.com/file/d/1Viw-9ev64CIISVf0tMWZJwRf0SCtzkXK/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Unduh CV</a>
-//         <a href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white">Portofolio Aktif</a>
-//       </div>
-//     </div>
-//   </section>
-// );
-
-// --- [BAGIAN 2: KOMPONEN HERO] ---
-// const Hero: React.FC = () => (
-//   <section id="home" className="min-h-screen flex items-center justify-center text-center px-4 relative bg-cover bg-no-repeat" style={{ backgroundImage: `url('photo_with_parent.jpg')`, backgroundPosition: "center 17%" }}>
-//     <div className="absolute inset-0 bg-black/60 z-0"></div>
-//     <div className="max-w-4xl relative z-10">
-//       <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight">Rizky Faisal Rafi</h1>
-      
-//       {/* Bagian deskripsi yang sudah diubah */}
-//       <p className="mt-4 text-lg md:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto">
-//         Seorang <span className="text-[#3498db] font-semibold">Profesional Multidisiplin</span> dengan latar belakang <span className="text-[#3498db] font-semibold">Teknologi</span> serta kompetensi di bidang <span className="text-[#3498db] font-semibold">Administrasi & Finance</span>. Berdedikasi untuk memberikan solusi yang efisien, andal, dan terstruktur.
-//       </p>
-      
-//       {/* <div className="mt-8 flex flex-wrap justify-center gap-4">
-//         <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek</Link>
-//         <a href="https://drive.google.com/file/d/1Viw-9ev64CIISVf0tMWZJwRf0SCtzkXK/view?usp=sharing" target="_blank" rel="noopener noreferrer" className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Unduh CV</a>
-//         <a href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white">Portofolio Aktif</a>
-//       </div> */}
-
-//   <div className="mt-8 flex flex-wrap justify-center gap-4">
-//   <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-//     Lihat Proyek
-//   </Link>
-  
-//   {/* Tombol Unduh CV yang diperbarui ke file lokal */}
-//   <a 
-//     href="/cv/d:\Dokumen Lamar Kerja\CV_Rizky_Faisal_Rafi.pdf" 
-//     download="CV_Rizky_Faisal_Rafi.pdf"
-//     className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105"
-//   >
-//     Unduh CV
-//   </a>
-  
-//   {/* Tombol Portofolio Aktif */}
-//   <a 
-//     href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" 
-//     target="_blank" 
-//     rel="noopener noreferrer" 
-//     className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white"
-//   >
-//     Portofolio Aktif
-//   </a>
-// </div>
-      
-//     </div>
-//   </section>
-// );
-
 // --- [BAGIAN 2: KOMPONEN HERO] ---
 const Hero: React.FC = () => (
   <section id="home" className="min-h-screen flex items-center justify-center text-center px-4 relative bg-cover bg-no-repeat" style={{ backgroundImage: `url('photo_with_parent.jpg')`, backgroundPosition: "center 17%" }}>
     <div className="absolute inset-0 bg-black/60 z-0"></div>
     <div className="max-w-4xl relative z-10">
       <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight">Rizky Faisal Rafi</h1>
-
-      {/* Bagian deskripsi */}
       <p className="mt-4 text-lg md:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto">
-        Seorang <span className="text-[#3498db] font-semibold">Profesional Multidisiplin</span> dengan latar belakang <span className="text-[#3498db] font-semibold">Teknologi</span> serta kompetensi di bidang <span className="text-[#3498db] font-semibold">Administrasi & Finance</span>. Berdedikasi untuk memberikan solusi yang efisien, andal, dan terstruktur.
+        Seorang <span className="text-[#3498db] font-semibold">Profesional Multidisiplin</span> dengan latar belakang <span className="text-[#3498db] font-semibold">Teknologi</span> serta kompetensi di bidang <span className="text-[#3498db] font-semibold">Administrasi</span>. Berdedikasi untuk memberikan solusi yang efisien, andal, dan terstruktur.
       </p>
-
       <div className="mt-8 flex flex-wrap justify-center gap-4">
-        {/* Tombol Lihat Proyek IT */}
-        <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          Lihat Proyek IT
-        </Link>
-
-        {/* TOMBOL BARU: Lihat Proyek MS 365 */}
-        <Link to="/#microsoft-365" className="bg-[#217346] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-          Lihat Proyek Microsoft Office
-        </Link>
-
-        {/* Tombol Unduh CV */}
-        <a 
-          href="/CV_Rizky_Faisal_Rafi.pdf" 
-          download="CV_Rizky_Faisal_Rafi.pdf"
-          className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105"
-        >
-          Unduh CV
-        </a>
-
-        {/* Tombol Portofolio Aktif */}
-        <a 
-          href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white"
-        >
-          Portofolio Aktif
-        </a>
+        <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek IT</Link>
+        <Link to="/#microsoft-365" className="bg-[#217346] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek Microsoft Office</Link>
+        <a href="/CV_Rizky_Faisal_Rafi.pdf" download="CV_Rizky_Faisal_Rafi.pdf" className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Unduh CV</a>
+        <a href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white">Portofolio Aktif</a>
       </div>
     </div>
   </section>
@@ -361,13 +274,14 @@ const Bootcamp = () => {
     { name: "Android Java For Mobile Developer", organizer: "Hacktiv8 (Hacktivate Teknologi Indonesia)", date: "Agu 2022 - Des 2022", certificateUrl: "https://drive.google.com/file/d/195gadyKUWLYtnCjKGthMsLyUZwHUl5Za/view?usp=sharing", details: ["Memahami Konsep Java Untuk Android.", "Memahami Konsep Kotlin Untuk Android.", "Mengenal Dasar - Dasar Java."], relevantCourses: ["Android Java", "Android Kotlin", "Data Local Storage (Shared Preferences, SQLite, Room)", "Navigation"] },
     { name: "Operator Forklift", organizer: "Kautsar Academy by PT Kautsar Inti Prima - Class 2 Forklift Operator SIO Kemnaker", date: "April 2026", certificateUrl: "https://drive.google.com/file/d/1suvWguewV9VcIOVA_SYA24YEsH6pvuLm/view?usp=sharing?", details: ["Memahami Konsep Dasar Forklift.", "Memahami Konsep Dasar Keselamatan Kerja Forklift.", "Mengenal Dasar - Dasar Forklift.", "Keselamatan Kerja Forklift.", "Safety Forklift.", "Driving Forklift."], relevantCourses: ["Forklift Operator SIO Kemnaker", "Safety Forklift", "Driving Forklift"] },
     { name: "BNSP - Operator Komputer", organizer: "Dinas Ketenagakerjaan Kota Tangerang", date: "July 2026 - Present", details: ["Proficient in Microsoft Word for document formatting, layout design, and professional document preparation.", "Skilled in Microsoft Excel, including complex formulas, data cleaning, data management, PivotTables, PivotCharts, dashboard creation, etc.", "Experienced in Microsoft PowerPoint for presentation design and content development, with certified competency and practical exercise experience."], relevantCourses: ["Microsoft Word", "Microsoft Excel", "Microsoft PowerPoint", "BNSP - Operator Komputer"] },
+    { name: "Microsoft Excel Course: Foundation to Mastery", organizer: "Entrefine By Calvin Lim Juara Dunia Excel 2025", date: "August 2026", certificateUrl: "https://learn.entrefine.com/certificate/ENT-M4GM-NJF5-7XGL", details: ["Skilled in Microsoft Excel, including complex formulas, data cleaning, data management, PivotTables, PivotCharts, dashboard creation, etc."], relevantCourses: ["Microsoft Excel", "Entrefine Learning", "Calvin Lim Teacher"] },
   ];
   return <SectionWithTabs id="bootcamp" title="Bootcamp & Sertifikasi" subtitle="Pengembangan Diri" data={bootcampData} />;
 };
 
 const Education = () => {
   const educationHistory = [
-    { institution: "Universitas Raharja", degree: "Sarjana Komputer (S.Kom)", major: "Teknologi Informasi", date: "2020 - 2024", certificateUrl: "https://drive.google.com/file/d/1kwl6o_l5I91cH4MsTRVNricukyzq5vie/view?usp=sharing", details: ["Aktif di organisasi kemahasiswaan (Himpunan Mahasiswa Teknik Informatika).", "Proyek akhir Skripsi tentang pengembangan aplikasi mobile.", "Meraih IPK 3.84."], relevantCourses: ["Sarjana Komputer (S.Kom)", "Teknik Informatika", "Raharja University", "IPK 3.84"] },
+    { institution: "Universitas Raharja", degree: "Sarjana Komputer (S.Kom)", major: "Tekologi Informasi", date: "2020 - 2024", certificateUrl: "https://drive.google.com/file/d/1kwl6o_l5I91cH4MsTRVNricukyzq5vie/view?usp=sharing", details: ["Aktif di organisasi kemahasiswaan (Himpunan Mahasiswa Teknik Informatika).", "Proyek akhir Skripsi tentang pengembangan aplikasi mobile.", "Meraih IPK 3.84."], relevantCourses: ["Sarjana Komputer (S.Kom)", "Teknik Informatika", "Raharja University", "IPK 3.84"] },
     { institution: "SMK Negeri 8 Kota Tangerang", degree: "Sekolah Menengah Kejuruan (SMK)", major: "Teknik Instalasi Tenaga Listrik", certificateUrl: "https://drive.google.com/file/d/1FkqO-Csau7bGg-cUCDmc0gFLay4QSdpR/view?usp=sharing", date: "2017 - 2020", details: ["Aktif di organisasi Paskibra (PASLAVANTA).", "Aktif di organisasi Pramuka (Ketua Pradana).", "Aktif di organisasi Pramuka Saka Wirakartika."], relevantCourses: ["Sekolah Menengah Kejuruan (SMK)", "Teknik Instalasi Tenaga Listrik (TITL)", "SMK Negeri 8 Kota Tangerang", "Pramuka & Paskibra"] },
   ];
   return <SectionWithTabs id="education" title="Riwayat Pendidikan" subtitle="Edukasi" data={educationHistory} />;
@@ -445,11 +359,9 @@ const ProjectCarousel: React.FC<{ images: string[]; title: string }> = ({ images
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  // Perbaikan Scroll Body Modal
   React.useEffect(() => {
     if (isModalOpen) document.body.classList.add("overflow-hidden");
     else document.body.classList.remove("overflow-hidden");
-    
     return () => document.body.classList.remove("overflow-hidden");
   }, [isModalOpen]);
 
@@ -457,7 +369,6 @@ const ProjectCarousel: React.FC<{ images: string[]; title: string }> = ({ images
     if (e) e.stopPropagation();
     setCurrentIndex(currentIndex === 0 ? images.length - 1 : currentIndex - 1);
   };
-
   const nextSlide = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     setCurrentIndex(currentIndex === images.length - 1 ? 0 : currentIndex + 1);
@@ -509,7 +420,7 @@ const ProjectCarousel: React.FC<{ images: string[]; title: string }> = ({ images
   );
 };
 
-// --- KOMPONEN UTAMA MS 365 TERINTEGRASI SIMPAN DATABASE & MODEL LIHAT DATA ---
+// --- [BAGIAN KOMPONEN MICROSOFT 365 PROJECTS] ---
 const Microsoft365Projects: React.FC = () => {
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [downloadName, setDownloadName] = useState("");
@@ -517,50 +428,84 @@ const Microsoft365Projects: React.FC = () => {
   const [selectedExcelUrl, setSelectedExcelUrl] = useState("");
 
   const ms365List = [
-    // Template Excel 1
+    // 1. Template 1: MASTERPIECE MINI-ERP (Teaser)
+    {
+      isCaseStudy: true,
+      caseStudyLink: "/mini-erp",
+      images: ["/excel/5/image.png"], 
+      title: "Mini-ERP System: Automated B2B Procurement Cycle",
+      desc: "Sebuah purwarupa (prototype) sistem Enterprise Resource Planning (ERP) berskala kecil yang dirancang untuk mengotomatiskan seluruh alur pengadaan barang (B2B Procurement). Proyek ini memetakan kompleksitas alur kerja dunia nyata—mulai dari pemesanan hingga pembayaran—ke dalam ekosistem dokumen Excel yang terintegrasi dinamis.",
+      features: [
+        "Order Initiation: Otomatisasi dokumen Purchase Order (PO) & Kalkulasi Pajak.",
+        "Fulfillment System: Form Surat Jalan yang terintegrasi dengan Database Inventaris.",
+        "Quality Control: Penerbitan dokumen BAST & Surat Retur Barang.",
+        "Billing & Settlement: Generator Invoice Otomatis & Kwitansi Pembayaran."
+      ],
+      tech: ["Microsoft Excel", "Database Relational", "VLOOKUP", "Business Logic"],
+    },
+
+    // 2. Template Excel 2: HR & Payroll
     {
       images: ["/excel/1/image.png"],
       pdfUrl: "/excel/1/AbsensiBulananRekapGajiByRIFARA.pdf",
       excelUrl: "/excel/1/TemplateAbsensiBulananRekapGajibyRIFARA.xlsx",
       title: "Absensi Bulanan & Penggajian Otomatis (Automated HR & Payroll System)",
       desc: "Pembuatan sistem rekapitulasi absensi dan kalkulasi penggajian karyawan bulanan yang terintegrasi. Menggunakan formula dinamis dan logika perhitungan bersyarat untuk melacak kehadiran, cuti, serta menghitung gaji bersih (Take-Home Pay) secara otomatis dan akurat.",
-      features: ["Otomatisasi Kalkulasi Penggajian: Perhitungan gaji pokok, tunjangan, dan potongan kehadiran secara real-time.", "Rekapitulasi Data Bersyarat: Penggunaan COUNTIF dengan wildcard untuk melacak berbagai kode status cuti karyawan.", "Keamanan Data (Data Protection): Implementasi penguncian sel (Locked Cells) untuk melindungi integritas formula.", "Manajemen Tanggal & Teks Dinamis: Ekstraksi hari dan tanggal menggunakan kombinasi formula LEFT, TEXT, dan DATE."],
+      features: [
+        "Otomatisasi Kalkulasi Penggajian: Perhitungan gaji pokok, tunjangan, dan potongan kehadiran secara real-time.", 
+        "Rekapitulasi Data Bersyarat: Penggunaan COUNTIF dengan wildcard untuk melacak berbagai kode status cuti karyawan.", 
+        "Keamanan Data (Data Protection): Implementasi penguncian sel (Locked Cells) untuk melindungi integritas formula.", 
+        "Manajemen Tanggal & Teks Dinamis: Ekstraksi hari dan tanggal menggunakan kombinasi formula LEFT, TEXT, dan DATE."
+      ],
       tech: ["Microsoft Excel", "HR Analytics", "Payroll Automation", "Formula & Logic"],
     },
 
-    // Template Excel 2
+    // 3. Template Excel 3: Faktur Penjualan (Kembali Ditambahkan)
     {
       images: ["/excel/2/image1.png", "/excel/2/image2.png"],
       pdfUrl: "/excel/2/Faktur_Invoice_By_RIFARA.pdf",
       excelUrl: "/excel/2/Faktur_Invoice_By_RIFARA.xlsx",
       title: "Generator Faktur Penjualan Otomatis (Automated Sales Invoice Generator)",
       desc: "Pembuatan template faktur penjualan dinamis yang dirancang untuk mempercepat proses penagihan dan administrasi. Sistem ini menggunakan kombinasi fitur validasi data dan formula pencarian untuk mengisi detail pelanggan serta melakukan kalkulasi transaksi secara otomatis, sehingga meminimalisir kesalahan input manual (human error).",
-      features: ["Otomatisasi Data Pelanggan: Implementasi Data Validation (Dropdown List) yang dipadukan dengan formula VLOOKUP untuk memanggil data alamat dan kontak pelanggan secara instan berdasarkan nama perusahaan.", "Kalkulasi Harga Dinamis: Perhitungan otomatis dan akurat untuk Sub Total, Total Diskon, perhitungan Pajak (10%), hingga Total Akhir (Yang Dibayar) menggunakan fungsi matematika dasar dan SUM.", "Manajemen Basis Data Terstruktur: Memanfaatkan tabel referensi terpisah (Master Data) untuk menyimpan daftar pelanggan secara rapi, sehingga pembuatan faktur baru menjadi jauh lebih cepat dan efisien.", "Desain Profesional & Siap Cetak: Tata letak (layout) faktur yang bersih, terstruktur, dan telah diatur area cetaknya (Print Area) agar formatnya tetap rapi saat diekspor ke PDF maupun dicetak langsung."],
+      features: [
+        "Otomatisasi Data Pelanggan: Implementasi Data Validation (Dropdown List) yang dipadukan dengan formula VLOOKUP untuk memanggil data alamat pelanggan secara instan.", 
+        "Kalkulasi Harga Dinamis: Perhitungan otomatis dan akurat untuk Sub Total, Diskon, Pajak (10%), hingga Total Akhir.", 
+        "Manajemen Basis Data Terstruktur: Memanfaatkan tabel referensi terpisah (Master Data) untuk menyimpan daftar pelanggan secara rapi.", 
+        "Desain Profesional & Siap Cetak: Tata letak (layout) faktur yang bersih dan telah diatur area cetaknya (Print Area)."
+      ],
       tech: ["Microsoft Excel", "Sales Automation", "VLOOKUP & Data Validation", "Formula & Logic"],
     },
-
-    // Template Excel 3
+    
+    // 4. Template Excel 4: Slip Gaji
     {
       images: ["/excel/3/image1.png", "/excel/3/image2.png"],
       pdfUrl: "/excel/3/Slip_Gaji_Karyawan_By_RIFARA.pdf",
       excelUrl: "/excel/3/Slip_Gaji_Karyawan_By_RIFARA.xlsx",
       title: "Generator Slip Gaji Karyawan Interaktif (Interactive Employee Payslip Generator)",
-      desc: "Pembuatan template slip gaji karyawan dinamis yang dirancang untuk mempercepat proses pencetakan dokumen penggajian bulanan. Sistem ini memanfaatkan fitur kontrol interaktif untuk navigasi data secara cepat, memungkinkan HR atau admin untuk melihat dan mencetak slip gaji tiap karyawan tanpa perlu mengubah formula secara manual.",
-      features: ["Navigasi Data Interaktif: Penggunaan Form Controls (Spin Button & List Box) yang terhubung dengan nomor urut (ID) untuk memilih dan menampilkan rincian gaji karyawan secara instan dan user-friendly.", "Integrasi Data Otomatis: Memanfaatkan fungsi pencarian lanjutan (seperti VLOOKUP atau INDEX-MATCH) untuk menarik data komponen gaji pokok, tunjangan, dan potongan secara otomatis berdasarkan nama atau nomor urut yang dipilih.", "Kalkulasi Penggajian Akurat: Perhitungan terpusat untuk total pendapatan bersih (Take-Home Pay) setelah dikurangi potongan terkait (seperti Pajak/PPh), meminimalisir kesalahan perhitungan manual.", "Format Dokumen Siap Cetak: Tata letak (layout) slip gaji yang rapi dan profesional, dilengkapi dengan pengaturan area cetak (Print Area) agar dokumen siap diekspor ke PDF atau dicetak langsung dengan ukuran yang presisi."],
+      desc: "Pembuatan template slip gaji karyawan dinamis yang dirancang untuk mempercepat proses pencetakan dokumen penggajian bulanan. Sistem ini memanfaatkan fitur kontrol interaktif untuk navigasi data secara cepat tanpa perlu mengubah formula secara manual.",
+      features: [
+        "Navigasi Data Interaktif (Spin Button & List Box).", 
+        "Integrasi Data Otomatis menggunakan VLOOKUP/INDEX-MATCH.", 
+        "Kalkulasi Penggajian Akurat untuk pendapatan bersih setelah pemotongan pajak.",
+        "Format Dokumen Siap Cetak (Print Area Terkalibrasi)."
+      ],
       tech: ["Microsoft Excel", "Payroll Automation", "Form Controls", "Interactive Dashboard"],
     },
 
-    // Template Excel 4
+    // 5. Template Excel 5: Surat Jalan (Kembali Ditambahkan)
     {
       images: ["/excel/4/image1.jpg", "/excel/4/image2.png"],
       pdfUrl: "/excel/4/Surat_Jalan_By_RIFARA.pdf",
       excelUrl: "/excel/4/Surat_Jalan_By_RIFARA.xlsx",
-      title: "Surat Jalan (Delivery Note) Dinamis & Interaktif (Dynamic & Interactive Delivery Note Template)",
+      title: "Surat Jalan (Delivery Note) Dinamis & Interaktif",
       desc: "Pembuatan template Surat Jalan (Delivery Note) dinamis yang dirancang untuk mempercepat proses administrasi pengiriman barang harian. Sistem ini memanfaatkan integrasi rumus dan manajemen data untuk menarik detail pelanggan serta inventaris secara instan, meminimalisir human error dalam pencatatan fisik, dan memastikan kelancaran alur distribusi.",
-      features: ["Integrasi Database Pelanggan & Barang: Memanfaatkan fungsi pencarian lanjutan (XLOOKUP) dipadukan dengan Data Validation (Dropdown List) untuk memanggil data alamat pelanggan dan deskripsi barang secara otomatis hanya dengan memilih No. Surat Jalan.", "Penomoran & Perekaman Data Efisien: Implementasi sistem input yang terstruktur untuk merekam detail pengiriman (Nomor Surat Jalan, Tanggal, Nama Supir, Nomor Polisi Kendaraan) secara rapi agar mudah dilacak untuk keperluan audit atau penagihan (invoicing).", "Format Dokumen Siap Cetak: Tata letak (layout) Surat Jalan yang rapi dan profesional (mendukung format multi-copy), dilengkapi dengan pengaturan area cetak (Print Area) agar dokumen siap diekspor ke PDF atau dicetak langsung dengan ukuran kertas yang presisi (misalnya A5 atau A4 dibagi dua)."],
+      features: [
+        "Integrasi Database Pelanggan & Barang: Memanfaatkan fungsi pencarian lanjutan dipadukan dengan Data Validation untuk memanggil data secara otomatis.", 
+        "Penomoran & Perekaman Data Efisien: Implementasi sistem input terstruktur untuk merekam detail pengiriman (Nama Supir, Nomor Polisi, dll).", 
+        "Format Dokumen Siap Cetak: Tata letak (layout) Surat Jalan yang profesional mendukung pencetakan presisi multi-copy (misalnya A5 atau A4 dibagi dua)."
+      ],
       tech: ["Microsoft Excel", "Document Automation", "Data Management", "Print-Ready Layout"],
-    },
-    
+    }
   ];
 
   const Chip: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -569,57 +514,38 @@ const Microsoft365Projects: React.FC = () => {
 
   const handleDownloadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (downloadPhone.trim().length < 10) return alert("Nomor WhatsApp tidak valid. Minimal 10 angka.");
 
-    // Validasi Manual Tambahan sebelum proses dijalankan
-    if (downloadPhone.trim().length < 10) {
-      alert("Nomor WhatsApp tidak valid. Minimal harus berisi 10 angka.");
-      return;
+    const GOOGLE_SCRIPT_URL = "URL_GOOGLE_APPS_SCRIPT_ANDA_DISINI";
+    
+    const newEntry = {
+      name: downloadName.trim(),
+      phone: downloadPhone.trim(),
+      timestamp: new Date().toLocaleString("id-ID", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }),
+    };
+
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors", 
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newEntry),
+      });
+    } catch (error) {
+      console.error("Gagal mengirim data ke Google Sheets:", error);
     }
 
-    // GANTI URL DI BAWAH INI DENGAN URL GOOGLE APPS SCRIPT ANDA
-    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzAcmWg0qoULx8jV6LVpk2JWOV7Hfo1K81nG4DVixsvrsqTazO0aO_ZPTYL1Xgrw1-Liw/exec";
+    const link = document.createElement("a");
+    link.href = selectedExcelUrl;
+    link.setAttribute("download", "");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 
-    if (downloadName.trim() && downloadPhone.trim()) {
-      const newEntry = {
-        name: downloadName.trim(),
-        phone: downloadPhone.trim(),
-        timestamp: new Date().toLocaleString("id-ID", {
-          day: "numeric",
-          month: "short",
-          year: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      };
-
-      // 1. Kirim data ke Google Sheets melalui Apps Script
-      try {
-        await fetch(GOOGLE_SCRIPT_URL, {
-          method: "POST",
-          mode: "no-cors", 
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(newEntry),
-        });
-      } catch (error) {
-        console.error("Gagal mengirim data ke Google Sheets:", error);
-      }
-
-      // 2. Lanjutkan proses unduh file Excel template untuk user
-      const link = document.createElement("a");
-      link.href = selectedExcelUrl;
-      link.setAttribute("download", "");
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      setDownloadName("");
-      setDownloadPhone("");
-      setIsDownloadModalOpen(false);
-
-      alert("Terima kasih! Data Anda telah tersimpan dan file Excel sedang diunduh.");
-    }
+    setDownloadName("");
+    setDownloadPhone("");
+    setIsDownloadModalOpen(false);
+    alert("Terima kasih! File Excel sedang diunduh.");
   };
 
   return (
@@ -651,9 +577,21 @@ const Microsoft365Projects: React.FC = () => {
                 {project.tech.map((tech, i) => <Chip key={i}>{tech}</Chip>)}
               </div>
 
-              {/* Area Tombol Aksi */}
               <div className="mt-4 border-t border-gray-700 pt-6 flex flex-wrap gap-3">
-                {project.pdfUrl && (
+                
+                {project.isCaseStudy && (
+                  <Link
+                    to={project.caseStudyLink!}
+                    className="inline-flex w-full items-center justify-center gap-2 px-5 py-3 font-bold text-white bg-gradient-to-r from-[#3498db] to-[#2980b9] rounded-lg shadow-lg transition-transform transform hover:scale-105 hover:shadow-cyan-500/25"
+                  >
+                    Lihat Studi Kasus Lengkap
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 ml-1">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                  </Link>
+                )}
+
+                {!project.isCaseStudy && project.pdfUrl && (
                   <a
                     href={project.pdfUrl}
                     target="_blank"
@@ -667,7 +605,7 @@ const Microsoft365Projects: React.FC = () => {
                   </a>
                 )}
 
-                {project.excelUrl && (
+                {!project.isCaseStudy && project.excelUrl && (
                   <button
                     onClick={() => {
                       setSelectedExcelUrl(project.excelUrl);
@@ -687,7 +625,7 @@ const Microsoft365Projects: React.FC = () => {
         ))}
       </div>
 
-      {/* --- MODAL 1: FORM ISIAN DOWNLOAD EXCEL --- */}
+      {/* --- MODAL FOR EXCEL DOWNLOAD (TETAP SAMA) --- */}
       {isDownloadModalOpen && (
         <div className="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 w-full max-w-md shadow-2xl relative animate-fade-in-up">
@@ -699,59 +637,22 @@ const Microsoft365Projects: React.FC = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-
             <div className="text-center mb-6">
               <h3 className="text-2xl font-bold text-white mb-2">Unduh Template Excel</h3>
               <p className="text-gray-400 text-sm">Isi formulir di bawah ini untuk mengunduh file secara gratis.</p>
             </div>
-
             <form onSubmit={handleDownloadSubmit} className="space-y-4">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">Nama Lengkap <span className="text-red-500">*</span></label>
-                <input
-                  type="text"
-                  id="name"
-                  required
-                  value={downloadName}
-                  onChange={(e) => setDownloadName(e.target.value)}
-                  placeholder="Masukkan nama Anda"
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3498db] focus:border-transparent transition-all"
-                />
+                <input type="text" id="name" required value={downloadName} onChange={(e) => setDownloadName(e.target.value)} placeholder="Masukkan nama Anda" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3498db] transition-all" />
               </div>
-
               <div>
                 <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1">Nomor WhatsApp <span className="text-red-500">*</span></label>
-                <input
-                  type="tel"
-                  id="phone"
-                  required
-                  minLength={10} // <-- Validasi Bawaan HTML
-                  value={downloadPhone}
-                  onChange={(e) => {
-                    // Validasi agar HANYA angka yang bisa diketik oleh pengguna
-                    const onlyNums = e.target.value.replace(/[^0-9]/g, '');
-                    setDownloadPhone(onlyNums);
-                  }}
-                  placeholder="Contoh: 081234567890"
-                  className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3498db] focus:border-transparent transition-all"
-                />
-                <p className="text-xs text-gray-500 mt-1">Gunakan angka saja, minimal 10 digit.</p>
+                <input type="tel" id="phone" required minLength={10} value={downloadPhone} onChange={(e) => setDownloadPhone(e.target.value.replace(/[^0-9]/g, ''))} placeholder="Contoh: 081234567890" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3498db] transition-all" />
               </div>
-
               <div className="pt-4 flex gap-3">
-                <button
-                  type="button"
-                  onClick={() => setIsDownloadModalOpen(false)}
-                  className="flex-1 px-4 py-3 font-semibold text-gray-300 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 hover:text-white transition-colors"
-                >
-                  Batal
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 px-4 py-3 font-bold text-white bg-[#3498db] rounded-lg shadow-lg shadow-[#3498db]/30 hover:bg-[#2980b9] transition-colors"
-                >
-                  Unduh Sekarang
-                </button>
+                <button type="button" onClick={() => setIsDownloadModalOpen(false)} className="flex-1 px-4 py-3 font-semibold text-gray-300 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 hover:text-white transition-colors">Batal</button>
+                <button type="submit" className="flex-1 px-4 py-3 font-bold text-white bg-[#3498db] rounded-lg shadow-lg hover:bg-[#2980b9] transition-colors">Unduh</button>
               </div>
             </form>
           </div>
@@ -760,6 +661,111 @@ const Microsoft365Projects: React.FC = () => {
     </section>
   );
 };
+
+
+// --- [HALAMAN BARU: MINI ERP CASE STUDY PAGE] ---
+const MiniERPPage: React.FC = () => {
+  const erpSteps = [
+    {
+      title: "Pemesanan Barang (Purchase Order)",
+      desc: "Siklus pengadaan dimulai ketika pihak pembeli menerbitkan Purchase Order (PO). Dokumen ini mengikat pesanan secara resmi antar perusahaan (B2B). Pada sistem Excel ini, PO dilengkapi fitur kalkulasi dinamis untuk Sub Total, Pajak (PPN), dan Grand Total.",
+      // image: "/excel/5/po_modern.png",
+      image: "/excel/5/image.png",
+      tag: "Tahap 1 - Inisiasi Transaksi",
+      color: "text-blue-400"
+    },
+    {
+      title: "Pengiriman Barang (Surat Jalan)",
+      desc: "Setelah PO diterima, vendor mengirimkan barang menggunakan Surat Jalan (Delivery Note). Sistem ini menggunakan formula VLOOKUP yang terhubung dengan Database Inventaris, sehingga entri nama barang dan satuan akan terisi otomatis hanya dengan memasukkan Kode Barang.",
+      // image: "/excel/erp/surat_jalan.png",
+      image: "/excel/5/image.png",
+      tag: "Tahap 2 - Logistik & Pemenuhan",
+      color: "text-orange-400"
+    },
+    {
+      title: "Serah Terima (BAST)",
+      desc: "Saat barang tiba, pihak pembeli melakukan pengecekan kualitas (Quality Control). Jika seluruh pesanan sesuai dan dalam kondisi baik, kedua belah pihak menandatangani Berita Acara Serah Terima (BAST) sebagai bukti hukum perpindahan kepemilikan dan tanggung jawab.",
+      // image: "/excel/erp/bast.png",
+      image: "/excel/5/image.png",
+      tag: "Tahap 3 - Validasi Kualitas",
+      color: "text-green-400"
+    },
+    {
+      title: "Penanganan Anomali (Surat Retur)",
+      desc: "Proyek ERP ini juga dirancang untuk menangani edge cases. Jika ditemukan barang rusak atau cacat produksi saat serah terima, sistem menyediakan Surat Retur (Return Note) untuk mencatat pengembalian barang secara rapi dan profesional.",
+      // image: "/excel/erp/retur.png",
+      image: "/excel/5/image.png",
+      tag: "Tahap 4 - Penanganan Retur",
+      color: "text-red-400"
+    },
+    {
+      title: "Penagihan Uang (Invoice)",
+      desc: "Berdasarkan kuantitas barang aktual yang diterima di BAST, pihak vendor berhak menerbitkan Faktur Penagihan (Invoice). Tagihan ini telah diatur dengan format yang menonjolkan metode dan tenggat waktu pembayaran (Net Term).",
+      // image: "/excel/erp/invoice.png",
+      image: "/excel/5/image.png",
+      tag: "Tahap 5 - Administrasi Keuangan",
+      color: "text-purple-400"
+    },
+    {
+      title: "Penyelesaian Transaksi (Kwitansi)",
+      desc: "Siklus pengadaan ditutup ketika pihak Keuangan (Finance) pembeli telah mentransfer dana pembayaran. Vendor kemudian menerbitkan dokumen Kwitansi berdesain modern lengkap dengan kolom meterai sebagai bukti pelunasan sah.",
+      // image: "/excel/erp/kwitansi.png",
+      image: "/excel/5/image.png",
+      tag: "Tahap 6 - Finalisasi",
+      color: "text-teal-400"
+    }
+  ];
+
+  return (
+    <div className="pt-24 pb-20 px-4 max-w-5xl mx-auto min-h-screen">
+      <div className="text-center mb-16">
+        <Link to="/#microsoft-365" className="inline-flex items-center text-gray-400 hover:text-[#3498db] transition-colors mb-6">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 mr-2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" /></svg>
+          Kembali ke Portofolio
+        </Link>
+        <h3 className="text-xl font-bold uppercase text-[#3498db] tracking-widest mb-3">Case Study</h3>
+        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">Mini-ERP System: Automated B2B Procurement Cycle</h1>
+        <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+          Studi kasus perancangan purwarupa (prototype) sistem Enterprise Resource Planning skala kecil menggunakan Microsoft Excel. Proyek ini memetakan alur kerja dunia nyata ke dalam dokumen yang terintegrasi secara cerdas untuk meminimalisir human error.
+        </p>
+        <div className="mt-8 flex justify-center gap-4">
+          
+          {/* TOMBOL UNDUH MASTER EXCEL DIUBAH MENJADI ALERT */}
+          <button 
+            onClick={(e) => {
+              e.preventDefault();
+              alert("Dokumen Mini-ERP Master (Full Version) saat ini sedang dalam tahap pengembangan. Silakan cek secara berkala untuk pembaruannya!");
+            }}
+            className="bg-[#217346] text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-[#1e603b] transition-transform transform hover:scale-105 flex items-center gap-2"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+            Unduh Excel Master
+          </button>
+
+        </div>
+      </div>
+
+      <div className="space-y-16 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-gradient-to-b before:from-transparent before:via-gray-700 before:to-transparent">
+        {erpSteps.map((step, idx) => (
+          <div key={idx} className={`relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active`}>
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-gray-900 bg-gray-800 text-white font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+              {idx + 1}
+            </div>
+            <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-gray-800/80 p-6 md:p-8 rounded-2xl border border-gray-700 shadow-xl transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
+              <span className={`text-sm font-bold uppercase tracking-wider mb-2 block ${step.color}`}>{step.tag}</span>
+              <h3 className="text-2xl font-bold text-white mb-4">{step.title}</h3>
+              <p className="text-gray-400 mb-6 leading-relaxed">{step.desc}</p>
+              <div className="w-full overflow-hidden rounded-lg border border-gray-700 bg-gray-900 aspect-[4/3] group/img cursor-pointer">
+                <img src={step.image} alt={step.title} className="w-full h-full object-cover object-top opacity-80 transition-all duration-500 group-hover/img:scale-105 group-hover/img:opacity-100" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 
 const Publications: React.FC = () => {
   const publicationList = [
@@ -790,7 +796,6 @@ const Publications: React.FC = () => {
   );
 };
 
-// --- [BAGIAN 6: KOMPONEN KONTAK] ---
 const Contact: React.FC = () => {
   const CommunicationIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 text-gray-300"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" /></svg>);
   const Microsoft365Icon = () => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-10 h-10"><path fill="#F25022" d="M11.25 3H3.75v7.5h7.5V3z" /><path fill="#7FBA00" d="M20.25 3h-7.5v7.5h7.5V3z" /><path fill="#00A4EF" d="M11.25 12.75H3.75v7.5h7.5v-7.5z" /><path fill="#FFB900" d="M20.25 12.75h-7.5v7.5h7.5v-7.5z" /></svg>);
@@ -838,10 +843,9 @@ const Contact: React.FC = () => {
   );
 };
 
-// --- [BAGIAN 7: KOMPONEN FOOTER] ---
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-900/50 border-t border-gray-800 mt-16">
+    <footer className="bg-gray-900/50 border-t border-gray-800 mt-16 relative z-10">
       <div className="max-w-6xl mx-auto px-4 py-8 text-center">
         <div className="text-2xl font-bold mb-4 text-white">
           <span className="text-[#3498db]">Rizky </span>
@@ -863,8 +867,7 @@ const Footer: React.FC = () => {
   );
 };
 
-// --- [BAGIAN 8: HALAMAN (PAGES)] ---
-// Microsoft365Page telah dihapus dan digabungkan langsung ke sini
+// --- [BAGIAN 8: HALAMAN HOME] ---
 const HomePage = () => (
   <>
     <Hero />
@@ -891,13 +894,13 @@ const AppContent = () => {
   const handleBackToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
-    <div className="min-h-screen m-0 p-0 bg-gray-900 text-white relative">
+    <div className="min-h-screen m-0 p-0 bg-gray-900 text-white relative font-sans">
       <ScrollHandler />
       
-      {/* Efek Background dibungkus dalam div fixed agar tidak mengacaukan batas scroll halaman terbawah */}
+      {/* Background Ornamen */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#3498db]/10 rounded-full filter blur-3xl opacity-50 animate-pulse-slow"></div>
-        <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-600/10 rounded-full filter blur-3xl opacity-50 animate-pulse-slow animation-delay-4000"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-600/10 rounded-full filter blur-3xl opacity-50 animate-pulse-slow" style={{ animationDelay: '-5s' }}></div>
       </div>
 
       <div className="relative z-10">
@@ -905,7 +908,8 @@ const AppContent = () => {
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            {/* Rute /microsoft-365 dihapus karena semua komponen sekarang dalam page HomePage */}
+            {/* INI ADALAH RUTE HALAMAN BARU UNTUK MINI-ERP */}
+            <Route path="/mini-erp" element={<MiniERPPage />} />
           </Routes>
         </main>
         <Footer />
@@ -934,8 +938,6 @@ const AppContent = () => {
           100% { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in-up { animation: fade-in-up 0.4s ease-out forwards; }
-        .animate-pulse-slow { animation: pulse-slow 10s infinite ease-in-out; }
-        .animation-delay-4000 { animation-delay: -5s; }
       `}</style>
     </div>
   );
