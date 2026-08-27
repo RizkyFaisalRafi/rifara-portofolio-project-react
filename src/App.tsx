@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
 
-// --- [KOMPONEN PEMBANTU: Auto-Scroll saat berpindah hash] ---
+// --- [KOMPONEN PEMBANTU: Auto-Scroll saat berpindah hash/halaman] ---
 const ScrollHandler = () => {
   const location = useLocation();
 
@@ -14,7 +14,8 @@ const ScrollHandler = () => {
           element.scrollIntoView({ behavior: "smooth" });
         }, 50);
       }
-    } else if (location.pathname === "/") {
+    } else {
+      // Perbaikan: Hapus if (pathname === "/") agar berlaku untuk SEMUA halaman baru
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   }, [location]);
@@ -431,7 +432,7 @@ const Microsoft365Projects: React.FC = () => {
     {
       isCaseStudy: true,
       caseStudyLink: "/mini-erp",
-      images: ["/excel/erp/po_modern.png"], 
+      images: ["/excel/5/image.png"], 
       title: "Mini-ERP System: Automated B2B Procurement Cycle",
       desc: "Sebuah purwarupa (prototype) sistem Enterprise Resource Planning (ERP) berskala kecil yang dirancang untuk mengotomatiskan seluruh alur pengadaan barang (B2B Procurement). Proyek ini memetakan kompleksitas alur kerja dunia nyata—mulai dari pemesanan hingga pembayaran—ke dalam ekosistem dokumen Excel yang terintegrasi dinamis.",
       features: [
@@ -459,7 +460,7 @@ const Microsoft365Projects: React.FC = () => {
       tech: ["Microsoft Excel", "HR Analytics", "Payroll Automation", "Formula & Logic"],
     },
 
-    // 3. Template Excel 3: Faktur Penjualan (Kembali Ditambahkan)
+    // 3. Template Excel 3: Faktur Penjualan
     {
       images: ["/excel/2/image1.png", "/excel/2/image2.png"],
       pdfUrl: "/excel/2/Faktur_Invoice_By_RIFARA.pdf",
@@ -491,7 +492,7 @@ const Microsoft365Projects: React.FC = () => {
       tech: ["Microsoft Excel", "Payroll Automation", "Form Controls", "Interactive Dashboard"],
     },
 
-    // 5. Template Excel 5: Surat Jalan (Kembali Ditambahkan)
+    // 5. Template Excel 5: Surat Jalan
     {
       images: ["/excel/4/image1.jpg", "/excel/4/image2.png"],
       pdfUrl: "/excel/4/Surat_Jalan_By_RIFARA.pdf",
@@ -624,7 +625,7 @@ const Microsoft365Projects: React.FC = () => {
         ))}
       </div>
 
-      {/* --- MODAL FOR EXCEL DOWNLOAD (TETAP SAMA) --- */}
+      {/* --- MODAL FOR EXCEL DOWNLOAD --- */}
       {isDownloadModalOpen && (
         <div className="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 w-full max-w-md shadow-2xl relative animate-fade-in-up">
@@ -662,12 +663,30 @@ const Microsoft365Projects: React.FC = () => {
 };
 
 
-// --- [HALAMAN BARU: MINI ERP CASE STUDY PAGE DENGAN MODAL DOWNLOAD EXCEL] ---
+// --- [HALAMAN BARU: MINI ERP CASE STUDY PAGE DENGAN SCROLL ANIMATION] ---
 const MiniERPPage: React.FC = () => {
-  // State untuk form download Excel
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [downloadName, setDownloadName] = useState("");
   const [downloadPhone, setDownloadPhone] = useState("");
+
+  // Efek Intersection Observer untuk Animasi Scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+          }
+        });
+      },
+      { threshold: 0.15 } // Memicu animasi ketika 15% dari kartu terlihat di layar
+    );
+
+    const cards = document.querySelectorAll(".reveal-on-scroll");
+    cards.forEach((card) => observer.observe(card));
+
+    return () => observer.disconnect();
+  }, []);
 
   const erpSteps = [
     {
@@ -714,12 +733,10 @@ const MiniERPPage: React.FC = () => {
     }
   ];
 
-  // Handler Submit Form Mini ERP
   const handleDownloadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (downloadPhone.trim().length < 10) return alert("Nomor WhatsApp tidak valid. Minimal 10 angka.");
 
-    // GANTI URL DI BAWAH INI DENGAN URL GOOGLE APPS SCRIPT ANDA
     const GOOGLE_SCRIPT_URL = "URL_GOOGLE_APPS_SCRIPT_ANDA_DISINI";
     
     const newEntry = {
@@ -739,9 +756,8 @@ const MiniERPPage: React.FC = () => {
       console.error("Gagal mengirim data ke Google Sheets:", error);
     }
 
-    // Eksekusi download file master Excel
     const link = document.createElement("a");
-    link.href = "/excel/5/Mini_ERP_Procurement_By_RIFARA.xlsx"; // Path master excel
+    link.href = "/excel/5/Mini_ERP_Procurement_By_RIFARA.xlsx";
     link.setAttribute("download", "");
     document.body.appendChild(link);
     link.click();
@@ -767,7 +783,6 @@ const MiniERPPage: React.FC = () => {
         </p>
         <div className="mt-8 flex justify-center gap-4">
           
-          {/* TOMBOL UNDUH MASTER EXCEL MEMANGGIL MODAL */}
           <button 
             onClick={(e) => {
               e.preventDefault();
@@ -790,39 +805,33 @@ const MiniERPPage: React.FC = () => {
             </svg>
             Lihat / Unduh PDF Master
           </a>
-
         </div>
       </div>
 
       <div className="space-y-16 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-gradient-to-b before:from-transparent before:via-gray-700 before:to-transparent">
         {erpSteps.map((step, idx) => (
-          <div key={idx} className={`relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active`}>
-            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-gray-900 bg-gray-800 text-white font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10">
+          // Pembungkus Animasi (Class "reveal-on-scroll" ditambahkan di sini)
+          <div key={idx} className={`reveal-on-scroll relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group`}>
+            <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-gray-900 bg-gray-800 text-white font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform duration-500 group-hover:scale-125">
               {idx + 1}
             </div>
             <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-gray-800/80 p-6 md:p-8 rounded-2xl border border-gray-700 shadow-xl transition-transform duration-300 hover:-translate-y-2 hover:shadow-2xl">
               <span className={`text-sm font-bold uppercase tracking-wider mb-2 block ${step.color}`}>{step.tag}</span>
               <h3 className="text-2xl font-bold text-white mb-4">{step.title}</h3>
               <p className="text-gray-400 mb-6 leading-relaxed">{step.desc}</p>
-              <div className="w-full overflow-hidden rounded-lg border border-gray-700 bg-gray-900 aspect-[4/3] group/img cursor-pointer">
-                <img src={step.image} alt={step.title} className="w-full h-full object-cover object-top opacity-80 transition-all duration-500 group-hover/img:scale-105 group-hover/img:opacity-100" />
+              <div className="w-full overflow-hidden rounded-lg border border-gray-700 bg-gray-900 aspect-[4/3] group-hover:shadow-lg transition-all cursor-pointer">
+                <img src={step.image} alt={step.title} className="w-full h-full object-cover object-top opacity-80 transition-all duration-500 hover:scale-105 hover:opacity-100" />
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* --- MODAL DOWNLOAD EXCEL KHUSUS MINI ERP --- */}
       {isDownloadModalOpen && (
         <div className="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 w-full max-w-md shadow-2xl relative animate-fade-in-up">
-            <button
-              onClick={() => setIsDownloadModalOpen(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+            <button onClick={() => setIsDownloadModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
             <div className="text-center mb-6">
               <h3 className="text-2xl font-bold text-white mb-2">Unduh Excel Master Mini-ERP</h3>
@@ -845,11 +854,9 @@ const MiniERPPage: React.FC = () => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
-
 
 const Publications: React.FC = () => {
   const publicationList = [
@@ -981,7 +988,6 @@ const AppContent = () => {
     <div className="min-h-screen m-0 p-0 bg-gray-900 text-white relative font-sans">
       <ScrollHandler />
       
-      {/* Background Ornamen */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#3498db]/10 rounded-full filter blur-3xl opacity-50 animate-pulse-slow"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-600/10 rounded-full filter blur-3xl opacity-50 animate-pulse-slow" style={{ animationDelay: '-5s' }}></div>
@@ -992,7 +998,6 @@ const AppContent = () => {
         <main>
           <Routes>
             <Route path="/" element={<HomePage />} />
-            {/* INI ADALAH RUTE HALAMAN BARU UNTUK MINI-ERP */}
             <Route path="/mini-erp" element={<MiniERPPage />} />
           </Routes>
         </main>
@@ -1010,6 +1015,8 @@ const AppContent = () => {
           </svg>
         </button>
       )}
+      
+      {/* PENAMBAHAN STYLE UNTUK ANIMASI SCROLL (REVEAL) */}
       <style>{`
         html { scroll-behavior: smooth; }
         body.overflow-hidden { overflow: hidden; }
@@ -1022,6 +1029,17 @@ const AppContent = () => {
           100% { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in-up { animation: fade-in-up 0.4s ease-out forwards; }
+        
+        /* CSS Animasi Scroll Timeline */
+        .reveal-on-scroll {
+          opacity: 0;
+          transform: translateY(40px);
+          transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal-on-scroll.is-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
       `}</style>
     </div>
   );
