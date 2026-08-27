@@ -1,5 +1,33 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
+
+// --- [FUNGSI PEMBANTU: Animasi Scroll Kustom] ---
+const slowScrollTo = (targetY: number, duration: number = 1200) => {
+  const startY = window.scrollY;
+  const distance = targetY - startY;
+  let startTime: number | null = null;
+
+  const easeInOutCubic = (t: number, b: number, c: number, d: number) => {
+    t /= d / 2;
+    if (t < 1) return (c / 2) * t * t * t + b;
+    t -= 2;
+    return (c / 2) * (t * t * t + 2) + b;
+  };
+
+  const animation = (currentTime: number) => {
+    if (startTime === null) startTime = currentTime;
+    const timeElapsed = currentTime - startTime;
+    const nextY = easeInOutCubic(timeElapsed, startY, distance, duration);
+    
+    window.scrollTo(0, nextY);
+
+    if (timeElapsed < duration) {
+      requestAnimationFrame(animation);
+    }
+  };
+
+  requestAnimationFrame(animation);
+};
 
 // --- [KOMPONEN PEMBANTU: Auto-Scroll saat berpindah hash/halaman] ---
 const ScrollHandler = () => {
@@ -11,17 +39,69 @@ const ScrollHandler = () => {
       const element = document.getElementById(id);
       if (element) {
         setTimeout(() => {
-          element.scrollIntoView({ behavior: "smooth" });
+          const yOffset = -80; 
+          const y = element.getBoundingClientRect().top + window.scrollY + yOffset;
+          slowScrollTo(y, 1200); 
         }, 50);
       }
     } else {
-      // Perbaikan: Hapus if (pathname === "/") agar berlaku untuk SEMUA halaman baru
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      slowScrollTo(0, 1200); 
     }
   }, [location]);
 
   return null;
 };
+
+// --- [KOMPONEN BARU: REVEAL SCROLL ANIMATION] ---
+const Reveal: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = "" }) => {
+  const domRef = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+            if (domRef.current) observer.unobserve(domRef.current);
+          }
+        });
+      },
+      { threshold: 0.15 } 
+    );
+
+    const currentRef = domRef.current;
+    if (currentRef) observer.observe(currentRef);
+
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={domRef}
+      className={`reveal-on-scroll ${isVisible ? "is-visible" : ""} ${className}`}
+    >
+      {children}
+    </div>
+  );
+};
+
+// --- [KOMPONEN ANIMASI BURUNG (FLYING BIRD)] ---
+const FlyingBird: React.FC = () => {
+  return (
+    <div className="bird-container pointer-events-none fixed z-0">
+      <div className="bird">
+        {/* Menggunakan SVG ikon burung */}
+        <svg viewBox="0 0 24 24" width="40" height="40" xmlns="http://www.w3.org/2000/svg" fill="rgba(52, 152, 219, 0.4)">
+          <path d="M23.13 6.03c-1.89-1.39-4.88-2.03-7.53-1.12-1.93-1.63-4.34-2.88-6.68-2.91-1.36-.02-2.73.43-3.8 1.15-.36.24-.71.53-1.02.85-.43-.16-.86-.28-1.27-.37-.87-.19-1.65-.24-2.28-.21-.36.02-.67.06-.9.13-.19.06-.32.14-.4.21-.11.1-.17.24-.13.38.04.14.15.25.29.3.26.11.66.16 1.14.16.63 0 1.45-.09 2.37-.29.47-.1.97-.24 1.47-.41.31.25.66.45 1.05.61.94.4 2.11.55 3.32.48 1.1-.06 2.21-.31 3.25-.66 2.76-1.01 5.92-.3 7.9 1.17.65.48.97 1.05 1.06 1.54.09.49-.07 1.06-.52 1.6-1.57 1.9-4.99 2.66-8.32 2.6-1.52-.03-2.96-.28-4.22-.64-1.2-.34-2.24-.81-3.07-1.35-.41-.27-.79-.58-1.11-.93-.72.48-1.54.89-2.45 1.16-.9.27-1.85.42-2.81.44-.14 0-.27-.08-.34-.21-.06-.13-.04-.28.06-.38.16-.16.37-.24.59-.28.53-.1 1.09-.23 1.63-.44.5-.2 1-.46 1.47-.8.3-.21.57-.45.81-.72 1.25-.97 2.94-1.4 4.7-1.12.83.13 1.62.43 2.33.87.56.35 1.07.76 1.51 1.22.42.43.78.9 1.08 1.4 1.27 2.11 3.51 4.5 6.22 6.75 3.65 3.03 8.35 5.51 12.65 6.4.15.03.3.06.44.08.35.06.63.15.79.28.11.09.18.23.16.38-.02.15-.12.27-.26.33-.24.11-.64.15-1.13.14-.62-.01-1.42-.11-2.31-.32-1.01-.24-2.19-.64-3.41-1.19-2.3-1.03-4.83-2.61-7.07-4.63-1.63-1.47-3.13-3.23-4.32-5.18-.54-.89-1.02-1.82-1.41-2.77-.38-.93-.68-1.88-.87-2.83-1.44-.06-2.84-.44-4.08-1.07-1.2-.6-2.22-1.43-2.98-2.46-.86-1.17-1.31-2.58-1.28-4.02.04-1.6.67-3.13 1.77-4.42 1.22-1.43 2.92-2.5 4.88-3.08.97-.29 1.99-.44 3.02-.45h.19c.14 0 .28.09.34.22.06.13.04.28-.06.39-.16.16-.38.23-.61.27-.51.09-1.03.22-1.54.41-.5.18-.99.42-1.44.73C1.65 3.82.9 5.3.83 6.94c-.06 1.49.33 2.92 1.09 4.1.84 1.3 2.16 2.34 3.73 3.01 1.63.69 3.51 1 5.48 1.03 3.4.05 7.15-.49 10.3-2.56 1.2-.79 2.16-1.8 2.76-3.01.62-1.24.87-2.67.57-4.14-.3-1.47-1.22-2.8-2.66-3.83l.02.01z" />
+        </svg>
+      </div>
+    </div>
+  );
+};
+
 
 // --- [BAGIAN 1: KOMPONEN NAVIGASI] ---
 const Navbar: React.FC = () => {
@@ -54,7 +134,6 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
-      // Scroll Spy hanya aktif di halaman utama ("/")
       if (location.pathname !== "/") return;
 
       const sections = menuItems
@@ -158,7 +237,6 @@ const Navbar: React.FC = () => {
         </nav>
       </header>
       
-      {/* Mobile Menu */}
       <div className={`fixed inset-0 z-30 transform transition-opacity lg:hidden ${isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}>
         <div className="absolute inset-0 bg-gray-900/95 backdrop-blur-md overflow-y-auto" onClick={() => setIsMenuOpen(false)}>
           <div className="min-h-full flex flex-col items-center justify-center space-y-8 pb-10 pt-24" onClick={(e) => e.stopPropagation()}>
@@ -179,7 +257,7 @@ const Navbar: React.FC = () => {
 const Hero: React.FC = () => (
   <section id="home" className="min-h-screen flex items-center justify-center text-center px-4 relative bg-cover bg-no-repeat" style={{ backgroundImage: `url('photo_with_parent.jpg')`, backgroundPosition: "center 17%" }}>
     <div className="absolute inset-0 bg-black/60 z-0"></div>
-    <div className="max-w-4xl relative z-10">
+    <div className="max-w-4xl relative z-10 animate-fade-in-up">
       <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight">Rizky Faisal Rafi</h1>
       <p className="mt-4 text-lg md:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto">
         Seorang <span className="text-[#3498db] font-semibold">Profesional Multidisiplin</span> dengan latar belakang <span className="text-[#3498db] font-semibold">Teknologi</span> serta kompetensi di bidang <span className="text-[#3498db] font-semibold">Administrasi</span>. Berdedikasi untuk memberikan solusi yang efisien, andal, dan terstruktur.
@@ -207,51 +285,53 @@ const SectionWithTabs: React.FC<{ id: string; title: string; subtitle: string; d
 
   return (
     <section id={id} className="max-w-6xl mx-auto py-12 px-4">
-      <div className="text-center mb-12">
-        <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">{subtitle}</h3>
-        <h2 className="text-3xl md:text-4xl font-bold text-white">{title}</h2>
-      </div>
-      <div className="flex flex-col lg:flex-row gap-8">
-        <div className="flex flex-col gap-2 lg:w-1/4">
-          {data.map((item, idx) => (
-            <button key={idx} onClick={() => setActiveIndex(idx)} className={`text-left p-4 rounded-lg w-full transition-all duration-300 ${activeIndex === idx ? "bg-[#3498db]/20 text-[#3498db]" : "text-gray-400 hover:bg-gray-800/50"}`}>
-              <h4 className="font-bold">{item.company || item.institution || item.name}</h4>
-              <p className="text-sm">{item.role || item.degree || item.organizer}</p>
-            </button>
-          ))}
+      <Reveal>
+        <div className="text-center mb-12">
+          <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">{subtitle}</h3>
+          <h2 className="text-3xl md:text-4xl font-bold text-white">{title}</h2>
         </div>
-        <div className="w-full lg:w-3/4">
-          <div className="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
-              <div>
-                <h3 className="text-xl font-bold text-white">{activeItem.role || activeItem.degree || activeItem.name}</h3>
-                <a href={activeItem.companyUrl || "#"} target="_blank" rel="noopener noreferrer" className="text-lg text-[#3498db] hover:underline">{activeItem.company || activeItem.institution || activeItem.organizer}</a>
+        <div className="flex flex-col lg:flex-row gap-8">
+          <div className="flex flex-col gap-2 lg:w-1/4">
+            {data.map((item, idx) => (
+              <button key={idx} onClick={() => setActiveIndex(idx)} className={`text-left p-4 rounded-lg w-full transition-all duration-300 ${activeIndex === idx ? "bg-[#3498db]/20 text-[#3498db]" : "text-gray-400 hover:bg-gray-800/50"}`}>
+                <h4 className="font-bold">{item.company || item.institution || item.name}</h4>
+                <p className="text-sm">{item.role || item.degree || item.organizer}</p>
+              </button>
+            ))}
+          </div>
+          <div className="w-full lg:w-3/4">
+            <div className="bg-gray-800/50 p-6 rounded-lg border border-gray-700">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+                <div>
+                  <h3 className="text-xl font-bold text-white">{activeItem.role || activeItem.degree || activeItem.name}</h3>
+                  <a href={activeItem.companyUrl || "#"} target="_blank" rel="noopener noreferrer" className="text-lg text-[#3498db] hover:underline">{activeItem.company || activeItem.institution || activeItem.organizer}</a>
+                </div>
+                <p className="text-gray-400 mt-2 sm:mt-0 text-sm">{activeItem.date}</p>
               </div>
-              <p className="text-gray-400 mt-2 sm:mt-0 text-sm">{activeItem.date}</p>
-            </div>
-            <ul className="space-y-3 text-gray-300 mb-6">
-              {(activeItem.details || []).map((detail: string, i: number) => (
-                <li key={i} className="flex items-start gap-3">
-                  <span className="text-[#3498db] mt-1">&#10003;</span>
-                  <span dangerouslySetInnerHTML={{ __html: detail.replace(/<a /g, `<a class='text-cyan-400 hover:underline' `)}}></span>
-                </li>
-              ))}
-            </ul>
-            <div className="flex flex-wrap gap-2">
-              {(activeItem.skill || activeItem.relevantCourses || []).map((skill: string, i: number) => skill && (
-                <span key={i} className="bg-gray-700 text-gray-200 px-3 py-1 rounded-md text-xs font-medium">{skill}</span>
-              ))}
-            </div>
-            {activeItem.certificateUrl && (
-              <div className="mt-6">
-                <a href={activeItem.certificateUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 font-semibold text-white bg-gray-700 rounded-lg transition-colors hover:bg-[#3498db]">
-                  <CertificateIcon /> Lihat Sertifikat
-                </a>
+              <ul className="space-y-3 text-gray-300 mb-6">
+                {(activeItem.details || []).map((detail: string, i: number) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="text-[#3498db] mt-1">&#10003;</span>
+                    <span dangerouslySetInnerHTML={{ __html: detail.replace(/<a /g, `<a class='text-cyan-400 hover:underline' `)}}></span>
+                  </li>
+                ))}
+              </ul>
+              <div className="flex flex-wrap gap-2">
+                {(activeItem.skill || activeItem.relevantCourses || []).map((skill: string, i: number) => skill && (
+                  <span key={i} className="bg-gray-700 text-gray-200 px-3 py-1 rounded-md text-xs font-medium">{skill}</span>
+                ))}
               </div>
-            )}
+              {activeItem.certificateUrl && (
+                <div className="mt-6">
+                  <a href={activeItem.certificateUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 font-semibold text-white bg-gray-700 rounded-lg transition-colors hover:bg-[#3498db]">
+                    <CertificateIcon /> Lihat Sertifikat
+                  </a>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 };
@@ -310,13 +390,15 @@ const Projects: React.FC = () => {
 
   return (
     <section id="projects" className="mx-auto mt-12 max-w-6xl px-4 py-12">
-      <div className="text-center mb-12">
-        <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">Studi Kasus</h3>
-        <h2 className="text-3xl md:text-4xl font-bold text-white">Riwayat Proyek</h2>
-      </div>
+      <Reveal>
+        <div className="text-center mb-12">
+          <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">Studi Kasus</h3>
+          <h2 className="text-3xl md:text-4xl font-bold text-white">Riwayat Proyek</h2>
+        </div>
+      </Reveal>
       <div className="space-y-16 mt-8">
         {projectList.map((project, idx) => (
-          <div key={idx} className={`flex flex-col lg:flex-row items-center gap-8 lg:gap-12 p-6 bg-gray-900/50 rounded-2xl border border-gray-800 shadow-xl overflow-hidden ${idx % 2 !== 0 ? "lg:flex-row-reverse" : ""}`}>
+          <Reveal key={idx} className={`flex flex-col lg:flex-row items-center gap-8 lg:gap-12 p-6 bg-gray-900/50 rounded-2xl border border-gray-800 shadow-xl overflow-hidden ${idx % 2 !== 0 ? "lg:flex-row-reverse" : ""}`}>
             <div className="w-full lg:w-1/2">
               <img src={project.image} alt={project.title} className="w-full h-auto aspect-video object-cover rounded-lg shadow-lg" />
             </div>
@@ -347,7 +429,7 @@ const Projects: React.FC = () => {
                 )}
               </div>
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -428,10 +510,10 @@ const Microsoft365Projects: React.FC = () => {
   const [selectedExcelUrl, setSelectedExcelUrl] = useState("");
 
   const ms365List = [
-    // 1. Template 1: MASTERPIECE MINI-ERP (Teaser)
     {
       isCaseStudy: true,
       caseStudyLink: "/mini-erp",
+      // images: ["/excel/erp/po_modern.png"], 
       images: ["/excel/5/image.png"], 
       title: "Mini-ERP System: Automated B2B Procurement Cycle",
       desc: "Sebuah purwarupa (prototype) sistem Enterprise Resource Planning (ERP) berskala kecil yang dirancang untuk mengotomatiskan seluruh alur pengadaan barang (B2B Procurement). Proyek ini memetakan kompleksitas alur kerja dunia nyata—mulai dari pemesanan hingga pembayaran—ke dalam ekosistem dokumen Excel yang terintegrasi dinamis.",
@@ -443,8 +525,6 @@ const Microsoft365Projects: React.FC = () => {
       ],
       tech: ["Microsoft Excel", "Database Relational", "VLOOKUP", "Business Logic"],
     },
-
-    // 2. Template Excel 2: HR & Payroll
     {
       images: ["/excel/1/image.png"],
       pdfUrl: "/excel/1/AbsensiBulananRekapGajiByRIFARA.pdf",
@@ -459,8 +539,6 @@ const Microsoft365Projects: React.FC = () => {
       ],
       tech: ["Microsoft Excel", "HR Analytics", "Payroll Automation", "Formula & Logic"],
     },
-
-    // 3. Template Excel 3: Faktur Penjualan
     {
       images: ["/excel/2/image1.png", "/excel/2/image2.png"],
       pdfUrl: "/excel/2/Faktur_Invoice_By_RIFARA.pdf",
@@ -475,8 +553,6 @@ const Microsoft365Projects: React.FC = () => {
       ],
       tech: ["Microsoft Excel", "Sales Automation", "VLOOKUP & Data Validation", "Formula & Logic"],
     },
-    
-    // 4. Template Excel 4: Slip Gaji
     {
       images: ["/excel/3/image1.png", "/excel/3/image2.png"],
       pdfUrl: "/excel/3/Slip_Gaji_Karyawan_By_RIFARA.pdf",
@@ -491,8 +567,6 @@ const Microsoft365Projects: React.FC = () => {
       ],
       tech: ["Microsoft Excel", "Payroll Automation", "Form Controls", "Interactive Dashboard"],
     },
-
-    // 5. Template Excel 5: Surat Jalan
     {
       images: ["/excel/4/image1.jpg", "/excel/4/image2.png"],
       pdfUrl: "/excel/4/Surat_Jalan_By_RIFARA.pdf",
@@ -550,14 +624,16 @@ const Microsoft365Projects: React.FC = () => {
 
   return (
     <section id="microsoft-365" className="mx-auto mt-12 max-w-6xl px-4 py-12 relative">
-      <div className="text-center mb-12">
-        <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">Administrasi & Analisis Data</h3>
-        <h2 className="text-3xl md:text-4xl font-bold text-white">Proyek Microsoft 365</h2>
-      </div>
+      <Reveal>
+        <div className="text-center mb-12">
+          <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">Administrasi & Analisis Data</h3>
+          <h2 className="text-3xl md:text-4xl font-bold text-white">Proyek Microsoft 365</h2>
+        </div>
+      </Reveal>
 
       <div className="space-y-16 mt-8">
         {ms365List.map((project, idx) => (
-          <div key={idx} className={`flex flex-col lg:flex-row items-center gap-8 lg:gap-12 p-6 bg-gray-900/50 rounded-2xl border border-gray-800 shadow-xl overflow-hidden ${idx % 2 !== 0 ? "lg:flex-row-reverse" : ""}`}>
+          <Reveal key={idx} className={`flex flex-col lg:flex-row items-center gap-8 lg:gap-12 p-6 bg-gray-900/50 rounded-2xl border border-gray-800 shadow-xl overflow-hidden ${idx % 2 !== 0 ? "lg:flex-row-reverse" : ""}`}>
             <div className="w-full lg:w-1/2">
               <ProjectCarousel images={project.images} title={project.title} />
             </div>
@@ -578,7 +654,6 @@ const Microsoft365Projects: React.FC = () => {
               </div>
 
               <div className="mt-4 border-t border-gray-700 pt-6 flex flex-wrap gap-3">
-                
                 {project.isCaseStudy && (
                   <Link
                     to={project.caseStudyLink!}
@@ -621,21 +696,15 @@ const Microsoft365Projects: React.FC = () => {
                 )}
               </div>
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
 
-      {/* --- MODAL FOR EXCEL DOWNLOAD --- */}
       {isDownloadModalOpen && (
         <div className="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 w-full max-w-md shadow-2xl relative animate-fade-in-up">
-            <button
-              onClick={() => setIsDownloadModalOpen(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+            <button onClick={() => setIsDownloadModalOpen(false)} className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
             <div className="text-center mb-6">
               <h3 className="text-2xl font-bold text-white mb-2">Unduh Template Excel</h3>
@@ -669,29 +738,11 @@ const MiniERPPage: React.FC = () => {
   const [downloadName, setDownloadName] = useState("");
   const [downloadPhone, setDownloadPhone] = useState("");
 
-  // Efek Intersection Observer untuk Animasi Scroll
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-          }
-        });
-      },
-      { threshold: 0.15 } // Memicu animasi ketika 15% dari kartu terlihat di layar
-    );
-
-    const cards = document.querySelectorAll(".reveal-on-scroll");
-    cards.forEach((card) => observer.observe(card));
-
-    return () => observer.disconnect();
-  }, []);
-
   const erpSteps = [
     {
       title: "Pemesanan Barang (Purchase Order)",
       desc: "Siklus pengadaan dimulai ketika pihak pembeli menerbitkan Purchase Order (PO). Dokumen ini mengikat pesanan secara resmi antar perusahaan (B2B). Pada sistem Excel ini, PO dilengkapi fitur kalkulasi dinamis untuk Sub Total, Pajak (PPN), dan Grand Total.",
+      // image: "/excel/erp/po_modern.png",
       image: "/excel/5/image.png",
       tag: "Tahap 1 - Inisiasi Transaksi",
       color: "text-blue-400"
@@ -699,6 +750,7 @@ const MiniERPPage: React.FC = () => {
     {
       title: "Pengiriman Barang (Surat Jalan)",
       desc: "Setelah PO diterima, vendor mengirimkan barang menggunakan Surat Jalan (Delivery Note). Sistem ini menggunakan formula VLOOKUP yang terhubung dengan Database Inventaris, sehingga entri nama barang dan satuan akan terisi otomatis hanya dengan memasukkan Kode Barang.",
+      // image: "/excel/erp/surat_jalan.png",
       image: "/excel/5/image.png",
       tag: "Tahap 2 - Logistik & Pemenuhan",
       color: "text-orange-400"
@@ -706,6 +758,7 @@ const MiniERPPage: React.FC = () => {
     {
       title: "Serah Terima (BAST)",
       desc: "Saat barang tiba, pihak pembeli melakukan pengecekan kualitas (Quality Control). Jika seluruh pesanan sesuai dan dalam kondisi baik, kedua belah pihak menandatangani Berita Acara Serah Terima (BAST) sebagai bukti hukum perpindahan kepemilikan dan tanggung jawab.",
+      // image: "/excel/erp/bast.png",
       image: "/excel/5/image.png",
       tag: "Tahap 3 - Validasi Kualitas",
       color: "text-green-400"
@@ -713,6 +766,7 @@ const MiniERPPage: React.FC = () => {
     {
       title: "Penanganan Anomali (Surat Retur)",
       desc: "Proyek ERP ini juga dirancang untuk menangani edge cases. Jika ditemukan barang rusak atau cacat produksi saat serah terima, sistem menyediakan Surat Retur (Return Note) untuk mencatat pengembalian barang secara rapi dan profesional.",
+      // image: "/excel/erp/retur.png",
       image: "/excel/5/image.png",
       tag: "Tahap 4 - Penanganan Retur",
       color: "text-red-400"
@@ -720,6 +774,7 @@ const MiniERPPage: React.FC = () => {
     {
       title: "Penagihan Uang (Invoice)",
       desc: "Berdasarkan kuantitas barang aktual yang diterima di BAST, pihak vendor berhak menerbitkan Faktur Penagihan (Invoice). Tagihan ini telah diatur dengan format yang menonjolkan metode dan tenggat waktu pembayaran (Net Term).",
+      // image: "/excel/erp/invoice.png",
       image: "/excel/5/image.png",
       tag: "Tahap 5 - Administrasi Keuangan",
       color: "text-purple-400"
@@ -727,6 +782,7 @@ const MiniERPPage: React.FC = () => {
     {
       title: "Penyelesaian Transaksi (Kwitansi)",
       desc: "Siklus pengadaan ditutup ketika pihak Keuangan (Finance) pembeli telah mentransfer dana pembayaran. Vendor kemudian menerbitkan dokumen Kwitansi berdesain modern lengkap dengan kolom meterai sebagai bukti pelunasan sah.",
+      // image: "/excel/erp/kwitansi.png",
       image: "/excel/5/image.png",
       tag: "Tahap 6 - Finalisasi",
       color: "text-teal-400"
@@ -757,7 +813,7 @@ const MiniERPPage: React.FC = () => {
     }
 
     const link = document.createElement("a");
-    link.href = "/excel/5/Mini_ERP_Procurement_By_RIFARA.xlsx";
+    link.href = "/excel/erp/Mini_ERP_Procurement_By_RIFARA.xlsx";
     link.setAttribute("download", "");
     document.body.appendChild(link);
     link.click();
@@ -771,47 +827,48 @@ const MiniERPPage: React.FC = () => {
 
   return (
     <div className="pt-24 pb-20 px-4 max-w-5xl mx-auto min-h-screen">
-      <div className="text-center mb-16">
-        <Link to="/#microsoft-365" className="inline-flex items-center text-gray-400 hover:text-[#3498db] transition-colors mb-6">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 mr-2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" /></svg>
-          Kembali ke Portofolio
-        </Link>
-        <h3 className="text-xl font-bold uppercase text-[#3498db] tracking-widest mb-3">Case Study</h3>
-        <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">Mini-ERP System: Automated B2B Procurement Cycle</h1>
-        <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
-          Studi kasus perancangan purwarupa (prototype) sistem Enterprise Resource Planning skala kecil menggunakan Microsoft Excel. Proyek ini memetakan alur kerja dunia nyata ke dalam dokumen yang terintegrasi secara cerdas untuk meminimalisir human error.
-        </p>
-        <div className="mt-8 flex justify-center gap-4">
-          
-          <button 
-            onClick={(e) => {
-              e.preventDefault();
-              setIsDownloadModalOpen(true);
-            }}
-            className="bg-[#217346] text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-[#1e603b] transition-transform transform hover:scale-105 flex items-center gap-2"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
-            Unduh Excel Master
-          </button>
+      <Reveal>
+        <div className="text-center mb-16">
+          <Link to="/#microsoft-365" className="inline-flex items-center text-gray-400 hover:text-[#3498db] transition-colors mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 mr-2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" /></svg>
+            Kembali ke Portofolio
+          </Link>
+          <h3 className="text-xl font-bold uppercase text-[#3498db] tracking-widest mb-3">Case Study</h3>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">Mini-ERP System: Automated B2B Procurement Cycle</h1>
+          <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            Studi kasus perancangan purwarupa (prototype) sistem Enterprise Resource Planning skala kecil menggunakan Microsoft Excel. Proyek ini memetakan alur kerja dunia nyata ke dalam dokumen yang terintegrasi secara cerdas untuk meminimalisir human error.
+          </p>
+          <div className="mt-8 flex justify-center gap-4">
+            
+            <button 
+              onClick={(e) => {
+                e.preventDefault();
+                setIsDownloadModalOpen(true);
+              }}
+              className="bg-[#217346] text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-[#1e603b] transition-transform transform hover:scale-105 flex items-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+              Unduh Excel Master
+            </button>
 
-          <a 
-            href="/excel/5/Mini_ERP_Procurement_By_RIFARA.pdf" 
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-red-600 text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-red-700 transition-transform transform hover:scale-105 flex items-center gap-2"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-            </svg>
-            Lihat / Unduh PDF Master
-          </a>
+            <a 
+              href="/excel/erp/Mini_ERP_Procurement_By_RIFARA.pdf" 
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-red-600 text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-red-700 transition-transform transform hover:scale-105 flex items-center gap-2"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+              </svg>
+              Lihat / Unduh PDF Master
+            </a>
+          </div>
         </div>
-      </div>
+      </Reveal>
 
       <div className="space-y-16 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-1 before:bg-gradient-to-b before:from-transparent before:via-gray-700 before:to-transparent">
         {erpSteps.map((step, idx) => (
-          // Pembungkus Animasi (Class "reveal-on-scroll" ditambahkan di sini)
-          <div key={idx} className={`reveal-on-scroll relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group`}>
+          <Reveal key={idx} className={`relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group`}>
             <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-gray-900 bg-gray-800 text-white font-bold shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 z-10 transition-transform duration-500 group-hover:scale-125">
               {idx + 1}
             </div>
@@ -823,7 +880,7 @@ const MiniERPPage: React.FC = () => {
                 <img src={step.image} alt={step.title} className="w-full h-full object-cover object-top opacity-80 transition-all duration-500 hover:scale-105 hover:opacity-100" />
               </div>
             </div>
-          </div>
+          </Reveal>
         ))}
       </div>
 
@@ -860,19 +917,21 @@ const MiniERPPage: React.FC = () => {
 
 const Publications: React.FC = () => {
   const publicationList = [
-    { title: "PENGEMBANGAN WEB DINAS PERPUSTAKAAN DAN ARSIP BERBASIS LARAVEL FRAMEWORK PADA DPAD Kota TANGERANG", journal: "Jurnal Mahasiswa Teknik Informatika (Jurnal Teknologi Informasi)", date: "Desember 2023", desc: "Penelitian ini membahas pengembangan web Dinas Perpustakaan dan Arsip berbasis Laravel Framework pada DPAD Kota Tangerang untuk meningkatkan layanan perpustakaan dan arsip digital.", link: "https://ejournal.itn.ac.id/index.php/jati/article/view/7840", authors: ["Agam Adensa", "Kamilah Raihan", "Rizky Faisal Rafi", "Irwan Richwandi Putra", " Firda Azizah"] },
+    { title: "PENGEMBANGAN WEB DINAS PERPUSTAKAAN DAN ARSIP BERBASIS LARAVEL FRAMEWORK PADA DPAD Kota TANGERANG", journal: "Jurnal Mahasiswa Teknik Informatika (Jurnal Teknologi Informasi)", date: "Desember 2023", desc: "Penelitian ini membahas pengembangan web Dinas Perpustakaan dan Arsip berbasis Laravel Framework pada DPAD Kota Tangerang untuk meningkatkan layanan perpustakaan dan Arsip digital.", link: "https://ejournal.itn.ac.id/index.php/jati/article/view/7840", authors: ["Agam Adensa", "Kamilah Raihan", "Rizky Faisal Rafi", "Irwan Richwandi Putra", " Firda Azizah"] },
   ];
   const DocumentIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>);
 
   return (
     <section id="publications" className="mx-auto mt-12 max-w-6xl px-4 py-12">
-      <div className="text-center mb-12">
-        <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">Riset & Akademik</h3>
-        <h2 className="text-3xl md:text-4xl font-bold text-white">Publikasi Jurnal</h2>
-      </div>
+      <Reveal>
+        <div className="text-center mb-12">
+          <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">Riset & Akademik</h3>
+          <h2 className="text-3xl md:text-4xl font-bold text-white">Publikasi Jurnal</h2>
+        </div>
+      </Reveal>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {publicationList.map((pub, idx) => (
-          <div key={idx} className="bg-gray-900/50 rounded-2xl p-6 border border-gray-800 shadow-xl flex flex-col transition-transform transform hover:-translate-y-2">
+          <Reveal key={idx} className="bg-gray-900/50 rounded-2xl p-6 border border-gray-800 shadow-xl flex flex-col transition-transform transform hover:-translate-y-2">
             <h3 className="text-xl font-bold text-white mb-2">{pub.title}</h3>
             <p className="text-sm text-cyan-400 font-semibold mb-1">{pub.journal}</p>
             <p className="text-xs text-gray-400 mb-4">{pub.authors.join(", ")} - {pub.date}</p>
@@ -880,7 +939,7 @@ const Publications: React.FC = () => {
             <a href={pub.link} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center gap-2 px-4 py-2 font-semibold text-white bg-gray-700 rounded-lg transition-colors hover:bg-[#3498db] self-start">
               <DocumentIcon /> Baca Publikasi
             </a>
-          </div>
+          </Reveal>
         ))}
       </div>
     </section>
@@ -910,7 +969,7 @@ const Contact: React.FC = () => {
 
   return (
     <section id="contact" className="max-w-6xl mx-auto py-12 px-4">
-      <div className="bg-gray-900/50 rounded-2xl p-8 md:p-12 border border-gray-800 shadow-2xl text-center">
+      <Reveal className="bg-gray-900/50 rounded-2xl p-8 md:p-12 border border-gray-800 shadow-2xl text-center">
         <h2 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">Kontak & Keahlian</h2>
         <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Mari Berkolaborasi!</h1>
         <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">Punya proyek menarik? Saya selalu terbuka untuk diskusi, peluang, dan ide-ide baru. Jangan ragu menghubungi saya.</p>
@@ -929,7 +988,7 @@ const Contact: React.FC = () => {
             ))}
           </div>
         </div>
-      </div>
+      </Reveal>
     </section>
   );
 };
@@ -982,15 +1041,17 @@ const AppContent = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleBackToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const handleBackToTop = () => slowScrollTo(0, 1500);
 
   return (
     <div className="min-h-screen m-0 p-0 bg-gray-900 text-white relative font-sans">
       <ScrollHandler />
       
+      {/* Background Ornamen dan Komponen Burung Terbang */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-[-10%] left-[-10%] w-96 h-96 bg-[#3498db]/10 rounded-full filter blur-3xl opacity-50 animate-pulse-slow"></div>
         <div className="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-600/10 rounded-full filter blur-3xl opacity-50 animate-pulse-slow" style={{ animationDelay: '-5s' }}></div>
+        <FlyingBird />
       </div>
 
       <div className="relative z-10">
@@ -1016,10 +1077,10 @@ const AppContent = () => {
         </button>
       )}
       
-      {/* PENAMBAHAN STYLE UNTUK ANIMASI SCROLL (REVEAL) */}
       <style>{`
-        html { scroll-behavior: smooth; }
+        /* CSS Animasi Dasar */
         body.overflow-hidden { overflow: hidden; }
+        
         @keyframes pulse-slow {
           0%, 100% { transform: scale(1); opacity: 0.4; }
           50% { transform: scale(1.2); opacity: 0.6; }
@@ -1030,15 +1091,58 @@ const AppContent = () => {
         }
         .animate-fade-in-up { animation: fade-in-up 0.4s ease-out forwards; }
         
-        /* CSS Animasi Scroll Timeline */
+        /* CSS Animasi Scroll Menggunakan Komponen <Reveal> */
         .reveal-on-scroll {
           opacity: 0;
           transform: translateY(40px);
-          transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+          transition: opacity 0.8s cubic-bezier(0.5, 0, 0, 1), transform 0.8s cubic-bezier(0.5, 0, 0, 1);
         }
         .reveal-on-scroll.is-visible {
           opacity: 1;
           transform: translateY(0);
+        }
+
+        /* --- CSS ANIMASI BURUNG TERBANG --- */
+        .bird-container {
+          position: absolute;
+          top: 20%;
+          left: -10%;
+          transform: scale(0) translateX(-10vw);
+          will-change: transform;
+          animation: flyAcross 20s linear infinite;
+        }
+
+        .bird {
+          animation: flap 0.8s ease-in-out infinite alternate;
+        }
+
+        @keyframes flyAcross {
+          0% {
+            transform: scale(0.5) translateX(-10vw) translateY(0vh);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          50% {
+            transform: scale(0.8) translateX(50vw) translateY(-10vh);
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            transform: scale(0.5) translateX(110vw) translateY(-20vh);
+            opacity: 0;
+          }
+        }
+
+        @keyframes flap {
+          0% {
+            transform: translateY(0px) rotate(-10deg);
+          }
+          100% {
+            transform: translateY(15px) rotate(10deg);
+          }
         }
       `}</style>
     </div>
