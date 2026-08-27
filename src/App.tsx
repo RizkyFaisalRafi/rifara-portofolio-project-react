@@ -118,7 +118,7 @@ const Navbar: React.FC = () => {
     { name: "Projects", href: "/#projects" },
     { name: "Microsoft 365", href: "/#microsoft-365" },
     { name: "Publications", href: "/#publications" },
-    { name: "Contact", href: "/#contact" },
+    // { name: "Contact", href: "/#contact" },
   ];
 
   useEffect(() => {
