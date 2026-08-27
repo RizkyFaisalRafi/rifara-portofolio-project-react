@@ -431,7 +431,7 @@ const Microsoft365Projects: React.FC = () => {
     {
       isCaseStudy: true,
       caseStudyLink: "/mini-erp",
-      images: ["/excel/5/image.png"], 
+      images: ["/excel/erp/po_modern.png"], 
       title: "Mini-ERP System: Automated B2B Procurement Cycle",
       desc: "Sebuah purwarupa (prototype) sistem Enterprise Resource Planning (ERP) berskala kecil yang dirancang untuk mengotomatiskan seluruh alur pengadaan barang (B2B Procurement). Proyek ini memetakan kompleksitas alur kerja dunia nyata—mulai dari pemesanan hingga pembayaran—ke dalam ekosistem dokumen Excel yang terintegrasi dinamis.",
       features: [
@@ -662,13 +662,17 @@ const Microsoft365Projects: React.FC = () => {
 };
 
 
-// --- [HALAMAN BARU: MINI ERP CASE STUDY PAGE] ---
+// --- [HALAMAN BARU: MINI ERP CASE STUDY PAGE DENGAN MODAL DOWNLOAD EXCEL] ---
 const MiniERPPage: React.FC = () => {
+  // State untuk form download Excel
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const [downloadName, setDownloadName] = useState("");
+  const [downloadPhone, setDownloadPhone] = useState("");
+
   const erpSteps = [
     {
       title: "Pemesanan Barang (Purchase Order)",
       desc: "Siklus pengadaan dimulai ketika pihak pembeli menerbitkan Purchase Order (PO). Dokumen ini mengikat pesanan secara resmi antar perusahaan (B2B). Pada sistem Excel ini, PO dilengkapi fitur kalkulasi dinamis untuk Sub Total, Pajak (PPN), dan Grand Total.",
-      // image: "/excel/erp/po_modern.png",
       image: "/excel/5/image.png",
       tag: "Tahap 1 - Inisiasi Transaksi",
       color: "text-blue-400"
@@ -676,7 +680,6 @@ const MiniERPPage: React.FC = () => {
     {
       title: "Pengiriman Barang (Surat Jalan)",
       desc: "Setelah PO diterima, vendor mengirimkan barang menggunakan Surat Jalan (Delivery Note). Sistem ini menggunakan formula VLOOKUP yang terhubung dengan Database Inventaris, sehingga entri nama barang dan satuan akan terisi otomatis hanya dengan memasukkan Kode Barang.",
-      // image: "/excel/erp/surat_jalan.png",
       image: "/excel/5/image.png",
       tag: "Tahap 2 - Logistik & Pemenuhan",
       color: "text-orange-400"
@@ -684,7 +687,6 @@ const MiniERPPage: React.FC = () => {
     {
       title: "Serah Terima (BAST)",
       desc: "Saat barang tiba, pihak pembeli melakukan pengecekan kualitas (Quality Control). Jika seluruh pesanan sesuai dan dalam kondisi baik, kedua belah pihak menandatangani Berita Acara Serah Terima (BAST) sebagai bukti hukum perpindahan kepemilikan dan tanggung jawab.",
-      // image: "/excel/erp/bast.png",
       image: "/excel/5/image.png",
       tag: "Tahap 3 - Validasi Kualitas",
       color: "text-green-400"
@@ -692,7 +694,6 @@ const MiniERPPage: React.FC = () => {
     {
       title: "Penanganan Anomali (Surat Retur)",
       desc: "Proyek ERP ini juga dirancang untuk menangani edge cases. Jika ditemukan barang rusak atau cacat produksi saat serah terima, sistem menyediakan Surat Retur (Return Note) untuk mencatat pengembalian barang secara rapi dan profesional.",
-      // image: "/excel/erp/retur.png",
       image: "/excel/5/image.png",
       tag: "Tahap 4 - Penanganan Retur",
       color: "text-red-400"
@@ -700,7 +701,6 @@ const MiniERPPage: React.FC = () => {
     {
       title: "Penagihan Uang (Invoice)",
       desc: "Berdasarkan kuantitas barang aktual yang diterima di BAST, pihak vendor berhak menerbitkan Faktur Penagihan (Invoice). Tagihan ini telah diatur dengan format yang menonjolkan metode dan tenggat waktu pembayaran (Net Term).",
-      // image: "/excel/erp/invoice.png",
       image: "/excel/5/image.png",
       tag: "Tahap 5 - Administrasi Keuangan",
       color: "text-purple-400"
@@ -708,12 +708,50 @@ const MiniERPPage: React.FC = () => {
     {
       title: "Penyelesaian Transaksi (Kwitansi)",
       desc: "Siklus pengadaan ditutup ketika pihak Keuangan (Finance) pembeli telah mentransfer dana pembayaran. Vendor kemudian menerbitkan dokumen Kwitansi berdesain modern lengkap dengan kolom meterai sebagai bukti pelunasan sah.",
-      // image: "/excel/erp/kwitansi.png",
       image: "/excel/5/image.png",
       tag: "Tahap 6 - Finalisasi",
       color: "text-teal-400"
     }
   ];
+
+  // Handler Submit Form Mini ERP
+  const handleDownloadSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (downloadPhone.trim().length < 10) return alert("Nomor WhatsApp tidak valid. Minimal 10 angka.");
+
+    // GANTI URL DI BAWAH INI DENGAN URL GOOGLE APPS SCRIPT ANDA
+    const GOOGLE_SCRIPT_URL = "URL_GOOGLE_APPS_SCRIPT_ANDA_DISINI";
+    
+    const newEntry = {
+      name: downloadName.trim(),
+      phone: downloadPhone.trim(),
+      timestamp: new Date().toLocaleString("id-ID", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }),
+    };
+
+    try {
+      await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors", 
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newEntry),
+      });
+    } catch (error) {
+      console.error("Gagal mengirim data ke Google Sheets:", error);
+    }
+
+    // Eksekusi download file master Excel
+    const link = document.createElement("a");
+    link.href = "/excel/5/Mini_ERP_Procurement_By_RIFARA.xlsx"; // Path master excel
+    link.setAttribute("download", "");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setDownloadName("");
+    setDownloadPhone("");
+    setIsDownloadModalOpen(false);
+    alert("Terima kasih! Data Anda telah tersimpan dan file Excel sedang diunduh.");
+  };
 
   return (
     <div className="pt-24 pb-20 px-4 max-w-5xl mx-auto min-h-screen">
@@ -729,29 +767,18 @@ const MiniERPPage: React.FC = () => {
         </p>
         <div className="mt-8 flex justify-center gap-4">
           
-          {/* TOMBOL UNDUH MASTER EXCEL (TETAP ALERT KARENA MASIH PROSES) */}
-          {/* <button 
+          {/* TOMBOL UNDUH MASTER EXCEL MEMANGGIL MODAL */}
+          <button 
             onClick={(e) => {
               e.preventDefault();
-              alert("Dokumen Mini-ERP Master (Full Version) saat ini sedang dalam tahap pengembangan. Silakan cek secara berkala untuk pembaruannya!");
+              setIsDownloadModalOpen(true);
             }}
             className="bg-[#217346] text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-[#1e603b] transition-transform transform hover:scale-105 flex items-center gap-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
             Unduh Excel Master
-          </button> */}
+          </button>
 
-          {/* TOMBOL UNDUH EXCEL MASTER */}
-          <a 
-            href="/excel/erp/Mini_ERP_Procurement_By_RIFARA.xlsx" 
-            download="Mini_ERP_Procurement_By_RIFARA.xlsx"
-            className="bg-[#217346] text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-[#1e603b] transition-transform transform hover:scale-105 flex items-center gap-2"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
-            Unduh Excel Master
-          </a>
-
-          {/* TOMBOL UNDUH PDF MASTER - LANGSUNG PREVIEW/DOWNLOAD LOKAL */}
           <a 
             href="/excel/5/Mini_ERP_Procurement_By_RIFARA.pdf" 
             target="_blank"
@@ -784,6 +811,41 @@ const MiniERPPage: React.FC = () => {
           </div>
         ))}
       </div>
+
+      {/* --- MODAL DOWNLOAD EXCEL KHUSUS MINI ERP --- */}
+      {isDownloadModalOpen && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 w-full max-w-md shadow-2xl relative animate-fade-in-up">
+            <button
+              onClick={() => setIsDownloadModalOpen(false)}
+              className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-bold text-white mb-2">Unduh Excel Master Mini-ERP</h3>
+              <p className="text-gray-400 text-sm">Isi formulir di bawah ini untuk mengunduh file secara gratis.</p>
+            </div>
+            <form onSubmit={handleDownloadSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-1">Nama Lengkap <span className="text-red-500">*</span></label>
+                <input type="text" id="name" required value={downloadName} onChange={(e) => setDownloadName(e.target.value)} placeholder="Masukkan nama Anda" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3498db] transition-all" />
+              </div>
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-1">Nomor WhatsApp <span className="text-red-500">*</span></label>
+                <input type="tel" id="phone" required minLength={10} value={downloadPhone} onChange={(e) => setDownloadPhone(e.target.value.replace(/[^0-9]/g, ''))} placeholder="Contoh: 081234567890" className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#3498db] transition-all" />
+              </div>
+              <div className="pt-4 flex gap-3">
+                <button type="button" onClick={() => setIsDownloadModalOpen(false)} className="flex-1 px-4 py-3 font-semibold text-gray-300 bg-gray-800 border border-gray-700 rounded-lg hover:bg-gray-700 hover:text-white transition-colors">Batal</button>
+                <button type="submit" className="flex-1 px-4 py-3 font-bold text-white bg-[#3498db] rounded-lg shadow-lg hover:bg-[#2980b9] transition-colors">Unduh</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
