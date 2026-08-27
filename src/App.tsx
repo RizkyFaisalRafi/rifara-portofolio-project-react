@@ -590,7 +590,7 @@ const Microsoft365Projects: React.FC = () => {
     e.preventDefault();
     if (downloadPhone.trim().length < 10) return alert("Nomor WhatsApp tidak valid. Minimal 10 angka.");
 
-    const GOOGLE_SCRIPT_URL = "URL_GOOGLE_APPS_SCRIPT_ANDA_DISINI";
+    const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzAcmWg0qoULx8jV6LVpk2JWOV7Hfo1K81nG4DVixsvrsqTazO0aO_ZPTYL1Xgrw1-Liw/exec";
     
     const newEntry = {
       name: downloadName.trim(),
