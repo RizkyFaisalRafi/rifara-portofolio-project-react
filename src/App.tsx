@@ -813,7 +813,7 @@ const MiniERPPage: React.FC = () => {
     }
 
     const link = document.createElement("a");
-    link.href = "/excel/erp/Mini_ERP_Procurement_By_RIFARA.xlsx";
+    link.href = "/excel/5/Mini_ERP_Procurement_By_RIFARA.xlsx";
     link.setAttribute("download", "");
     document.body.appendChild(link);
     link.click();
@@ -852,7 +852,7 @@ const MiniERPPage: React.FC = () => {
             </button>
 
             <a 
-              href="/excel/erp/Mini_ERP_Procurement_By_RIFARA.pdf" 
+              href="/excel/5/Mini_ERP_Procurement_By_RIFARA.pdf" 
               target="_blank"
               rel="noopener noreferrer"
               className="bg-red-600 text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-red-700 transition-transform transform hover:scale-105 flex items-center gap-2"
