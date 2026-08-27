@@ -187,7 +187,7 @@ const Hero: React.FC = () => (
         <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek IT</Link>
         <Link to="/#microsoft-365" className="bg-[#217346] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek Microsoft Office</Link>
         <a href="/CV_Rizky_Faisal_Rafi.pdf" download="CV_Rizky_Faisal_Rafi.pdf" className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Unduh CV</a>
-        <a href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white">Portofolio Aktif</a>
+        {/* <a href="https://docs.google.com/presentation/d/1VPoWSX7t2qAgI5RfQ3S5GoExeZwX7Y2CVR0EHfT5ah0/edit?usp=sharing" target="_blank" rel="noopener noreferrer" className="border-2 border-gray-500 text-gray-300 font-semibold px-8 py-3 rounded-lg shadow-lg transition-all duration-300 hover:scale-105 hover:border-[#3498db] hover:text-white">Portofolio Aktif</a> */}
       </div>
     </div>
   </section>
