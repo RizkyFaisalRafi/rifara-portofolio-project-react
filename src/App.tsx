@@ -265,7 +265,7 @@ const Hero: React.FC = () => (
       <div className="mt-8 flex flex-wrap justify-center gap-4">
         <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek IT</Link>
         <Link to="/#microsoft-365" className="bg-[#217346] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek Microsoft Office</Link>
-        <a href="/CV_Rizky_Faisal_Rafi.pdf" download="CV_Rizky_Faisal_Rafi.pdf" className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Unduh CV</a>
+        <a href="/cv/CV_Rizky_Faisal_Rafi.pdf" download="/cv/CV_Rizky_Faisal_Rafi.pdf" className="bg-gray-700 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Unduh CV</a>
       </div>
     </div>
   </section>
