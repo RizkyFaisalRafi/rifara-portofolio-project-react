@@ -579,6 +579,7 @@ const Microsoft365Projects: React.FC = () => {
       ],
       tech: ["Microsoft Excel", "Payroll Automation", "Form Controls", "Interactive Dashboard"],
     },
+
     {
       images: ["/excel/4/image1.jpg", "/excel/4/image2.png"],
       pdfUrl: "/excel/4/Surat_Jalan_By_RIFARA.pdf",
@@ -591,6 +592,20 @@ const Microsoft365Projects: React.FC = () => {
         "Format Dokumen Siap Cetak: Tata letak (layout) Surat Jalan yang profesional mendukung pencetakan presisi multi-copy (misalnya A5 atau A4 dibagi dua)."
       ],
       tech: ["Microsoft Excel", "Document Automation", "Data Management", "Print-Ready Layout"],
+    },
+
+    {
+      images: ["/excel/6/image.png"],
+      pdfUrl: "/excel/6/Laporan_Admin_Affiliate_By_RIFARA.pdf",
+      excelUrl: "/excel/6/Laporan_Admin_Affiliate_By_RIFARA.xlsx",
+      title: "Laporan Performa Afiliasi (Monthly Recap) Otomatis",
+      desc: "Pembuatan template Laporan Performa Afiliasi bulanan yang dirancang untuk mempercepat rekapitulasi kinerja kreator (KOL). Sistem ini menggunakan formula terintegrasi untuk menghitung Gross Merchandise Value (GMV), Conversion Rate, dan estimasi komisi secara instan. Template ini meminimalisir kesalahan perhitungan manual dan menyajikan rangkuman data yang terstruktur untuk kebutuhan evaluasi manajemen.",
+      features: [
+        "Kalkulasi Finansial Otomatis: Implementasi formula untuk menghitung GMV dan Total Payout Komisi berdasarkan persentase (rate) masing-masing kreator secara dinamis.", 
+        "Pelacakan Metrik Kinerja (KPI): Memantau efektivitas kampanye tiap afiliator melalui rasio konversi (Conversion Rate) dari jumlah klik menjadi pesanan selesai.", 
+        "Executive Summary & Print-Ready Layout: Desain tata letak profesional dengan ringkasan metrik utama di bagian atas dan indikator warna untuk status pembayaran, siap diekspor ke format PDF."
+      ],
+      tech: ["Microsoft Excel", "Data Reporting", "Performance Tracking", "Financial Calculation"],
     }
   ];
 
