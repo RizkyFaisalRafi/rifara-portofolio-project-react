@@ -537,6 +537,7 @@ const Microsoft365Projects: React.FC = () => {
       ],
       tech: ["Microsoft Excel", "Database Relational", "VLOOKUP", "Business Logic"],
     },
+    
     {
       images: ["/excel/1/image.png"],
       pdfUrl: "/excel/1/AbsensiBulananRekapGajiByRIFARA.pdf",
@@ -551,20 +552,22 @@ const Microsoft365Projects: React.FC = () => {
       ],
       tech: ["Microsoft Excel", "HR Analytics", "Payroll Automation", "Formula & Logic"],
     },
-    {
-      images: ["/excel/2/image1.png", "/excel/2/image2.png"],
-      pdfUrl: "/excel/2/Faktur_Invoice_By_RIFARA.pdf",
-      excelUrl: "/excel/2/Faktur_Invoice_By_RIFARA.xlsx",
-      title: "Generator Faktur Penjualan Otomatis (Automated Sales Invoice Generator)",
-      desc: "Pembuatan template faktur penjualan dinamis yang dirancang untuk mempercepat proses penagihan dan administrasi. Sistem ini menggunakan kombinasi fitur validasi data dan formula pencarian untuk mengisi detail pelanggan serta melakukan kalkulasi transaksi secara otomatis, sehingga meminimalisir kesalahan input manual (human error).",
-      features: [
-        "Otomatisasi Data Pelanggan: Implementasi Data Validation (Dropdown List) yang dipadukan dengan formula VLOOKUP untuk memanggil data alamat pelanggan secara instan.", 
-        "Kalkulasi Harga Dinamis: Perhitungan otomatis dan akurat untuk Sub Total, Diskon, Pajak (10%), hingga Total Akhir.", 
-        "Manajemen Basis Data Terstruktur: Memanfaatkan tabel referensi terpisah (Master Data) untuk menyimpan daftar pelanggan secara rapi.", 
-        "Desain Profesional & Siap Cetak: Tata letak (layout) faktur yang bersih dan telah diatur area cetaknya (Print Area)."
-      ],
-      tech: ["Microsoft Excel", "Sales Automation", "VLOOKUP & Data Validation", "Formula & Logic"],
-    },
+    
+    // {
+    //   images: ["/excel/2/image1.png", "/excel/2/image2.png"],
+    //   pdfUrl: "/excel/2/Faktur_Invoice_By_RIFARA.pdf",
+    //   excelUrl: "/excel/2/Faktur_Invoice_By_RIFARA.xlsx",
+    //   title: "Generator Faktur Penjualan Otomatis (Automated Sales Invoice Generator)",
+    //   desc: "Pembuatan template faktur penjualan dinamis yang dirancang untuk mempercepat proses penagihan dan administrasi. Sistem ini menggunakan kombinasi fitur validasi data dan formula pencarian untuk mengisi detail pelanggan serta melakukan kalkulasi transaksi secara otomatis, sehingga meminimalisir kesalahan input manual (human error).",
+    //   features: [
+    //     "Otomatisasi Data Pelanggan: Implementasi Data Validation (Dropdown List) yang dipadukan dengan formula VLOOKUP untuk memanggil data alamat pelanggan secara instan.", 
+    //     "Kalkulasi Harga Dinamis: Perhitungan otomatis dan akurat untuk Sub Total, Diskon, Pajak (10%), hingga Total Akhir.", 
+    //     "Manajemen Basis Data Terstruktur: Memanfaatkan tabel referensi terpisah (Master Data) untuk menyimpan daftar pelanggan secara rapi.", 
+    //     "Desain Profesional & Siap Cetak: Tata letak (layout) faktur yang bersih dan telah diatur area cetaknya (Print Area)."
+    //   ],
+    //   tech: ["Microsoft Excel", "Sales Automation", "VLOOKUP & Data Validation", "Formula & Logic"],
+    // },
+
     {
       images: ["/excel/3/image1.png", "/excel/3/image2.png"],
       pdfUrl: "/excel/3/Slip_Gaji_Karyawan_By_RIFARA.pdf",
@@ -580,19 +583,19 @@ const Microsoft365Projects: React.FC = () => {
       tech: ["Microsoft Excel", "Payroll Automation", "Form Controls", "Interactive Dashboard"],
     },
 
-    {
-      images: ["/excel/4/image1.jpg", "/excel/4/image2.png"],
-      pdfUrl: "/excel/4/Surat_Jalan_By_RIFARA.pdf",
-      excelUrl: "/excel/4/Surat_Jalan_By_RIFARA.xlsx",
-      title: "Surat Jalan (Delivery Note) Dinamis & Interaktif",
-      desc: "Pembuatan template Surat Jalan (Delivery Note) dinamis yang dirancang untuk mempercepat proses administrasi pengiriman barang harian. Sistem ini memanfaatkan integrasi rumus dan manajemen data untuk menarik detail pelanggan serta inventaris secara instan, meminimalisir human error dalam pencatatan fisik, dan memastikan kelancaran alur distribusi.",
-      features: [
-        "Integrasi Database Pelanggan & Barang: Memanfaatkan fungsi pencarian lanjutan dipadukan dengan Data Validation untuk memanggil data secara otomatis.", 
-        "Penomoran & Perekaman Data Efisien: Implementasi sistem input terstruktur untuk merekam detail pengiriman (Nama Supir, Nomor Polisi, dll).", 
-        "Format Dokumen Siap Cetak: Tata letak (layout) Surat Jalan yang profesional mendukung pencetakan presisi multi-copy (misalnya A5 atau A4 dibagi dua)."
-      ],
-      tech: ["Microsoft Excel", "Document Automation", "Data Management", "Print-Ready Layout"],
-    },
+    // {
+    //   images: ["/excel/4/image1.jpg", "/excel/4/image2.png"],
+    //   pdfUrl: "/excel/4/Surat_Jalan_By_RIFARA.pdf",
+    //   excelUrl: "/excel/4/Surat_Jalan_By_RIFARA.xlsx",
+    //   title: "Surat Jalan (Delivery Note) Dinamis & Interaktif",
+    //   desc: "Pembuatan template Surat Jalan (Delivery Note) dinamis yang dirancang untuk mempercepat proses administrasi pengiriman barang harian. Sistem ini memanfaatkan integrasi rumus dan manajemen data untuk menarik detail pelanggan serta inventaris secara instan, meminimalisir human error dalam pencatatan fisik, dan memastikan kelancaran alur distribusi.",
+    //   features: [
+    //     "Integrasi Database Pelanggan & Barang: Memanfaatkan fungsi pencarian lanjutan dipadukan dengan Data Validation untuk memanggil data secara otomatis.", 
+    //     "Penomoran & Perekaman Data Efisien: Implementasi sistem input terstruktur untuk merekam detail pengiriman (Nama Supir, Nomor Polisi, dll).", 
+    //     "Format Dokumen Siap Cetak: Tata letak (layout) Surat Jalan yang profesional mendukung pencetakan presisi multi-copy (misalnya A5 atau A4 dibagi dua)."
+    //   ],
+    //   tech: ["Microsoft Excel", "Document Automation", "Data Management", "Print-Ready Layout"],
+    // },
 
     {
       images: ["/excel/6/image.png"],
