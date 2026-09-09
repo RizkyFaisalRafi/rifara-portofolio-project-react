@@ -606,6 +606,20 @@ const Microsoft365Projects: React.FC = () => {
         "Executive Summary & Print-Ready Layout: Desain tata letak profesional dengan ringkasan metrik utama di bagian atas dan indikator warna untuk status pembayaran, siap diekspor ke format PDF."
       ],
       tech: ["Microsoft Excel", "Data Reporting", "Performance Tracking", "Financial Calculation"],
+    },
+
+    {
+      images: ["/excel/7/image.jpg"],
+      pdfUrl: "/excel/7/Laporan_Stok_Opname_Gudang_By_RIFARA.pdf",
+      excelUrl: "/excel/7/Laporan_Stok_Opname_Gudang_By_RIFARA.xlsx",
+      title: "Laporan Stok Opname Gudang",
+      desc: "Pembuatan template Laporan Stok Opname Gudang yang dirancang untuk mempercepat proses pencatatan dan evaluasi persediaan. Sistem ini mengintegrasikan riwayat mutasi barang dengan hasil audit fisik untuk menghasilkan data inventaris yang akurat dan dapat dipertanggungjawabkan.",
+      features: [
+        "Kalkulasi Selisih (Variance) Otomatis: Implementasi formula matematis untuk membandingkan saldo akhir sistem dengan hasil perhitungan fisik di lapangan, sehingga anomali stok (+/-) terdeteksi secara instan.", 
+        "Pemantauan Mutasi Terstruktur: Pencatatan alur masuk (inbound) dan keluar (outbound) barang yang sistematis berdasarkan Kode SKU untuk memastikan integritas data persediaan.", 
+        "Audit-Ready & Print Layout: Desain tata letak profesional yang dilengkapi kolom keterangan untuk analisis selisih (rusak/hilang), serta diformat khusus agar rapi saat dicetak atau diekspor ke PDF untuk pelaporan manajemen."
+      ],
+      tech: ["Microsoft Excel", "Inventory Management", "Logical Formulas", "Data Administration"],
     }
   ];
 
