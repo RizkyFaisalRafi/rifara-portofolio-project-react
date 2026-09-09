@@ -775,11 +775,19 @@ const MiniERPPage: React.FC = () => {
       color: "text-blue-400"
     },
     {
+      title: "Instruksi Pengeluaran (Delivery Order)", // [BARU] Tambahan DO Internal Gudang
+      desc: "Sebagai jembatan antara tim Sales/Admin dan tim Logistik, sistem menerbitkan Delivery Order (DO). Dokumen ini murni berfungsi sebagai Surat Perintah Kerja (SPK) internal bagi staf gudang untuk menyiapkan, mengepak (packing), dan mengeluarkan barang sesuai daftar pesanan sebelum dikirim ke pelanggan.",
+      // image: "/excel/erp/delivery_order.png", 
+      image: "/excel/5/image.png",
+      tag: "Tahap 2 - Instruksi Gudang",
+      color: "text-yellow-400"
+    },
+    {
       title: "Pengiriman Barang (Surat Jalan)",
-      desc: "Setelah PO diterima, vendor mengirimkan barang menggunakan Surat Jalan (Delivery Note). Sistem ini menggunakan formula VLOOKUP yang terhubung dengan Database Inventaris, sehingga entri nama barang dan satuan akan terisi otomatis hanya dengan memasukkan Kode Barang.",
+      desc: "Setelah barang siap dan dimuat ke kendaraan (berdasarkan instruksi DO), vendor mengirimkan barang menggunakan Surat Jalan (Delivery Note). Dokumen eksternal ini dibawa oleh kurir/supir dan berfungsi sebagai tanda terima sah di lokasi pelanggan.",
       // image: "/excel/erp/surat_jalan.png",
       image: "/excel/5/image.png",
-      tag: "Tahap 2 - Logistik & Pemenuhan",
+      tag: "Tahap 3 - Logistik & Pengiriman", // Ubah tag menjadi Tahap 3
       color: "text-orange-400"
     },
     {
@@ -787,7 +795,7 @@ const MiniERPPage: React.FC = () => {
       desc: "Saat barang tiba, pihak pembeli melakukan pengecekan kualitas (Quality Control). Jika seluruh pesanan sesuai dan dalam kondisi baik, kedua belah pihak menandatangani Berita Acara Serah Terima (BAST) sebagai bukti hukum perpindahan kepemilikan dan tanggung jawab.",
       // image: "/excel/erp/bast.png",
       image: "/excel/5/image.png",
-      tag: "Tahap 3 - Validasi Kualitas",
+      tag: "Tahap 4 - Validasi Kualitas", // Ubah tag menjadi Tahap 4
       color: "text-green-400"
     },
     {
@@ -795,7 +803,7 @@ const MiniERPPage: React.FC = () => {
       desc: "Proyek ERP ini juga dirancang untuk menangani edge cases. Jika ditemukan barang rusak atau cacat produksi saat serah terima, sistem menyediakan Surat Retur (Return Note) untuk mencatat pengembalian barang secara rapi dan profesional.",
       // image: "/excel/erp/retur.png",
       image: "/excel/5/image.png",
-      tag: "Tahap 4 - Penanganan Retur",
+      tag: "Tahap 5 - Penanganan Retur", // Ubah tag menjadi Tahap 5
       color: "text-red-400"
     },
     {
@@ -803,7 +811,7 @@ const MiniERPPage: React.FC = () => {
       desc: "Berdasarkan kuantitas barang aktual yang diterima di BAST, pihak vendor berhak menerbitkan Faktur Penagihan (Invoice). Tagihan ini telah diatur dengan format yang menonjolkan metode dan tenggat waktu pembayaran (Net Term).",
       // image: "/excel/erp/invoice.png",
       image: "/excel/5/image.png",
-      tag: "Tahap 5 - Administrasi Keuangan",
+      tag: "Tahap 6 - Administrasi Keuangan", // Ubah tag menjadi Tahap 6
       color: "text-purple-400"
     },
     {
@@ -811,10 +819,10 @@ const MiniERPPage: React.FC = () => {
       desc: "Siklus pengadaan ditutup ketika pihak Keuangan (Finance) pembeli telah mentransfer dana pembayaran. Vendor kemudian menerbitkan dokumen Kwitansi berdesain modern lengkap dengan kolom meterai sebagai bukti pelunasan sah.",
       // image: "/excel/erp/kwitansi.png",
       image: "/excel/5/image.png",
-      tag: "Tahap 6 - Finalisasi",
+      tag: "Tahap 7 - Finalisasi", // Ubah tag menjadi Tahap 7
       color: "text-teal-400"
     }
-  ];
+];
 
   const handleDownloadSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -840,7 +848,8 @@ const MiniERPPage: React.FC = () => {
     }
 
     const link = document.createElement("a");
-    link.href = "/excel/5/Mini_ERP_Procurement_By_RIFARA.xlsx";
+    // link.href = "/excel/5/Mini_ERP_Procurement_By_RIFARA.xlsx";
+    link.href = "/excel/5/Mini_ERP_Procurement_By_RIFARA_Update.xlsx";
     link.setAttribute("download", "");
     document.body.appendChild(link);
     link.click();
@@ -879,7 +888,8 @@ const MiniERPPage: React.FC = () => {
             </button>
 
             <a 
-              href="/excel/5/Mini_ERP_Procurement_By_RIFARA.pdf" 
+              // href="/excel/5/Mini_ERP_Procurement_By_RIFARA.pdf" 
+              href="/excel/5/Mini_ERP_Procurement_By_RIFARA_Update.pdf" 
               target="_blank"
               rel="noopener noreferrer"
               className="bg-red-600 text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-red-700 transition-transform transform hover:scale-105 flex items-center gap-2"
