@@ -1082,6 +1082,10 @@ const Footer: React.FC = () => {
         <div className="text-gray-500 text-sm">
           &copy; {new Date().getFullYear()} Rizky Faisal Rafi. All rights reserved.
         </div>
+        {/* --- [TAMBAHAN: Tampilan Terakhir Diperbarui] --- */}
+        <div className="text-gray-500/80 text-xs mt-3">
+          Terakhir diperbarui: 3 Oktober 2026
+        </div>
       </div>
     </footer>
   );
