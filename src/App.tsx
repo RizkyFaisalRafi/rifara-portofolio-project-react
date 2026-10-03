@@ -611,6 +611,7 @@ const Microsoft365Projects: React.FC = () => {
       tech: ["Microsoft Excel", "Data Reporting", "Performance Tracking", "Financial Calculation"],
     },
 
+    // 7
     {
       images: ["/excel/7/image.jpg"],
       pdfUrl: "/excel/7/Laporan_Stok_Opname_Gudang_By_RIFARA.pdf",
@@ -623,6 +624,21 @@ const Microsoft365Projects: React.FC = () => {
         "Audit-Ready & Print Layout: Desain tata letak profesional yang dilengkapi kolom keterangan untuk analisis selisih (rusak/hilang), serta diformat khusus agar rapi saat dicetak atau diekspor ke PDF untuk pelaporan manajemen."
       ],
       tech: ["Microsoft Excel", "Inventory Management", "Logical Formulas", "Data Administration"],
+    },
+
+    // 8
+    {
+      images: ["/excel/8/image.jpg"], // Sesuaikan nomor folder/path dengan struktur web Anda
+      pdfUrl: "/excel/8/Cheat_Sheet_Shortcut_Excel_By_Rizky_Faisal_Rafi.pdf",
+      excelUrl: "",
+      title: "Cheat Sheet & Panduan Shortcut Microsoft Excel",
+      desc: "Pembuatan dokumen panduan komprehensif (Cheat Sheet) yang merangkum 50+ shortcut esensial Microsoft Excel. Panduan ini dirancang untuk meningkatkan produktivitas, efisiensi waktu, dan mempercepat alur kerja dengan mengurangi ketergantungan pada navigasi mouse dalam pengolahan data harian.",
+      features: [
+        "Kategorisasi Fungsional Terstruktur: Pengelompokan shortcut secara logis (Navigasi Data, Pemformatan Sel, Manajemen Sheet, dll) yang memudahkan pengguna dalam mencari, mengingat, dan mempraktikkan kombinasi tombol dengan cepat.",
+        "Optimalisasi Alur Kerja (Workflow): Memuat shortcut krusial untuk analisis dan administrasi data tingkat lanjut, seperti penguncian referensi absolut (F4), Flash Fill, AutoFit, hingga manajemen tabel dan sel.",
+        "Print-Ready & Ergonomic Design: Desain tata letak visual berukuran A4 yang profesional dan bersih, dirancang khusus untuk dicetak sebagai lembar referensi (desk reference) guna menemani proses belajar dan bekerja."
+      ],
+      tech: ["Microsoft Excel", "Productivity", "Workflow Optimization", "Data Administration"],
     }
   ];
 
