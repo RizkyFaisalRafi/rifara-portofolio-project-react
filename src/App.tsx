@@ -93,32 +93,28 @@ const Reveal: React.FC<{ children: React.ReactNode; className?: string }> = ({ c
 const WelcomeModal: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation(); // [BARU] Mendeteksi perubahan URL
+  const location = useLocation();
 
   useEffect(() => {
+    // 1. Cek apakah ini kunjungan pertama
     const hasVisited = localStorage.getItem("hasVisitedPortfolio");
-    const hasNoHash = !location.hash; // Mengecek apakah URL TIDAK memiliki /#
     
-    // Skenario 1: Belum pernah visit DAN URL tidak memiliki /#
-    if (!hasVisited && hasNoHash) {
-      const timer = setTimeout(() => setIsOpen(true), 500);
-      return () => clearTimeout(timer);
-    } 
-    // Skenario 2: Belum pernah visit TAPI langsung masuk ke section tertentu (misal web.com/#projects)
-    // Set localStorage diam-diam agar modal diskip dan tidak mengganggu
-    else if (!hasVisited && !hasNoHash) {
-      localStorage.setItem("hasVisitedPortfolio", "true");
-    }
+    // 2. Cek apakah pengunjung berada tepat di "https://rifaraportofolio.my.id/"
+    // (pathname harus "/" DAN tidak boleh ada hash seperti "#projects")
+    const isExactHome = location.pathname === "/" && !location.hash; 
 
-    /* 
-    modal harus **SELALU** muncul setiap kali URL tidak ada /# 
-    (tanpa peduli apakah user sudah pernah berkunjung atau belum),
-    */
-    if (hasNoHash) {
-       const timer = setTimeout(() => setIsOpen(true), 500);
-       return () => clearTimeout(timer);
+    if (!hasVisited) {
+      if (isExactHome) {
+        // Jika di halaman utama yang bersih, munculkan modal
+        const timer = setTimeout(() => setIsOpen(true), 500);
+        return () => clearTimeout(timer);
+      } else {
+        // Jika masuk lewat /mini-erp atau /#..., jangan munculkan modal 
+        // dan langsung tandai sebagai "sudah berkunjung"
+        localStorage.setItem("hasVisitedPortfolio", "true");
+      }
     }
-  }, [location.hash]);
+  }, [location.pathname, location.hash]);
 
   const handleSelection = (hash: string) => {
     localStorage.setItem("hasVisitedPortfolio", "true");
@@ -172,7 +168,7 @@ const WelcomeModal: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
             </svg>
           </button>
-
+          
           {/* Pilihan Administrasi */}
           <button
             onClick={() => handleSelection("#microsoft-365")}
@@ -200,8 +196,8 @@ const WelcomeModal: React.FC = () => {
               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
             </svg>
           </button>
-
         </div>
+        
       </div>
     </div>
   );
