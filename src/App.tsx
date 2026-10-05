@@ -89,48 +89,145 @@ const Reveal: React.FC<{ children: React.ReactNode; className?: string }> = ({ c
   );
 };
 
-// --- [KOMPONEN BARU: MODAL SELAMAT DATANG (FIRST VISITOR)] ---
+// --- [KOMPONEN BARU: MODAL SELAMAT DATANG (SESSION VISITOR)] ---
+// const WelcomeModal: React.FC = () => {
+//   const [isOpen, setIsOpen] = useState(false);
+//   const navigate = useNavigate();
+//   const location = useLocation();
+
+//   useEffect(() => {
+//     const hasVisited = sessionStorage.getItem("hasVisitedPortfolio");
+//     const isHomePage = location.pathname === "/";
+//     const hasNoHash = !location.hash || location.hash === ""; // Pastikan hash benar-benar kosong
+
+//     if (!hasVisited) {
+//       if (isHomePage && hasNoHash) {
+//         // Langsung tampilkan modal (tanpa setTimeout untuk mencegah bug Strict Mode di localhost)
+//         setIsOpen(true);
+//       } else {
+//         // Jika masuk via link spesifik, tandai sudah berkunjung agar modal tidak muncul
+//         sessionStorage.setItem("hasVisitedPortfolio", "true");
+//       }
+//     }
+//   }, [location.pathname, location.hash]);
+
+//   const handleSelection = (hash: string) => {
+//     sessionStorage.setItem("hasVisitedPortfolio", "true");
+//     setIsOpen(false);
+//     navigate(`/${hash}`);
+//   };
+
+//   const handleCVClick = () => {
+//     sessionStorage.setItem("hasVisitedPortfolio", "true");
+//     setIsOpen(false);
+//     window.open("/cv/CV_Rizky_Faisal_Rafi.pdf", "_blank", "noopener,noreferrer");
+//   };
+
+//   const handleClose = () => {
+//     sessionStorage.setItem("hasVisitedPortfolio", "true");
+//     setIsOpen(false);
+//   };
+
+//   if (!isOpen) return null;
+
+//   return (
+//     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in-up">
+//       <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl relative text-center">
+        
+//         <button
+//           onClick={handleClose}
+//           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
+//           aria-label="Tutup"
+//         >
+//           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
+//             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+//           </svg>
+//         </button>
+        
+//         <h2 className="text-3xl font-extrabold text-white mb-3">Selamat Datang!</h2>
+//         <p className="text-gray-400 mb-8 text-sm md:text-base leading-relaxed">
+//           Terima kasih telah berkunjung. Untuk memberikan pengalaman terbaik, portofolio mana yang ingin Anda eksplorasi terlebih dahulu?
+//         </p>
+        
+//         <div className="flex flex-col gap-4">
+//           <button
+//             onClick={() => handleSelection("#projects")}
+//             className="w-full flex items-center justify-between px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl hover:bg-[#3498db]/10 hover:border-[#3498db] transition-all group"
+//           >
+//             <div className="text-left">
+//               <h3 className="text-lg font-bold text-white group-hover:text-[#3498db] transition-colors">Portofolio IT & Software</h3>
+//               <p className="text-xs md:text-sm text-gray-400 mt-1">Mobile App (Flutter, Kotlin), Web Dev, dll.</p>
+//             </div>
+//             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-500 group-hover:text-[#3498db]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+//               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+//             </svg>
+//           </button>
+          
+//           <button
+//             onClick={() => handleSelection("#microsoft-365")}
+//             className="w-full flex items-center justify-between px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl hover:bg-[#217346]/10 hover:border-[#217346] transition-all group"
+//           >
+//             <div className="text-left">
+//               <h3 className="text-lg font-bold text-white group-hover:text-[#217346] transition-colors">Portofolio Administrasi</h3>
+//               <p className="text-xs md:text-sm text-gray-400 mt-1">Microsoft 365, Excel Dashboard, ERP, dll.</p>
+//             </div>
+//             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-500 group-hover:text-[#217346]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+//               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+//             </svg>
+//           </button>
+
+//           <button
+//             onClick={handleCVClick}
+//             className="w-full flex items-center justify-between px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl hover:bg-gray-700 hover:border-gray-500 transition-all group"
+//           >
+//             <div className="text-left">
+//               <h3 className="text-lg font-bold text-white group-hover:text-gray-200 transition-colors">Lihat CV / Resume</h3>
+//               <p className="text-xs md:text-sm text-gray-400 mt-1">Unduh atau lihat profil profesional lengkap.</p>
+//             </div>
+//             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-500 group-hover:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+//               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+//             </svg>
+//           </button>
+//         </div>
+        
+//       </div>
+//     </div>
+//   );
+// };
+
+// --- [KOMPONEN BARU: MODAL SELAMAT DATANG (URL BASED)] ---
 const WelcomeModal: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
-    // 1. Cek apakah ini kunjungan pertama
-    const hasVisited = localStorage.getItem("hasVisitedPortfolio");
-    
-    // 2. Cek apakah pengunjung berada tepat di "https://rifaraportofolio.my.id/"
-    // (pathname harus "/" DAN tidak boleh ada hash seperti "#projects")
-    const isExactHome = location.pathname === "/" && !location.hash; 
+    // Mengecek apakah pengunjung berada TEPAT di halaman utama "/"
+    const isHomePage = location.pathname === "/";
+    // Mengecek apakah URL tidak memiliki imbuhan /# (seperti /#projects)
+    const hasNoHash = !location.hash || location.hash === "";
 
-    if (!hasVisited) {
-      if (isExactHome) {
-        // Jika di halaman utama yang bersih, munculkan modal
-        const timer = setTimeout(() => setIsOpen(true), 500);
-        return () => clearTimeout(timer);
-      } else {
-        // Jika masuk lewat /mini-erp atau /#..., jangan munculkan modal 
-        // dan langsung tandai sebagai "sudah berkunjung"
-        localStorage.setItem("hasVisitedPortfolio", "true");
-      }
+    // Modal HANYA muncul jika URL persis "/" tanpa hash tambahan
+    if (isHomePage && hasNoHash) {
+      setIsOpen(true);
+    } else {
+      // Jika URL berubah ke /#... atau /mini-erp, modal otomatis ditutup/tidak muncul
+      setIsOpen(false);
     }
   }, [location.pathname, location.hash]);
 
   const handleSelection = (hash: string) => {
-    localStorage.setItem("hasVisitedPortfolio", "true");
     setIsOpen(false);
     navigate(`/${hash}`);
   };
 
   const handleCVClick = () => {
-    localStorage.setItem("hasVisitedPortfolio", "true");
     setIsOpen(false);
     window.open("/cv/CV_Rizky_Faisal_Rafi.pdf", "_blank", "noopener,noreferrer");
   };
 
   const handleClose = () => {
-    localStorage.setItem("hasVisitedPortfolio", "true");
-    setIsOpen(false);
+    setIsOpen(false); // Menutup modal agar pengunjung bisa melihat halaman Home
   };
 
   if (!isOpen) return null;
@@ -139,6 +236,7 @@ const WelcomeModal: React.FC = () => {
     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in-up">
       <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl relative text-center">
         
+        {/* Tombol Close */}
         <button
           onClick={handleClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
