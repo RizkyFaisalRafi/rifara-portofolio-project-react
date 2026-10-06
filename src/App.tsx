@@ -595,22 +595,24 @@ const Education = () => {
 // --- [BAGIAN 4: KOMPONEN RIWAYAT PROYEK MOBILE/WEB] ---
 const Projects: React.FC = () => {
   const projectList = [
-    { image: "https://placehold.co/600x400/1a202c/3498db?text=Screenshot+Smart+Home+Pro", link: "https://play.google.com/store/apps/details?id=com.rifara.screenshootBesmartIndonesiaGemilang&pcampaignid=web_share", title: "Screenshot Smart Pro", desc: "Screenshot Layar dengan Jendela Mengambang dan Rekam Layar Suara Dengan Kualitas HD.", features: ["SCREENSHOT LAYAR DENGAN JENDELA MENGAMBANG", "REKAM LAYAR DENGAN SUARA", "KUALITAS HD", "FREE"], tech: ["Dart", "Flutter", 'Widget "Floating Action Button"', 'With Native Code', "MVVM", "Git", "GitHub", "Firebase", "Android Studio", "State Management Provider"] },
-    { image: "https://placehold.co/600x400/1a202c/3498db?text=AHE+Shopping", githubLink: "https://github.com/FinalProjectRifara/flutter_online_shop_app-ahe", title: "AHE Shopping", desc: "E-Commerce App Flutter App and Laravel Web Admin.", features: ["Payment Gateway Midtrans", "RajaOngkir Integration", "Firebase Cloud Messaging", "Flutter for Mobile App", "Laravel for Web Admin", "State Management Provider"], tech: ["Dart", "Flutter", "MVVM", "PHP", "Laravel", "MySQL", "Git", "GitHub", "Firebase", "Midtrans", "RajaOngkir", "Postman", "Xampp", "Visual Studio Code", "Android Studio", "State Management Provider"] },
-    { image: "https://placehold.co/600x400/1a202c/3498db?text=Todo+List+App", githubLink: "https://github.com/RizkyFaisalRafi/Final-Project-1", title: "To Do List App (Final Project (1) Bootcamp Hactiv8)", desc: "Aplikasi manajemen tugas harian yang dibangun sepenuhnya dengan Java Android, memungkinkan pengguna untuk menambah, mengedit, dan melacak tugas secara efisien.", features: ["Fungsionalitas CRUD (Create, Read, Update, Delete) untuk To Do List.", "Tandai tugas sebagai selesai atau belum selesai.", "Penyimpanan data lokal yang persisten."], tech: ["Java", "Android", "Data Local"] },
-    { image: "https://placehold.co/600x400/1a202c/3498db?text=Kalkulator+App", githubLink: "https://github.com/RizkyFaisalRafi/FinalProject3", title: "Kalkulator App (Final Project (2) Bootcamp Hactiv8)", desc: "Sebuah aplikasi kalkulator fungsional dengan antarmuka modern yang dibuat menggunakan Java Android untuk melakukan operasi perhitungan.", features: ["Mendukung operasi tambah, kurang, kali, dan bagi, sisa bagi.", "Fungsi 'Clear' untuk mereset / menghapus perhitungan.", "Antarmuka pengguna yang responsif dan intuitif."], tech: ["Java", "Android", "Data Local"] },
-    { image: "https://placehold.co/600x400/1a202c/3498db?text=Travelgo+App", githubLink: "https://github.com/RizkyFaisalRafi/FinalProject4", title: "Travelgo App (Final Project (3) Bootcamp Hactiv8)", desc: "Aplikasi direktori wisata yang menampilkan daftar destinasi menarik. Dibangun untuk mempraktikkan pembuatan layout kompleks dan menampilkan data dalam daftar.", features: ["Menampilkan daftar destinasi wisata dengan gambar dan deskripsi singkat.", "Halaman detail untuk setiap destinasi.", "Pencarian sederhana untuk menemukan destinasi (From, To, Passengers, Departure, Class)."], tech: ["Java", "Android", "Firebase"] },
-    { image: "https://placehold.co/600x400/1a202c/3498db?text=E+Commerce+App", githubLink: "https://github.com/RizkyFaisalRafi/Final_Project_2", title: "Travelgo App (Final Project (4) Bootcamp Hactiv8)", desc: "Aplikasi E Commerce. Multi User bisa digunakan untuk memasukan barang dengan role Admin, Staff dan juga sebagai user/buyer.", features: ["CRUD Manajemen Produk.", "Halaman Home Produk, Detail Produk.", "Cart"], tech: ["Java", "Android", "Firebase"] },
-    { image: "https://placehold.co/600x400/1a202c/3498db?text=Sekretariat+Kabinet", githubLink: "https://github.com/RizkyFaisalRafi/kabinet_indonesia", title: "Sekretariat Kabinet (Submission Dicoding Pemula Project)", desc: "APLIKASI INFORMASI KABINET INDONESIA", features: ["Informasi Kabinet", "Detail Kabinet", "Data Local"], tech: ["Dart", "Flutter", "Data Dummy"] },
-    { image: "https://placehold.co/600x400/1a202c/3498db?text=Restaurant+App", githubLink: "https://github.com/RizkyFaisalRafi", title: "Flutter Restaurant App (Submission Dicoding Fundamental Project)", desc: "Tahap Development Web", features: ["", "", ""], tech: ["Dart", "Flutter", "___", "___", "___", "___"] },
-    { image: "https://placehold.co/600x400/1a202c/3498db?text=Dicoding+Story", githubLink: "https://tree-sunstone-9a8.notion.site/Documentation-Portofolio-1e9169cf35a2804d81f9e146a6104bdb", title: "Flutter Dicoding Story (Submission Dicoding Intermediate Project)", desc: "Tahap Development Web", features: ["", "", ""], tech: ["Dart", "Flutter", "___", "___", "___", "___"] },
-    { image: "https://placehold.co/600x400/1a202c/3498db?text=Dicoding+Movie", githubLink: "https://github.com/RizkyFaisalRafi/ditonton_clean_architecture/tree/Second-Submission", title: "Flutter Dicoding Movie (Submission Dicoding Expert Project)", desc: "Tahap Development Web", features: ["...", "...", "..."], tech: ["Dart", "Flutter", "___", "___", "___", "___"] },
-    { image: "https://placehold.co/600x400/1a202c/3498db?text=Tempat+Wisata", githubLink: "https://github.com/RizkyFaisalRafi/Tempat_Wisata_Popular_App", title: "Kotlin Tempat Wisata (Submission Dicoding Pemula Project)", desc: "Tahap Development Web", features: ["...", "...", "..."], tech: ["Kotlin", "Android", "___", "___", "___", "___"] },
-    { image: "https://placehold.co/600x400/1a202c/3498db?text=Github+User+App", githubLink: "https://github.com/RizkyFaisalRafi/Github_User", title: "Kotlin Github User App (Submission Dicoding Fundamental Project)", desc: "Tahap Development Web", features: ["...", "...", "..."], tech: ["Kotlin", "Android", "___", "___", "___", "___"] },
+    { image: "https://placehold.co/600x400/1a202c/3498db?text=Screenshot+Smart+Home+Pro", link: "https://play.google.com/store/apps/details?id=com.rifara.screenshootBesmartIndonesiaGemilang&pcampaignid=web_share", githubLink: "", videoUrl: "", title: "Screenshot Smart Pro", desc: "Screenshot Layar dengan Jendela Mengambang dan Rekam Layar Suara Dengan Kualitas HD.", features: ["SCREENSHOT LAYAR DENGAN JENDELA MENGAMBANG", "REKAM LAYAR DENGAN SUARA", "KUALITAS HD", "FREE"], tech: ["Dart", "Flutter", 'Widget "Floating Action Button"', 'With Native Code', "MVVM", "Git", "GitHub", "Firebase", "Android Studio", "State Management Provider"] },
+    { image: "https://placehold.co/600x400/1a202c/3498db?text=AHE+Shopping", githubLink: "https://github.com/FinalProjectRifara/flutter_online_shop_app-ahe", link: "", videoUrl: "", title: "AHE Shopping", desc: "E-Commerce App Flutter App and Laravel Web Admin.", features: ["Payment Gateway Midtrans", "RajaOngkir Integration", "Firebase Cloud Messaging", "Flutter for Mobile App", "Laravel for Web Admin", "State Management Provider"], tech: ["Dart", "Flutter", "MVVM", "PHP", "Laravel", "MySQL", "Git", "GitHub", "Firebase", "Midtrans", "RajaOngkir", "Postman", "Xampp", "Visual Studio Code", "Android Studio", "State Management Provider"] },
+    { image: "https://placehold.co/600x400/1a202c/3498db?text=Todo+List+App", githubLink: "https://github.com/RizkyFaisalRafi/Final-Project-1", link: "", videoUrl: "", title: "To Do List App (Final Project (1) Bootcamp Hactiv8)", desc: "Aplikasi manajemen tugas harian yang dibangun sepenuhnya dengan Java Android, memungkinkan pengguna untuk menambah, mengedit, dan melacak tugas secara efisien.", features: ["Fungsionalitas CRUD (Create, Read, Update, Delete) untuk To Do List.", "Tandai tugas sebagai selesai atau belum selesai.", "Penyimpanan data lokal yang persisten."], tech: ["Java", "Android", "Data Local"] },
+    { image: "https://placehold.co/600x400/1a202c/3498db?text=Kalkulator+App", githubLink: "https://github.com/RizkyFaisalRafi/FinalProject3", link: "", videoUrl: "", title: "Kalkulator App (Final Project (2) Bootcamp Hactiv8)", desc: "Sebuah aplikasi kalkulator fungsional dengan antarmuka modern yang dibuat menggunakan Java Android untuk melakukan operasi perhitungan.", features: ["Mendukung operasi tambah, kurang, kali, dan bagi, sisa bagi.", "Fungsi 'Clear' untuk mereset / menghapus perhitungan.", "Antarmuka pengguna yang responsif dan intuitif."], tech: ["Java", "Android", "Data Local"] },
+    { image: "https://placehold.co/600x400/1a202c/3498db?text=Travelgo+App", githubLink: "https://github.com/RizkyFaisalRafi/FinalProject4", link: "", videoUrl: "", title: "Travelgo App (Final Project (3) Bootcamp Hactiv8)", desc: "Aplikasi direktori wisata yang menampilkan daftar destinasi menarik. Dibangun untuk mempraktikkan pembuatan layout kompleks dan menampilkan data dalam daftar.", features: ["Menampilkan daftar destinasi wisata dengan gambar dan deskripsi singkat.", "Halaman detail untuk setiap destinasi.", "Pencarian sederhana untuk menemukan destinasi (From, To, Passengers, Departure, Class)."], tech: ["Java", "Android", "Firebase"] },
+    { image: "https://placehold.co/600x400/1a202c/3498db?text=E+Commerce+App", githubLink: "https://github.com/RizkyFaisalRafi/Final_Project_2", link: "", videoUrl: "", title: "Travelgo App (Final Project (4) Bootcamp Hactiv8)", desc: "Aplikasi E Commerce. Multi User bisa digunakan untuk memasukan barang dengan role Admin, Staff dan juga sebagai user/buyer.", features: ["CRUD Manajemen Produk.", "Halaman Home Produk, Detail Produk.", "Cart"], tech: ["Java", "Android", "Firebase"] },
+    { image: "https://placehold.co/600x400/1a202c/3498db?text=Sekretariat+Kabinet", githubLink: "https://github.com/RizkyFaisalRafi/kabinet_indonesia", link: "", videoUrl: "", title: "Sekretariat Kabinet (Submission Dicoding Pemula Project)", desc: "APLIKASI INFORMASI KABINET INDONESIA", features: ["Informasi Kabinet", "Detail Kabinet", "Data Local"], tech: ["Dart", "Flutter", "Data Dummy"] },
+    { image: "https://placehold.co/600x400/1a202c/3498db?text=Restaurant+App", githubLink: "https://github.com/RizkyFaisalRafi", link: "", videoUrl: "", title: "Flutter Restaurant App (Submission Dicoding Fundamental Project)", desc: "Tahap Development Web", features: ["", "", ""], tech: ["Dart", "Flutter", "___", "___", "___", "___"] },
+    { image: "https://placehold.co/600x400/1a202c/3498db?text=Dicoding+Story", githubLink: "https://tree-sunstone-9a8.notion.site/Documentation-Portofolio-1e9169cf35a2804d81f9e146a6104bdb", link: "", videoUrl: "", title: "Flutter Dicoding Story (Submission Dicoding Intermediate Project)", desc: "Tahap Development Web", features: ["", "", ""], tech: ["Dart", "Flutter", "___", "___", "___", "___"] },
+    { image: "https://placehold.co/600x400/1a202c/3498db?text=Dicoding+Movie", githubLink: "https://github.com/RizkyFaisalRafi/ditonton_clean_architecture/tree/Second-Submission", link: "", videoUrl: "", title: "Flutter Dicoding Movie (Submission Dicoding Expert Project)", desc: "Tahap Development Web", features: ["...", "...", "..."], tech: ["Dart", "Flutter", "___", "___", "___", "___"] },
+    { image: "https://placehold.co/600x400/1a202c/3498db?text=Tempat+Wisata", githubLink: "https://github.com/RizkyFaisalRafi/Tempat_Wisata_Popular_App", link: "", videoUrl: "", title: "Kotlin Tempat Wisata (Submission Dicoding Pemula Project)", desc: "Tahap Development Web", features: ["...", "...", "..."], tech: ["Kotlin", "Android", "___", "___", "___", "___"] },
+    { image: "https://placehold.co/600x400/1a202c/3498db?text=Github+User+App", githubLink: "https://github.com/RizkyFaisalRafi/Github_User", link: "", videoUrl: "", title: "Kotlin Github User App (Submission Dicoding Fundamental Project)", desc: "Tahap Development Web", features: ["...", "...", "..."], tech: ["Kotlin", "Android", "___", "___", "___", "___"] },
   ];
 
   const PlayStoreIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M21.5,12c0-0.2-0.1-0.4-0.1-0.6l-3.3-3.3L3.6,3.6C3.4,3.4,3,3.6,3,4v16c0,0.4,0.4,0.6,0.6,0.4l14.5-4.5l3.3-3.3C21.4,12.4,21.5,12.2,21.5,12z M6.7,8.5l6.4,3.5l-6.4,3.5V8.5z M18,12.8l-5.1,1.6L6.7,18V6l6.2,3.4L18,11.2V12.8z" /></svg>);
   const GitHubIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12,2.2C6.5,2.2,2.2,6.5,2.2,12c0,4.3,2.8,8,6.6,9.3c0.5,0.1,0.7-0.2,0.7-0.5v-1.7c-2.7,0.6-3.3-1.3-3.3-1.3c-0.4-1.1-1.1-1.4-1.1-1.4c-0.9-0.6,0.1-0.6,0.1-0.6c1,0.1,1.5,1,1.5,1c0.9,1.5,2.3,1.1,2.9,0.8c0.1-0.7,0.3-1.1,0.6-1.3c-2.2-0.3-4.5-1.1-4.5-4.9c0-1.1,0.4-2,1-2.7c-0.1-0.3-0.5-1.3,0.1-2.7c0,0,0.8-0.3,2.7,1c0.8-0.2,1.6-0.3,2.5-0.3s1.7,0.1,2.5,0.3c1.9-1.3,2.7-1,2.7-1c0.6,1.4,0.2,2.4,0.1,2.7c0.6,0.7,1,1.6,1,2.7c0,3.8-2.3,4.6-4.5,4.9c0.4,0.3,0.7,0.9,0.7,1.8v2.7c0,0.3,0.2,0.6,0.7,0.5c3.8-1.3,6.6-5,6.6-9.3C21.8,6.5,17.5,2.2,12,2.2z" /></svg>);
+  const VideoIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" /></svg>);
+  
   const Chip: React.FC<{ children: React.ReactNode }> = ({ children }) => (<div className="bg-gray-700 text-gray-200 px-3 py-1 rounded-md text-sm font-medium">{children}</div>);
 
   return (
@@ -650,6 +652,11 @@ const Projects: React.FC = () => {
                 {project.githubLink && (
                   <a href={project.githubLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 font-semibold text-white bg-gray-700 rounded-lg transition-colors hover:bg-[#3498db]">
                     <GitHubIcon /> Lihat di GitHub
+                  </a>
+                )}
+                {project.videoUrl && (
+                  <a href={project.videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 font-semibold text-white bg-indigo-600 rounded-lg transition-colors hover:bg-indigo-700">
+                    <VideoIcon /> Lihat Video Demo / Dokumentasi
                   </a>
                 )}
               </div>
@@ -738,8 +745,8 @@ const Microsoft365Projects: React.FC = () => {
     {
       isCaseStudy: true,
       caseStudyLink: "/mini-erp",
-      // images: ["/excel/erp/po_modern.png"], 
       images: ["/excel/5/image.png"], 
+      videoUrl: "", 
       title: "Mini-ERP System: Automated B2B Procurement Cycle",
       desc: "Sebuah purwarupa (prototype) sistem Enterprise Resource Planning (ERP) berskala kecil yang dirancang untuk mengotomatiskan seluruh alur pengadaan barang (B2B Procurement). Proyek ini memetakan kompleksitas alur kerja dunia nyata—mulai dari pemesanan hingga pembayaran—ke dalam ekosistem dokumen Excel yang terintegrasi dinamis.",
       features: [
@@ -750,11 +757,11 @@ const Microsoft365Projects: React.FC = () => {
       ],
       tech: ["Microsoft Excel", "Database Relational", "VLOOKUP", "Business Logic"],
     },
-    
     {
       images: ["/excel/1/image.png"],
       pdfUrl: "/excel/1/AbsensiBulananRekapGajiByRIFARA.pdf",
       excelUrl: "/excel/1/TemplateAbsensiBulananRekapGajibyRIFARA.xlsx",
+      videoUrl: "", 
       title: "Absensi Bulanan & Penggajian Otomatis (Automated HR & Payroll System)",
       desc: "Pembuatan sistem rekapitulasi absensi dan kalkulasi penggajian karyawan bulanan yang terintegrasi. Menggunakan formula dinamis dan logika perhitungan bersyarat untuk melacak kehadiran, cuti, serta menghitung gaji bersih (Take-Home Pay) secara otomatis dan akurat.",
       features: [
@@ -765,26 +772,11 @@ const Microsoft365Projects: React.FC = () => {
       ],
       tech: ["Microsoft Excel", "HR Analytics", "Payroll Automation", "Formula & Logic"],
     },
-    
-    // {
-    //  images: ["/excel/2/image1.png", "/excel/2/image2.png"],
-    //  pdfUrl: "/excel/2/Faktur_Invoice_By_RIFARA.pdf",
-    //  excelUrl: "/excel/2/Faktur_Invoice_By_RIFARA.xlsx",
-    //  title: "Generator Faktur Penjualan Otomatis (Automated Sales Invoice Generator)",
-    //  desc: "Pembuatan template faktur penjualan dinamis yang dirancang untuk mempercepat proses penagihan dan administrasi. Sistem ini menggunakan kombinasi fitur validasi data dan formula pencarian untuk mengisi detail pelanggan serta melakukan kalkulasi transaksi secara otomatis, sehingga meminimalisir kesalahan input manual (human error).",
-    //  features: [
-    //    "Otomatisasi Data Pelanggan: Implementasi Data Validation (Dropdown List) yang dipadukan dengan formula VLOOKUP untuk memanggil data alamat pelanggan secara instan.", 
-    //    "Kalkulasi Harga Dinamis: Perhitungan otomatis dan akurat untuk Sub Total, Diskon, Pajak (10%), hingga Total Akhir.", 
-    //    "Manajemen Basis Data Terstruktur: Memanfaatkan tabel referensi terpisah (Master Data) untuk menyimpan daftar pelanggan secara rapi.", 
-    //    "Desain Profesional & Siap Cetak: Tata letak (layout) faktur yang bersih dan telah diatur area cetaknya (Print Area)."
-    //  ],
-    //  tech: ["Microsoft Excel", "Sales Automation", "VLOOKUP & Data Validation", "Formula & Logic"],
-    // },
-
     {
       images: ["/excel/3/image1.png", "/excel/3/image2.png"],
       pdfUrl: "/excel/3/Slip_Gaji_Karyawan_By_RIFARA.pdf",
       excelUrl: "/excel/3/Slip_Gaji_Karyawan_By_RIFARA.xlsx",
+      videoUrl: "",
       title: "Generator Slip Gaji Karyawan Interaktif (Interactive Employee Payslip Generator)",
       desc: "Pembuatan template slip gaji karyawan dinamis yang dirancang untuk mempercepat proses pencetakan dokumen penggajian bulanan. Sistem ini memanfaatkan fitur kontrol interaktif untuk navigasi data secara cepat tanpa perlu mengubah formula secara manual.",
       features: [
@@ -795,25 +787,11 @@ const Microsoft365Projects: React.FC = () => {
       ],
       tech: ["Microsoft Excel", "Payroll Automation", "Form Controls", "Interactive Dashboard"],
     },
-
-    // {
-    //  images: ["/excel/4/image1.jpg", "/excel/4/image2.png"],
-    //  pdfUrl: "/excel/4/Surat_Jalan_By_RIFARA.pdf",
-    //  excelUrl: "/excel/4/Surat_Jalan_By_RIFARA.xlsx",
-    //  title: "Surat Jalan (Delivery Note) Dinamis & Interaktif",
-    //  desc: "Pembuatan template Surat Jalan (Delivery Note) dinamis yang dirancang untuk mempercepat proses administrasi pengiriman barang harian. Sistem ini memanfaatkan integrasi rumus dan manajemen data untuk menarik detail pelanggan serta inventaris secara instan, meminimalisir human error dalam pencatatan fisik, dan memastikan kelancaran alur distribusi.",
-    //  features: [
-    //    "Integrasi Database Pelanggan & Barang: Memanfaatkan fungsi pencarian lanjutan dipadukan dengan Data Validation untuk memanggil data secara otomatis.", 
-    //    "Penomoran & Perekaman Data Efisien: Implementasi sistem input terstruktur untuk merekam detail pengiriman (Nama Supir, Nomor Polisi, dll).", 
-    //    "Format Dokumen Siap Cetak: Tata letak (layout) Surat Jalan yang profesional mendukung pencetakan presisi multi-copy (misalnya A5 atau A4 dibagi dua)."
-    //  ],
-    //  tech: ["Microsoft Excel", "Document Automation", "Data Management", "Print-Ready Layout"],
-    // },
-
     {
       images: ["/excel/6/image.png"],
       pdfUrl: "/excel/6/Laporan_Admin_Affiliate_By_RIFARA.pdf",
       excelUrl: "/excel/6/Laporan_Admin_Affiliate_By_RIFARA.xlsx",
+      videoUrl: "",
       title: "Laporan Performa Afiliasi (Monthly Recap) Otomatis",
       desc: "Pembuatan template Laporan Performa Afiliasi bulanan yang dirancang untuk mempercepat rekapitulasi kinerja kreator (KOL). Sistem ini menggunakan formula terintegrasi untuk menghitung Gross Merchandise Value (GMV), Conversion Rate, dan estimasi komisi secara instan. Template ini meminimalisir kesalahan perhitungan manual dan menyajikan rangkuman data yang terstruktur untuk kebutuhan evaluasi manajemen.",
       features: [
@@ -823,12 +801,11 @@ const Microsoft365Projects: React.FC = () => {
       ],
       tech: ["Microsoft Excel", "Data Reporting", "Performance Tracking", "Financial Calculation"],
     },
-
-    // 7
     {
       images: ["/excel/7/image.jpg"],
       pdfUrl: "/excel/7/Laporan_Stok_Opname_Gudang_By_RIFARA.pdf",
       excelUrl: "/excel/7/Laporan_Stok_Opname_Gudang_By_RIFARA.xlsx",
+      videoUrl: "",
       title: "Laporan Stok Opname Gudang",
       desc: "Pembuatan template Laporan Stok Opname Gudang yang dirancang untuk mempercepat proses pencatatan dan evaluasi persediaan. Sistem ini mengintegrasikan riwayat mutasi barang dengan hasil audit fisik untuk menghasilkan data inventaris yang akurat dan dapat dipertanggungjawabkan.",
       features: [
@@ -838,12 +815,11 @@ const Microsoft365Projects: React.FC = () => {
       ],
       tech: ["Microsoft Excel", "Inventory Management", "Logical Formulas", "Data Administration"],
     },
-
-    // 8
     {
-      images: ["/excel/8/image.jpg"], // Sesuaikan nomor folder/path dengan struktur web Anda
+      images: ["/excel/8/image.jpg"],
       pdfUrl: "/excel/8/Cheat_Sheet_Shortcut_Excel_By_Rizky_Faisal_Rafi.pdf",
       excelUrl: "",
+      videoUrl: "",
       title: "Cheat Sheet & Panduan Shortcut Microsoft Excel",
       desc: "Pembuatan dokumen panduan komprehensif (Cheat Sheet) yang merangkum 50+ shortcut esensial Microsoft Excel. Panduan ini dirancang untuk meningkatkan produktivitas, efisiensi waktu, dan mempercepat alur kerja dengan mengurangi ketergantungan pada navigasi mouse dalam pengolahan data harian.",
       features: [
@@ -937,6 +913,21 @@ const Microsoft365Projects: React.FC = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                     </svg>
                   </Link>
+                )}
+
+                {project.videoUrl && (
+                  <a
+                    href={project.videoUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-5 py-2.5 font-bold text-white bg-indigo-600 rounded-lg shadow-lg shadow-indigo-600/30 transition-transform transform hover:scale-105 hover:bg-indigo-700"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15.91 11.672a.375.375 0 010 .656l-5.603 3.113a.375.375 0 01-.557-.328V8.887c0-.286.307-.466.557-.327l5.603 3.112z" />
+                    </svg>
+                    Lihat Video Demo / Dokumentasi
+                  </a>
                 )}
 
                 {!project.isCaseStudy && project.pdfUrl && (
@@ -1421,12 +1412,12 @@ const HRDDataForm: React.FC = () => {
   // --- TAMPILAN FORM UTAMA JIKA SUDAH LOGIN ---
   return (
     <section id="hrd-data-form" className="max-w-4xl mx-auto py-12 px-4 relative">
-      <Reveal className="bg-gray-800/50 rounded-2xl p-8 border border-gray-700 shadow-xl">
+      <Reveal className="bg-gray-800/50 rounded-2xl p-8 md:p-10 border border-gray-700 shadow-xl">
         
-        {/* Tombol Logout (Kunci Kembali) di pojok kanan atas */}
+        {/* Tombol Logout (Kunci Kembali) di pojok kanan atas form */}
         <button 
           onClick={handleLogout}
-          className="absolute top-12 md:top-16 right-8 md:right-12 flex items-center gap-2 text-sm text-gray-400 hover:text-red-400 transition-colors bg-gray-900 px-3 py-1.5 rounded-md border border-gray-700"
+          className="absolute top-10 right-8 md:top-12 md:right-12 flex items-center gap-2 text-sm text-gray-400 hover:text-red-400 transition-colors bg-gray-900 px-3 py-1.5 rounded-md border border-gray-700"
           title="Kunci Akses Kembali"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
@@ -1452,7 +1443,6 @@ const HRDDataForm: React.FC = () => {
             Buka File Spreadsheet
           </a>
         </div>
-
 
         {/* --- [INFORMATION RULES BOX] --- */}
         <div className="mb-8 p-5 bg-[#3498db]/10 border border-[#3498db]/30 rounded-xl text-left shadow-inner">
