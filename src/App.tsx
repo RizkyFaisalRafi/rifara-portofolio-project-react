@@ -1229,6 +1229,366 @@ const Publications: React.FC = () => {
   );
 };
 
+// --- [KOMPONEN BARU: FORM INPUT DATA HRD DENGAN LOCK SCREEN KODE AKSES] ---
+const HRDDataForm: React.FC = () => {
+  // PENTING: Ganti URL di bawah ini dengan URL Web App dari Google Apps Script yang Anda deploy
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby3BRL50OdjvJYzOJAYng_SnCEOsJw88kYBEEH0H0J6Oft7BgFC5Zp86aBRsw_62QF9/exec";
+
+  // State untuk Keamanan (Lock Screen)
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [passcode, setPasscode] = useState("");
+  const [authStatus, setAuthStatus] = useState<{ type: "idle" | "loading" | "error"; message: string }>({ type: "idle", message: "" });
+
+  // State untuk CRUD Data
+  const [formData, setFormData] = useState({
+    companyName: "",
+    newCompanyName: "",
+    emailLink: "",
+    subjectFormat: "",
+    source: "",
+    sendDate: ""
+  });
+  const [formMode, setFormMode] = useState<"add" | "update" | "delete">("add");
+  const [companyList, setCompanyList] = useState<string[]>([]);
+  const [isLoadingCompanies, setIsLoadingCompanies] = useState(false);
+  const [status, setStatus] = useState<{ type: "idle" | "loading" | "success" | "error"; message: string }>({
+    type: "idle",
+    message: ""
+  });
+
+  // Mengecek apakah sebelumnya sudah login di sesi ini
+  useEffect(() => {
+    if (sessionStorage.getItem("hrd_authorized") === "true") {
+      setIsAuthorized(true);
+    }
+  }, []);
+
+  // --- Fungsi Verifikasi Kode ---
+  const handleVerifyCode = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAuthStatus({ type: "loading", message: "Memverifikasi kode..." });
+
+    try {
+      const response = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action: "verify_code", passcode })
+      });
+      const result = await response.json();
+
+      if (result.status === "success") {
+        setIsAuthorized(true);
+        sessionStorage.setItem("hrd_authorized", "true");
+        setAuthStatus({ type: "idle", message: "" });
+      } else {
+        setAuthStatus({ type: "error", message: result.message });
+        setPasscode(""); // Reset input jika salah
+      }
+    } catch (error) {
+      setAuthStatus({ type: "error", message: "Gagal terhubung ke server." });
+    }
+  };
+
+  // --- Fungsi Keluar/Logout ---
+  const handleLogout = () => {
+    setIsAuthorized(false);
+    sessionStorage.removeItem("hrd_authorized");
+    setPasscode("");
+    setCompanyList([]);
+  };
+
+  // --- Fungsi CRUD ---
+  const fetchCompanies = async () => {
+    setIsLoadingCompanies(true);
+    setStatus({ type: "loading", message: "Memuat daftar perusahaan..." });
+    
+    try {
+      const response = await fetch(SCRIPT_URL);
+      const result = await response.json();
+      
+      if (result.status === "success") {
+        setCompanyList(result.data);
+        setStatus({ type: "idle", message: "" });
+      } else {
+        setStatus({ type: "error", message: "Gagal memuat daftar perusahaan." });
+      }
+    } catch (error) {
+      setStatus({ type: "error", message: "Terjadi kesalahan koneksi saat memuat data." });
+    } finally {
+      setIsLoadingCompanies(false);
+    }
+  };
+
+  const handleModeSwitch = (mode: "add" | "update" | "delete") => {
+    setFormMode(mode);
+    setStatus({ type: "idle", message: "" });
+    setFormData({ companyName: "", newCompanyName: "", emailLink: "", subjectFormat: "", source: "", sendDate: "" });
+    
+    if (mode === "update" || mode === "delete") {
+      fetchCompanies(); 
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (formMode === "delete") {
+      const confirmDelete = window.confirm(`Apakah Anda yakin ingin mengosongkan data "${formData.companyName}"?`);
+      if (!confirmDelete) return;
+    }
+
+    setStatus({ 
+      type: "loading", 
+      message: formMode === "add" ? "Sedang menyimpan data baru..." : formMode === "update" ? "Sedang memperbarui data..." : "Sedang mengosongkan sel data..." 
+    });
+
+    try {
+      const payload = { ...formData, action: formMode };
+
+      const response = await fetch(SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await response.json();
+
+      if (result.status === "error") {
+        setStatus({ type: "error", message: result.message });
+      } else {
+        setStatus({ type: "success", message: result.message });
+        setFormData({ companyName: "", newCompanyName: "", emailLink: "", subjectFormat: "", source: "", sendDate: "" });
+        
+        if (formMode === "add") {
+           setCompanyList([]);
+        } else {
+           fetchCompanies();
+        }
+      }
+    } catch (error) {
+      setStatus({ type: "error", message: "Terjadi kesalahan koneksi. Gagal memproses permintaan." });
+    }
+  };
+
+  const isAdd = formMode === "add";
+  const isUpdate = formMode === "update";
+  const isDelete = formMode === "delete";
+
+  // --- TAMPILAN JIKA BELUM LOGIN (LOCK SCREEN) ---
+  if (!isAuthorized) {
+    return (
+      <section id="hrd-data-form" className="max-w-md mx-auto py-12 px-4">
+        <Reveal className="bg-gray-800/80 rounded-2xl p-8 border border-gray-700 shadow-2xl text-center backdrop-blur-sm relative overflow-hidden">
+          {/* Ikon Gembok */}
+          <div className="mx-auto w-16 h-16 bg-gray-900 rounded-full flex items-center justify-center border border-gray-700 shadow-inner mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-[#3498db]">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+            </svg>
+          </div>
+          
+          <h2 className="text-2xl font-bold text-white mb-2">Area Terbatas</h2>
+          <p className="text-gray-400 text-sm mb-8">Silakan masukkan kode akses untuk membuka fitur Internal Tools.</p>
+
+          <form onSubmit={handleVerifyCode} className="space-y-4">
+            <input 
+              type="password" 
+              required 
+              value={passcode} 
+              onChange={(e) => setPasscode(e.target.value)} 
+              placeholder="Masukkan Kode Akses" 
+              className="w-full px-4 py-3 bg-gray-900 text-center tracking-widest border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#3498db]" 
+            />
+            
+            {authStatus.type === "error" && <p className="text-red-400 text-xs font-semibold">{authStatus.message}</p>}
+            
+            <button
+              type="submit"
+              disabled={authStatus.type === "loading"}
+              className="w-full py-3 bg-[#3498db] hover:bg-[#2980b9] text-white font-bold rounded-lg shadow-lg transition-colors disabled:opacity-50"
+            >
+              {authStatus.type === "loading" ? "Memverifikasi..." : "Buka Akses"}
+            </button>
+          </form>
+        </Reveal>
+      </section>
+    );
+  }
+
+  // --- TAMPILAN FORM UTAMA JIKA SUDAH LOGIN ---
+  return (
+    <section id="hrd-data-form" className="max-w-4xl mx-auto py-12 px-4 relative">
+      <Reveal className="bg-gray-800/50 rounded-2xl p-8 border border-gray-700 shadow-xl">
+        
+        {/* Tombol Logout (Kunci Kembali) di pojok kanan atas */}
+        <button 
+          onClick={handleLogout}
+          className="absolute top-12 md:top-16 right-8 md:right-12 flex items-center gap-2 text-sm text-gray-400 hover:text-red-400 transition-colors bg-gray-900 px-3 py-1.5 rounded-md border border-gray-700"
+          title="Kunci Akses Kembali"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+          </svg>
+          <span className="hidden sm:inline">Kunci</span>
+        </button>
+
+        <div className="text-center mb-8">
+          <h3 className="text-lg font-semibold uppercase text-[#3498db] tracking-wider mb-2">Internal Tools</h3>
+          <h2 className="text-3xl font-bold text-white mb-5">HRD Data Entry Form</h2>
+          
+          {/* --- [TAMBAHAN: TOMBOL MENUJU SPREADSHEET] --- */}
+          <a 
+            href="https://docs.google.com/spreadsheets/d/1iq77FQCvdpYAZykEjcARzMk0drzpSethHKG6qCsw_-Y/edit" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-bold text-[#217346] bg-[#217346]/10 border border-[#217346]/30 rounded-lg hover:bg-[#217346]/20 transition-all shadow-sm"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            Buka File Spreadsheet
+          </a>
+        </div>
+
+
+        {/* --- [INFORMATION RULES BOX] --- */}
+        <div className="mb-8 p-5 bg-[#3498db]/10 border border-[#3498db]/30 rounded-xl text-left shadow-inner">
+          <h4 className="text-white font-bold mb-3 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-[#3498db]">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
+            </svg>
+            Aturan Sistem (System Rules)
+          </h4>
+          <ul className="space-y-2 text-sm text-gray-300">
+            <li className="flex items-start gap-2">
+              <span className="text-[#3498db] mt-0.5">▪</span>
+              <span><strong className="text-white">Anti-Duplikasi:</strong> Sistem akan mendeteksi dan menolak data baru jika <b>Nama Perusahaan</b> sudah terdaftar.</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-[#3498db] mt-0.5">▪</span>
+              <span><strong className="text-white">Update Parsial:</strong> Pada mode Update, kolom yang dibiarkan <b>KOSONG</b> tidak akan menghapus atau menimpa data lama Anda.</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-[#3498db] mt-0.5">▪</span>
+              <span><strong className="text-white">Kosongkan Data:</strong> Mode Hapus Data hanya akan menghapus isi teks (Kolom B - F), <b>tanpa merusak</b> urutan baris atau format kolom status.</span>
+            </li>
+          </ul>
+        </div>
+
+        {/* TOGGLE MODE */}
+        <div className="flex flex-col sm:flex-row justify-center gap-2 mb-8 bg-gray-900 p-1.5 rounded-lg w-full max-w-lg mx-auto border border-gray-700">
+          <button 
+            type="button"
+            onClick={() => handleModeSwitch("add")}
+            className={`flex-1 py-2 px-3 text-sm font-bold rounded-md transition-all duration-300 ${isAdd ? "bg-[#3498db] text-white shadow-lg" : "text-gray-400 hover:text-white"}`}
+          >
+            ➕ Tambah Data
+          </button>
+          <button 
+            type="button"
+            onClick={() => handleModeSwitch("update")}
+            className={`flex-1 py-2 px-3 text-sm font-bold rounded-md transition-all duration-300 ${isUpdate ? "bg-[#f39c12] text-white shadow-lg" : "text-gray-400 hover:text-white"}`}
+          >
+            ✏️ Update Data
+          </button>
+          <button 
+            type="button"
+            onClick={() => handleModeSwitch("delete")}
+            className={`flex-1 py-2 px-3 text-sm font-bold rounded-md transition-all duration-300 ${isDelete ? "bg-[#e74c3c] text-white shadow-lg" : "text-gray-400 hover:text-white"}`}
+          >
+            🗑️ Hapus Data
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            
+            <div className="md:col-span-2">
+              <label className={`block text-sm font-medium mb-1 ${isDelete ? "text-[#e74c3c]" : "text-gray-300"}`}>
+                {isAdd ? "Nama Perusahaan *" : "Pilih Perusahaan (Target) *"}
+              </label>
+              {isAdd ? (
+                <input type="text" name="companyName" required value={formData.companyName} onChange={handleChange} placeholder="Contoh: PT ABC Terang" className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#3498db]" />
+              ) : (
+                <select 
+                  name="companyName" required value={formData.companyName} onChange={handleChange} disabled={isLoadingCompanies}
+                  className={`w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 disabled:opacity-50 ${isDelete ? "focus:ring-[#e74c3c]" : "focus:ring-[#f39c12]"}`}
+                >
+                  <option value="" disabled>{isLoadingCompanies ? "Memuat data..." : "-- Pilih Perusahaan --"}</option>
+                  {companyList.map((comp, idx) => (
+                    <option key={idx} value={comp}>{comp}</option>
+                  ))}
+                </select>
+              )}
+            </div>
+
+            {!isDelete && (
+              <>
+                {isUpdate && (
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-[#f39c12] mb-1">Ubah Nama Perusahaan Menjadi</label>
+                    <input type="text" name="newCompanyName" value={formData.newCompanyName} onChange={handleChange} placeholder="Kosongkan jika tidak diubah" className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-[#f39c12]" />
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Email / Link Form / Job Link {isAdd && "*"}</label>
+                  <input type="text" name="emailLink" required={isAdd} value={formData.emailLink} onChange={handleChange} placeholder={isAdd ? "Contoh: hrd@abc.com" : "Kosongkan jika tidak diubah"} className={`w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 ${isAdd ? "focus:ring-[#3498db]" : "focus:ring-[#f39c12]"}`} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Format Subject Email {isAdd && "*"}</label>
+                  <input type="text" name="subjectFormat" required={isAdd} value={formData.subjectFormat} onChange={handleChange} placeholder={isAdd ? "Contoh: Posisi_Nama" : "Kosongkan jika tidak diubah"} className={`w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 ${isAdd ? "focus:ring-[#3498db]" : "focus:ring-[#f39c12]"}`} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Sumber {isAdd && "*"}</label>
+                  <input type="text" name="source" required={isAdd} value={formData.source} onChange={handleChange} placeholder={isAdd ? "Contoh: IG: lokerjakarta" : "Kosongkan jika tidak diubah"} className={`w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 ${isAdd ? "focus:ring-[#3498db]" : "focus:ring-[#f39c12]"}`} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">Tgl Kirim {isAdd && "*"}</label>
+                  <input type="date" name="sendDate" required={isAdd} value={formData.sendDate} onChange={handleChange} className={`w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 ${isAdd ? "focus:ring-[#3498db]" : "focus:ring-[#f39c12]"}`} />
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Menampilkan Status Notifikasi */}
+          {status.type !== "idle" && (
+            <div className={`p-4 rounded-lg font-medium text-sm flex items-center gap-2 ${
+              status.type === "success" ? "bg-green-500/20 text-green-400 border border-green-500/50" :
+              status.type === "error" ? "bg-red-500/20 text-red-400 border border-red-500/50" :
+              "bg-gray-800 text-gray-300 border border-gray-600"
+            }`}>
+              {status.type === "success" && <span>✅</span>}
+              {status.type === "error" && <span>❌</span>}
+              {status.type === "loading" && <span className="animate-spin">⏳</span>}
+              {status.message}
+            </div>
+          )}
+
+          <div className="pt-2 text-center md:text-left">
+            <button
+              type="submit"
+              disabled={status.type === "loading" || isLoadingCompanies}
+              className={`w-full md:w-auto px-8 py-3 text-white font-bold rounded-lg shadow-lg transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed ${
+                isAdd ? "bg-[#3498db] hover:bg-[#2980b9]" : isUpdate ? "bg-[#f39c12] hover:bg-[#d68910]" : "bg-[#e74c3c] hover:bg-[#c0392b]"
+              }`}
+            >
+              {status.type === "loading" 
+                ? (isAdd ? "Menyimpan Data..." : isUpdate ? "Memperbarui Data..." : "Memproses Data...") 
+                : (isAdd ? "Tambahkan ke Spreadsheet" : isUpdate ? "Simpan Perubahan (Update)" : "Kosongkan Data Ini")
+              }
+            </button>
+          </div>
+        </form>
+      </Reveal>
+    </section>
+  );
+};
+
+
 const Contact: React.FC = () => {
   const CommunicationIcon = () => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-10 h-10 text-gray-300"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z" /></svg>);
   const Microsoft365Icon = () => (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="w-10 h-10"><path fill="#F25022" d="M11.25 3H3.75v7.5h7.5V3z" /><path fill="#7FBA00" d="M20.25 3h-7.5v7.5h7.5V3z" /><path fill="#00A4EF" d="M11.25 12.75H3.75v7.5h7.5v-7.5z" /><path fill="#FFB900" d="M20.25 12.75h-7.5v7.5h7.5v-7.5z" /></svg>);
@@ -1314,6 +1674,8 @@ const HomePage = () => (
     <Projects />
     <Microsoft365Projects />
     <Publications />
+    {/* [TAMBAHAN BARU]: KOMPONEN FORM ENTRY DATA HRD */}
+    <HRDDataForm />
     <Contact />
   </>
 );
