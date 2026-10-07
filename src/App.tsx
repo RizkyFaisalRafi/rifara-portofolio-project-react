@@ -522,7 +522,7 @@ const Hero: React.FC = () => {
               <p className="text-gray-200 font-semibold mb-1">Maaf, pemutar video gagal dimuat.</p>
               <p className="text-gray-400 text-sm mb-5">Silakan periksa koneksi internet Anda atau tonton langsung melalui YouTube.</p>
               <a 
-                href="https://www.youtube.com/watch?v=x2NhJmoNEUk" 
+                href="https://www.youtube.com/watch?v=qfuMB6SqZD0" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg text-sm transition-transform transform hover:scale-105 shadow-lg shadow-red-600/20"
@@ -537,8 +537,8 @@ const Hero: React.FC = () => {
             // [UI NORMAL / DEFAULT]
             <iframe 
               className="w-full h-full border-0 bg-black"
-              src="https://www.youtube.com/watch/x2NhJmoNEUk" 
-              title="Video Biodata Rizky Faisal Rafi" 
+              src="https://www.youtube.com/embed/qfuMB6SqZD0"
+              title="Video Biodata Rizky Faisal Rafi"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
               allowFullScreen
               onError={() => setVideoHasError(true)} // Memicu state error jika iframe gagal dimuat
