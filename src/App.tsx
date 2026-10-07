@@ -1682,7 +1682,7 @@ const Contact: React.FC = () => {
         <p className="text-lg text-gray-400 mb-8 max-w-2xl mx-auto">Punya proyek menarik? Saya selalu terbuka untuk diskusi, peluang, dan ide-ide baru. Jangan ragu menghubungi saya.</p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <a href="https://www.linkedin.com/in/rizky-faisal-rafi-8691a7225/" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 px-6 py-3 font-semibold text-white bg-[#3498db] rounded-lg shadow-lg transition-transform transform hover:scale-105">Hubungi di LinkedIn</a>
-          <a href="https://wa.me/62895412892094" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 px-6 py-3 font-semibold text-white bg-green-500 rounded-lg shadow-lg transition-transform transform hover:scale-105">Chat di WhatsApp</a>
+          <a href="https://wa.me/6285179730587" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-3 px-6 py-3 font-semibold text-white bg-green-500 rounded-lg shadow-lg transition-transform transform hover:scale-105">Chat di WhatsApp</a>
         </div>
         <div className="mt-16">
           <h3 className="text-2xl font-bold text-white text-center mb-8">Tools & Teknologi yang Saya Kuasai</h3>
