@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-// [UPDATE]: Menambahkan useNavigate ke dalam import react-router-dom
 import { BrowserRouter, Routes, Route, Link, useLocation, useNavigate } from "react-router-dom";
+// [UPDATE]: Mengimpor Halaman yang sudah dipisah
+import AccurateAkunPerkiraanPage from "./detail_accurate/AccurateAkunPerkiraanPage";
+import AccurateKelolaFiturPage from "./detail_accurate/AccurateKelolaFiturPage";
+import AccurateInfoPerusahaanPage from "./detail_accurate/AccurateInfoPerusahaanPage";
 
 // --- [FUNGSI PEMBANTU: Animasi Scroll Kustom] ---
 const slowScrollTo = (targetY: number, duration: number = 1200) => {
@@ -54,7 +57,8 @@ const ScrollHandler = () => {
 };
 
 // --- [KOMPONEN BARU: REVEAL SCROLL ANIMATION] ---
-const Reveal: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = "" }) => {
+// [UPDATE] Menambahkan "export" agar bisa diakses oleh AccurateAkunPerkiraanPage.tsx
+export const Reveal: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = "" }) => {
   const domRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -89,112 +93,6 @@ const Reveal: React.FC<{ children: React.ReactNode; className?: string }> = ({ c
   );
 };
 
-// --- [KOMPONEN BARU: MODAL SELAMAT DATANG (SESSION VISITOR)] ---
-// const WelcomeModal: React.FC = () => {
-//   const [isOpen, setIsOpen] = useState(false);
-//   const navigate = useNavigate();
-//   const location = useLocation();
-
-//   useEffect(() => {
-//     const hasVisited = sessionStorage.getItem("hasVisitedPortfolio");
-//     const isHomePage = location.pathname === "/";
-//     const hasNoHash = !location.hash || location.hash === ""; // Pastikan hash benar-benar kosong
-
-//     if (!hasVisited) {
-//       if (isHomePage && hasNoHash) {
-//         // Langsung tampilkan modal (tanpa setTimeout untuk mencegah bug Strict Mode di localhost)
-//         setIsOpen(true);
-//       } else {
-//         // Jika masuk via link spesifik, tandai sudah berkunjung agar modal tidak muncul
-//         sessionStorage.setItem("hasVisitedPortfolio", "true");
-//       }
-//     }
-//   }, [location.pathname, location.hash]);
-
-//   const handleSelection = (hash: string) => {
-//     sessionStorage.setItem("hasVisitedPortfolio", "true");
-//     setIsOpen(false);
-//     navigate(`/${hash}`);
-//   };
-
-//   const handleCVClick = () => {
-//     sessionStorage.setItem("hasVisitedPortfolio", "true");
-//     setIsOpen(false);
-//     window.open("/cv/CV_Rizky_Faisal_Rafi.pdf", "_blank", "noopener,noreferrer");
-//   };
-
-//   const handleClose = () => {
-//     sessionStorage.setItem("hasVisitedPortfolio", "true");
-//     setIsOpen(false);
-//   };
-
-//   if (!isOpen) return null;
-
-//   return (
-//     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in-up">
-//       <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl relative text-center">
-        
-//         <button
-//           onClick={handleClose}
-//           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-//           aria-label="Tutup"
-//         >
-//           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
-//             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-//           </svg>
-//         </button>
-        
-//         <h2 className="text-3xl font-extrabold text-white mb-3">Selamat Datang!</h2>
-//         <p className="text-gray-400 mb-8 text-sm md:text-base leading-relaxed">
-//           Terima kasih telah berkunjung. Untuk memberikan pengalaman terbaik, portofolio mana yang ingin Anda eksplorasi terlebih dahulu?
-//         </p>
-        
-//         <div className="flex flex-col gap-4">
-//           <button
-//             onClick={() => handleSelection("#projects")}
-//             className="w-full flex items-center justify-between px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl hover:bg-[#3498db]/10 hover:border-[#3498db] transition-all group"
-//           >
-//             <div className="text-left">
-//               <h3 className="text-lg font-bold text-white group-hover:text-[#3498db] transition-colors">Portofolio IT & Software</h3>
-//               <p className="text-xs md:text-sm text-gray-400 mt-1">Mobile App (Flutter, Kotlin), Web Dev, dll.</p>
-//             </div>
-//             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-500 group-hover:text-[#3498db]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-//               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-//             </svg>
-//           </button>
-          
-//           <button
-//             onClick={() => handleSelection("#microsoft-365")}
-//             className="w-full flex items-center justify-between px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl hover:bg-[#217346]/10 hover:border-[#217346] transition-all group"
-//           >
-//             <div className="text-left">
-//               <h3 className="text-lg font-bold text-white group-hover:text-[#217346] transition-colors">Portofolio Administrasi</h3>
-//               <p className="text-xs md:text-sm text-gray-400 mt-1">Microsoft 365, Excel Dashboard, ERP, dll.</p>
-//             </div>
-//             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-500 group-hover:text-[#217346]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-//               <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-//             </svg>
-//           </button>
-
-//           <button
-//             onClick={handleCVClick}
-//             className="w-full flex items-center justify-between px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl hover:bg-gray-700 hover:border-gray-500 transition-all group"
-//           >
-//             <div className="text-left">
-//               <h3 className="text-lg font-bold text-white group-hover:text-gray-200 transition-colors">Lihat CV / Resume</h3>
-//               <p className="text-xs md:text-sm text-gray-400 mt-1">Unduh atau lihat profil profesional lengkap.</p>
-//             </div>
-//             <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-500 group-hover:text-gray-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-//               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-//             </svg>
-//           </button>
-//         </div>
-        
-//       </div>
-//     </div>
-//   );
-// };
-
 // --- [KOMPONEN BARU: MODAL SELAMAT DATANG (URL BASED)] ---
 const WelcomeModal: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -202,16 +100,12 @@ const WelcomeModal: React.FC = () => {
   const location = useLocation();
 
   useEffect(() => {
-    // Mengecek apakah pengunjung berada TEPAT di halaman utama "/"
     const isHomePage = location.pathname === "/";
-    // Mengecek apakah URL tidak memiliki imbuhan /# (seperti /#projects)
     const hasNoHash = !location.hash || location.hash === "";
 
-    // Modal HANYA muncul jika URL persis "/" tanpa hash tambahan
     if (isHomePage && hasNoHash) {
       setIsOpen(true);
     } else {
-      // Jika URL berubah ke /#... atau /mini-erp, modal otomatis ditutup/tidak muncul
       setIsOpen(false);
     }
   }, [location.pathname, location.hash]);
@@ -227,7 +121,7 @@ const WelcomeModal: React.FC = () => {
   };
 
   const handleClose = () => {
-    setIsOpen(false); // Menutup modal agar pengunjung bisa melihat halaman Home
+    setIsOpen(false); 
   };
 
   if (!isOpen) return null;
@@ -236,7 +130,6 @@ const WelcomeModal: React.FC = () => {
     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-fade-in-up">
       <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 md:p-8 w-full max-w-lg shadow-2xl relative text-center">
         
-        {/* Tombol Close */}
         <button
           onClick={handleClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
@@ -253,7 +146,6 @@ const WelcomeModal: React.FC = () => {
         </p>
         
         <div className="flex flex-col gap-4">
-          {/* Pilihan IT */}
           <button
             onClick={() => handleSelection("#projects")}
             className="w-full flex items-center justify-between px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl hover:bg-[#3498db]/10 hover:border-[#3498db] transition-all group"
@@ -267,7 +159,6 @@ const WelcomeModal: React.FC = () => {
             </svg>
           </button>
           
-          {/* Pilihan Administrasi */}
           <button
             onClick={() => handleSelection("#microsoft-365")}
             className="w-full flex items-center justify-between px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl hover:bg-[#217346]/10 hover:border-[#217346] transition-all group"
@@ -281,7 +172,19 @@ const WelcomeModal: React.FC = () => {
             </svg>
           </button>
 
-          {/* Pilihan CV */}
+          <button
+            onClick={() => handleSelection("accurate")}
+            className="w-full flex items-center justify-between px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl hover:bg-orange-500/10 hover:border-orange-500 transition-all group"
+          >
+            <div className="text-left">
+              <h3 className="text-lg font-bold text-white group-hover:text-orange-500 transition-colors">Portofolio Accurate</h3>
+              <p className="text-xs md:text-sm text-gray-400 mt-1">Materi & Demo Setup Sistem Akuntansi.</p>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-gray-500 group-hover:text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
           <button
             onClick={handleCVClick}
             className="w-full flex items-center justify-between px-6 py-4 bg-gray-800 border border-gray-700 rounded-xl hover:bg-gray-700 hover:border-gray-500 transition-all group"
@@ -306,7 +209,6 @@ const FlyingBird: React.FC = () => {
   return (
     <div className="bird-container pointer-events-none fixed z-0">
       <div className="bird">
-        {/* Menggunakan SVG ikon burung */}
         <svg viewBox="0 0 24 24" width="40" height="40" xmlns="http://www.w3.org/2000/svg" fill="rgba(52, 152, 219, 0.4)">
           <path d="M23.13 6.03c-1.89-1.39-4.88-2.03-7.53-1.12-1.93-1.63-4.34-2.88-6.68-2.91-1.36-.02-2.73.43-3.8 1.15-.36.24-.71.53-1.02.85-.43-.16-.86-.28-1.27-.37-.87-.19-1.65-.24-2.28-.21-.36.02-.67.06-.9.13-.19.06-.32.14-.4.21-.11.1-.17.24-.13.38.04.14.15.25.29.3.26.11.66.16 1.14.16.63 0 1.45-.09 2.37-.29.47-.1.97-.24 1.47-.41.31.25.66.45 1.05.61.94.4 2.11.55 3.32.48 1.1-.06 2.21-.31 3.25-.66 2.76-1.01 5.92-.3 7.9 1.17.65.48.97 1.05 1.06 1.54.09.49-.07 1.06-.52 1.6-1.57 1.9-4.99 2.66-8.32 2.6-1.52-.03-2.96-.28-4.22-.64-1.2-.34-2.24-.81-3.07-1.35-.41-.27-.79-.58-1.11-.93-.72.48-1.54.89-2.45 1.16-.9.27-1.85.42-2.81.44-.14 0-.27-.08-.34-.21-.06-.13-.04-.28.06-.38.16-.16.37-.24.59-.28.53-.1 1.09-.23 1.63-.44.5-.2 1-.46 1.47-.8.3-.21.57-.45.81-.72 1.25-.97 2.94-1.4 4.7-1.12.83.13 1.62.43 2.33.87.56.35 1.07.76 1.51 1.22.42.43.78.9 1.08 1.4 1.27 2.11 3.51 4.5 6.22 6.75 3.65 3.03 8.35 5.51 12.65 6.4.15.03.3.06.44.08.35.06.63.15.79.28.11.09.18.23.16.38-.02.15-.12.27-.26.33-.24.11-.64.15-1.13.14-.62-.01-1.42-.11-2.31-.32-1.01-.24-2.19-.64-3.41-1.19-2.3-1.03-4.83-2.61-7.07-4.63-1.63-1.47-3.13-3.23-4.32-5.18-.54-.89-1.02-1.82-1.41-2.77-.38-.93-.68-1.88-.87-2.83-1.44-.06-2.84-.44-4.08-1.07-1.2-.6-2.22-1.43-2.98-2.46-.86-1.17-1.31-2.58-1.28-4.02.04-1.6.67-3.13 1.77-4.42 1.22-1.43 2.92-2.5 4.88-3.08.97-.29 1.99-.44 3.02-.45h.19c.14 0 .28.09.34.22.06.13.04.28-.06.39-.16.16-.38.23-.61.27-.51.09-1.03.22-1.54.41-.5.18-.99.42-1.44.73C1.65 3.82.9 5.3.83 6.94c-.06 1.49.33 2.92 1.09 4.1.84 1.3 2.16 2.34 3.73 3.01 1.63.69 3.51 1 5.48 1.03 3.4.05 7.15-.49 10.3-2.56 1.2-.79 2.16-1.8 2.76-3.01.62-1.24.87-2.67.57-4.14-.3-1.47-1.22-2.8-2.66-3.83l.02.01z" />
         </svg>
@@ -314,7 +216,6 @@ const FlyingBird: React.FC = () => {
     </div>
   );
 };
-
 
 // --- [BAGIAN 1: KOMPONEN NAVIGASI] ---
 const Navbar: React.FC = () => {
@@ -330,8 +231,8 @@ const Navbar: React.FC = () => {
     { name: "Education", href: "/#education" },
     { name: "Projects", href: "/#projects" },
     { name: "Microsoft 365", href: "/#microsoft-365" },
+    { name: "Accurate", href: "/accurate" },
     { name: "Publications", href: "/#publications" },
-    // { name: "Contact", href: "/#contact" },
   ];
 
   useEffect(() => {
@@ -347,7 +248,11 @@ const Navbar: React.FC = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
-      if (location.pathname !== "/") return;
+      if (location.pathname !== "/") {
+        if (location.pathname.startsWith("/accurate")) setActiveSection("accurate");
+        if (location.pathname === "/mini-erp") setActiveSection("mini-erp");
+        return;
+      }
 
       const sections = menuItems
         .filter((item) => item.href.startsWith("/#"))
@@ -378,6 +283,8 @@ const Navbar: React.FC = () => {
     } else if (location.pathname === "/" && href.startsWith("/#")) {
       const sectionId = href.substring(2);
       isActive = activeSection === sectionId;
+    } else if (location.pathname.startsWith(href) && href !== "/") {
+      isActive = true;
     }
 
     return (
@@ -467,38 +374,7 @@ const Navbar: React.FC = () => {
 };
 
 // --- [BAGIAN 2: KOMPONEN HERO] ---
-// const Hero: React.FC = () => (
-//   <section id="home" className="min-h-screen flex items-center justify-center text-center px-4 relative bg-cover bg-no-repeat" style={{ backgroundImage: `url('photo_with_parent.jpg')`, backgroundPosition: "center 17%" }}>
-//     <div className="absolute inset-0 bg-black/60 z-0"></div>
-//     <div className="max-w-4xl relative z-10 animate-fade-in-up">
-//       <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight">Rizky Faisal Rafi</h1>
-//       <p className="mt-4 text-lg md:text-xl lg:text-2xl text-gray-300 max-w-3xl mx-auto">
-//         Seorang <span className="text-[#3498db] font-semibold">Profesional Multidisiplin</span> dengan latar belakang <span className="text-[#3498db] font-semibold">Teknologi</span> serta kompetensi di bidang <span className="text-[#3498db] font-semibold">Administrasi</span>. Berdedikasi untuk memberikan solusi yang efisien, andal, dan terstruktur.
-//       </p>
-//       <div className="mt-8 flex flex-wrap justify-center gap-4">
-//         <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek IT</Link>
-//         <Link to="/#microsoft-365" className="bg-[#217346] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek Microsoft Office</Link>
-  
-//         <a 
-//           href="/cv/CV_Rizky_Faisal_Rafi.pdf" 
-//           target="_blank"
-//           rel="noopener noreferrer"
-//           className="bg-gray-700 text-white font-bold px-6 py-3 rounded-lg shadow-lg hover:bg-blue-700 transition-transform transform hover:scale-105 flex items-center gap-2">
-
-//             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
-//               <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-//             </svg>
-//               Lihat / Unduh CV
-//             </a>
-      
-//       </div>
-//     </div>
-//   </section>
-// );
-
-// --- [BAGIAN 2: KOMPONEN HERO] ---
 const Hero: React.FC = () => {
-  // State untuk melacak apakah video gagal dimuat
   const [videoHasError, setVideoHasError] = useState(false);
 
   return (
@@ -514,7 +390,6 @@ const Hero: React.FC = () => {
         <div className="mt-8 w-full max-w-3xl aspect-video rounded-xl overflow-hidden shadow-[0_0_30px_rgba(52,152,219,0.3)] border border-gray-700 bg-gray-900 relative group">
           
           {videoHasError ? (
-            // [UI KETIKA ERROR]
             <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gray-900/90 backdrop-blur-sm border border-red-500/30">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-12 h-12 text-red-500 mb-3 animate-pulse">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
@@ -522,28 +397,25 @@ const Hero: React.FC = () => {
               <p className="text-gray-200 font-semibold mb-1">Maaf, pemutar video gagal dimuat.</p>
               <p className="text-gray-400 text-sm mb-5">Silakan periksa koneksi internet Anda atau tonton langsung melalui YouTube.</p>
               <a 
-                // href="https://www.youtube.com/watch?v=qfuMB6SqZD0"
                 href="https://www.youtube.com/watch?v=e0BnBkhS1oI"
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg text-sm transition-transform transform hover:scale-105 shadow-lg shadow-red-600/20"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                  <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                  <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385-8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
                 </svg>
                 Tonton di YouTube
               </a>
             </div>
           ) : (
-            // [UI NORMAL / DEFAULT]
             <iframe 
               className="w-full h-full border-0 bg-black"
-              // src="https://www.youtube.com/embed/qfuMB6SqZD0"
               src="https://www.youtube.com/embed/e0BnBkhS1oI"
               title="Video Biodata Rizky Faisal Rafi"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
               allowFullScreen
-              onError={() => setVideoHasError(true)} // Memicu state error jika iframe gagal dimuat
+              onError={() => setVideoHasError(true)} 
             ></iframe> 
           )}
 
@@ -551,7 +423,8 @@ const Hero: React.FC = () => {
 
         <div className="mt-10 flex flex-wrap justify-center gap-4">
           <Link to="/#projects" className="bg-[#3498db] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek IT</Link>
-          <Link to="/#microsoft-365" className="bg-[#217346] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek Microsoft Office</Link>
+          <Link to="/#microsoft-365" className="bg-[#217346] text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Lihat Proyek Office</Link>
+          <Link to="/accurate" className="bg-orange-600 text-white font-semibold px-8 py-3 rounded-lg shadow-lg transition-transform transform hover:scale-105">Portofolio Accurate</Link>
     
           <a 
             href="/cv/CV_Rizky_Faisal_Rafi.pdf" 
@@ -1263,6 +1136,143 @@ const MiniERPPage: React.FC = () => {
   );
 };
 
+// --- [HALAMAN BARU: ACCURATE HUB PAGE (Katalog Modul)] ---
+const AccurateHubPage: React.FC = () => {
+const modules = [
+    { 
+      id: "info-perusahaan",
+      title: "1. Profil & Info Perusahaan", 
+      desc: "Latar belakang, informasi dasar, dan kebijakan operasional studi kasus Toko Mebel Maju.", 
+      path: "/accurate/info-perusahaan", 
+      status: "Available",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-orange-500">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" />
+        </svg>
+      )
+    },
+
+   { 
+      id: "kelola-fitur",
+      title: "2. Setup Preferensi & Fitur", 
+      desc: "Panduan aktivasi modul spesifik (Penjualan, Pembelian, Persediaan) untuk menyesuaikan operasional sistem dengan skala bisnis.", 
+      // path: "/accurate/kelola-fitur", 
+      // status: "Available",
+      path: "#", 
+      status: "Coming Soon",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-orange-500">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" />
+        </svg>
+      )
+    },
+
+    { 
+      id: "akun-perkiraan",
+      title: "3. Setup Akun Perkiraan", 
+      desc: "Materi dan video panduan lengkap mengenai Chart of Accounts, saldo awal, klasifikasi, dan pemetaan akun default.", 
+      // path: "/accurate/akun-perkiraan", 
+      // status: "Available",
+      path: "#", 
+      status: "Coming Soon",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-orange-500">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+        </svg>
+      )
+    },
+
+   { 
+      id: "barang-jasa",
+      title: "4. Setup Barang & Jasa", 
+      desc: "Pengelolaan database inventory, pendaftaran kategori barang, satuan ukuran, dan penentuan harga jual/beli standar.", 
+      path: "#", 
+      status: "Coming Soon",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-gray-500">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
+        </svg>
+      )
+    },
+
+    { 
+      id: "pelanggan",
+      title: "5. Setup Pelanggan & Pemasok", 
+      desc: "Pendaftaran customer dan supplier baru, pengaturan termin pembayaran, pajak, serta pencatatan piutang dan hutang awal.", 
+      path: "#", 
+      status: "Coming Soon",
+      icon: (
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-10 h-10 text-gray-500">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+        </svg>
+      )
+    },
+  ];
+
+  return (
+    <div className="pt-24 pb-20 px-4 max-w-6xl mx-auto min-h-screen">
+      <Reveal>
+        <div className="text-center mb-12">
+          <h3 className="text-xl font-bold uppercase text-orange-500 tracking-widest mb-3">Katalog Pembelajaran</h3>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-6 leading-tight">Portofolio Accurate Online</h1>
+          <p className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed">
+            Pilih modul di bawah ini untuk melihat materi, dokumentasi, dan video demo mengenai setup awal database perusahaan di sistem akuntansi Accurate.
+          </p>
+        </div>
+      </Reveal>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        {modules.map((mod, idx) => (
+          <Reveal key={idx}>
+            <Link 
+              to={mod.status === "Available" ? mod.path : "#"}
+              className={`block h-full bg-gray-800/60 border rounded-2xl p-6 md:p-8 transition-all duration-300 ${
+                mod.status === "Available" 
+                  ? "border-gray-700 hover:border-orange-500 hover:shadow-2xl hover:shadow-orange-500/20 hover:-translate-y-2 cursor-pointer group" 
+                  : "border-gray-800 opacity-60 cursor-not-allowed"
+              }`}
+              onClick={(e) => {
+                if (mod.status !== "Available") e.preventDefault();
+              }}
+            >
+              <div className="flex justify-between items-start mb-6">
+                <div className={`p-3 rounded-xl ${mod.status === "Available" ? "bg-orange-500/20" : "bg-gray-700/50"}`}>
+                  {mod.icon}
+                </div>
+                {mod.status === "Available" ? (
+                  <span className="bg-green-500/20 text-green-400 text-xs font-bold px-3 py-1 rounded-full border border-green-500/30">
+                    Tersedia
+                  </span>
+                ) : (
+                  <span className="bg-gray-700 text-gray-400 text-xs font-bold px-3 py-1 rounded-full border border-gray-600">
+                    Coming Soon
+                  </span>
+                )}
+              </div>
+              
+              <h3 className={`text-2xl font-bold mb-3 ${mod.status === "Available" ? "text-white group-hover:text-orange-500 transition-colors" : "text-gray-400"}`}>
+                {mod.title}
+              </h3>
+              <p className="text-gray-400 leading-relaxed mb-6">
+                {mod.desc}
+              </p>
+
+              {mod.status === "Available" && (
+                <div className="flex items-center text-orange-500 font-bold text-sm">
+                  Lihat Modul & Demo Video
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </div>
+              )}
+            </Link>
+          </Reveal>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const Publications: React.FC = () => {
   const publicationList = [
     { title: "PENGEMBANGAN WEB DINAS PERPUSTAKAAN DAN ARSIP BERBASIS LARAVEL FRAMEWORK PADA DPAD Kota TANGERANG", journal: "Jurnal Mahasiswa Teknik Informatika (Jurnal Teknologi Informasi)", date: "Desember 2023", desc: "Penelitian ini membahas pengembangan web Dinas Perpustakaan dan Arsip berbasis Laravel Framework pada DPAD Kota Tangerang untuk meningkatkan layanan perpustakaan dan Arsip digital.", link: "https://ejournal.itn.ac.id/index.php/jati/article/view/7840", authors: ["Agam Adensa", "Kamilah Raihan", "Rizky Faisal Rafi", "Irwan Richwandi Putra", " Firda Azizah"] },
@@ -1714,6 +1724,7 @@ const Footer: React.FC = () => {
           <Link className="text-gray-300 hover:text-[#3498db]" to="/#experience">Experience</Link>
           <Link className="text-gray-300 hover:text-[#3498db]" to="/#projects">Projects</Link>
           <Link className="text-gray-300 hover:text-[#3498db]" to="/#microsoft-365">Microsoft 365</Link>
+          <Link className="text-gray-300 hover:text-[#3498db]" to="/accurate">Accurate</Link>
           <Link className="text-gray-300 hover:text-[#3498db]" to="/#contact">Contact</Link>
         </nav>
         <div className="text-gray-500 text-sm">
@@ -1776,6 +1787,13 @@ const AppContent = () => {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/mini-erp" element={<MiniERPPage />} />
+            <Route path="/accurate" element={<AccurateHubPage />} />
+
+            <Route path="/accurate/info-perusahaan" element={<AccurateInfoPerusahaanPage />} />
+            <Route path="/accurate/kelola-fitur" element={<AccurateKelolaFiturPage />} />
+            {/* Menggunakan Route ke Komponen yang sudah dipisah ke file lain */}
+            <Route path="/accurate/akun-perkiraan" element={<AccurateAkunPerkiraanPage />} />
+            {/* <Route path="/accurate/barang-dan-jasa" element={<AccurateBarangDanJasaPage />} /> */}
           </Routes>
         </main>
         <Footer />
